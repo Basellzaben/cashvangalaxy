@@ -1,15 +1,24 @@
 import 'dart:async';
+import 'package:cashvangalaxy/provider/CompanyProvider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'GlobalVar.dart';
 import 'HexaColor.dart';
 import 'UI/Login.dart';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 Future<void> main() async {
-  //GestureBinding.instance?.resamplingEnabled = true;
-
-  runApp(MyApp());
+  Provider.debugCheckInvalidValueType = null;
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CompanyProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
