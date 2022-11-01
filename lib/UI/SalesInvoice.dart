@@ -25,6 +25,11 @@ class SalesInvoice extends StatefulWidget {
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class _SalesInvoiceState extends State<SalesInvoice> {
+
+
+  List<Map<String, dynamic>> _journals = [];
+
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: <Widget>[
@@ -36,24 +41,24 @@ class _SalesInvoiceState extends State<SalesInvoice> {
             body: Directionality(
               textDirection: TextDirection.ltr,
               child: Container(
+                color: Colors.transparent,
                 child: Column(
                   children: [
                     Stack(
                       children: [
                         Container(
-                          height: 230.0,
+                          height: 215.0,
                           color: Colors.transparent,
                           child: Container(
                               decoration: new BoxDecoration(
                                   color: HexColor(Globalvireables.basecolor),
                                   borderRadius: new BorderRadius.only(
                                     bottomLeft: const Radius.circular(0.0),
-                                    bottomRight: const Radius.circular(0.0),
                                   )),
                               child: new Column(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(top: 30),
+                                    margin: EdgeInsets.only(top: 40),
                                     child: Row(
                                       children: [
                                         Spacer(),
@@ -71,7 +76,6 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                         Spacer(),
 
 
-
                                         Text(" فاتوره المبيعات ",
                                             style: TextStyle(
                                                 color: Colors.white,
@@ -79,8 +83,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 fontSize: 20)),
                                         GestureDetector(
                                           onTap: () {
-
-Navigator.pop(context);
+                                            Navigator.pop(context);
                                           },
                                           child: Icon(
                                             Icons.arrow_back_ios_sharp,
@@ -90,11 +93,9 @@ Navigator.pop(context);
                                         ),
 
 
-
                                       ],
                                     ),
                                   ),
-
                                   Container(
                                     margin: EdgeInsets.only(top: 5),
                                     child: Row(
@@ -134,10 +135,10 @@ Navigator.pop(context);
                                                 color: HexColor(
                                                     Globalvireables.white),
                                                 borderRadius:
-                                                    new BorderRadius.all(
+                                                new BorderRadius.all(
 
-                                                      const Radius.circular(
-                                                10),
+                                                  const Radius.circular(
+                                                      10),
                                                 )),
                                             margin: EdgeInsets.only(
                                                 left: 10, right: 10),
@@ -175,54 +176,70 @@ Navigator.pop(context);
                                     child: Row(
                                       children: [
 
- Container(
-                                  width: 200,
-                                  child: Directionality(
-                                      textDirection: TextDirection.rtl,
-                                      child: CheckboxListTile(
-                                      checkColor: HexColor(Globalvireables.white),
-                  title: Text(
-                    "شامل الضريبه",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  //    <-- label
-                  value: true,
-                  onChanged: (newValue) {
-                    setState(() {
-                      // CheckSelected[0] = newValue!;
-                    });
-                  },
-                ),
-              ),
-            )
-,
-                                        Container(
-                                          width: 200,
-                                          child: Directionality(
-                                            textDirection: TextDirection.rtl,
-                                            child: CheckboxListTile(
-                                              checkColor: HexColor(Globalvireables.white),
-                                              title: Text(
-                                                "نقدي",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500),
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Container(
+                                            child: Row(children: [
+
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ItemDialog()));
+
+                                                  //   Navigator.pop(context);
+                                                },
+                                                  child: Container(
+                                                    margin: EdgeInsets.all(5),
+                                                      child: Icon(
+                                                        Icons.add_circle,
+                                                        color: Colors.white,
+                                                        size: 50,
+                                                      )),
                                               ),
-                                              //    <-- label
-                                              value: true,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  // CheckSelected[0] = newValue!;
-                                                });
-                                              },
-                                            ),
+
+                                              SizedBox(width: MediaQuery
+                                                  .of(context)
+                                                  .size
+                                                  .width / 3.4,),
+                                              Checkbox(
+                                                  value: true,
+                                                  //set variable for value
+                                                  onChanged: (bool? value) {
+                                                    setState(() {});
+                                                  }
+                                              ),
+                                              Text("نقدي",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight
+                                                          .bold,
+                                                      fontSize: 15))
+
+                                              ,
+                                              Checkbox(
+                                                  value: true,
+                                                  //set variable for value
+                                                  onChanged: (bool? value) {
+                                                    setState(() {});
+                                                  }
+                                              ),
+                                              Text("شامل الضريبه",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight
+                                                          .bold,
+                                                      fontSize: 15)),
+
+
+                                            ],),
                                           ),
                                         )
+                                        ,
 
 
-          ],
+                                      ],
                                     ),
                                   ),
 
@@ -230,26 +247,178 @@ Navigator.pop(context);
                                 ],
                               )),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ItemDialog()));
-
-                         //   Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                                margin: EdgeInsets.only(top: 200),
-                                child: Icon(
-                                  Icons.add_circle,
-                                  color: Colors.black,
-                                  size: 50,
-                                )),
-                          ),
-                        )
                       ],
                     ),
-                    SingleChildScrollView(),
+
+                          Expanded(
+                            child: Container(
+                            ),
+                          ),
+                          /// Below container will go to bottom
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape : RoundedRectangleBorder(
+                                borderRadius : BorderRadius.circular(15)
+                            ),
+                            builder: (context) {
+                              return Container(
+                                decoration: new BoxDecoration(
+                                    color: HexColor(Globalvireables.basecolor),
+                                    borderRadius: new BorderRadius.only(
+                                        topLeft: const Radius.circular(15.0),
+                                        topRight: const Radius.circular(15.0))),
+                                child: Container(
+                                  decoration: new BoxDecoration(
+                                      color: HexColor(Globalvireables.basecolor),
+                                      borderRadius: new BorderRadius.only(
+                                          topLeft: const Radius.circular(22.0),
+                                          topRight: const Radius.circular(22.0))),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Row(
+                                          children: [
+                                            Spacer(),
+                                            Text("33",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)),
+                                            Text(": الخصم",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w200,
+                                                    fontSize: 20)),
+                                            Spacer(),
+                                            Text("40",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)),
+                                            Text(" : المجموع  ",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w200,
+                                                    fontSize: 20)),
+
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: Row(
+                                          children: [
+                                            Spacer(),
+                                            Text("22",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)),
+                                            Text(": الاجمالي",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w200,
+                                                    fontSize: 20)),
+                                            Spacer(),
+                                            Text("40",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20)),
+                                            Text(" : الضريبه  ",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w200,
+                                                    fontSize: 20)),
+                                          ],
+                                        ),
+                                      ),
+
+                                      Container(
+                                        margin: EdgeInsets.only(top: 40,bottom: 20),
+                                        child: Row(children: [
+                                          Spacer(),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary:HexColor(Globalvireables.white),
+                                            ),
+                                            child: Text(
+                                              "حفظ"
+                                              ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                            ),
+                                            onPressed:
+                                                () async {
+                                            },
+                                          ),
+                                          Spacer(),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary:HexColor(Globalvireables.white),
+                                            ),
+                                            child: Text(
+                                              "اعتماد"
+                                              ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                            ),
+                                            onPressed:
+                                                () async {
+                                            },
+                                          ),
+                                          Spacer(),
+
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary:HexColor(Globalvireables.white),
+                                            ),
+                                            child: Text(
+                                              "طباعه"
+                                              ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                            ),
+                                            onPressed:
+                                                () async {
+                                            },
+                                          ),
+                                          Spacer(),
+
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary:HexColor(Globalvireables.white),
+                                            ),
+                                            child: Text(
+                                              "حذف"
+                                              ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                            ),
+                                            onPressed:
+                                                () async {
+                                            },
+                                          ),
+                                          Spacer(),
+
+                                        ],),
+                                      )
+
+
+
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      child: Container(
+
+margin: EdgeInsets.only(bottom: 22),
+                        child: new Image.asset('assets/upbottom.png'
+                        ,width: 55,height: 55,
+                        )
+                       // child: Icon(Icons.settings_overscan,size: 55,color: HexColor(Globalvireables.basecolor),),
+                      ),
+                    ),
+
+
                   ],
                 ),
               ),

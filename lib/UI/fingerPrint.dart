@@ -1,25 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:path_provider_ios/path_provider_ios.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Models/Time.dart';
 import '../Sqlite/SharePrefernce.dart';
-import 'Home.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:battery_info/battery_info_plugin.dart';
-import 'package:battery_info/enums/charging_status.dart';
-import 'package:battery_info/model/android_battery_info.dart';
-import 'package:battery_info/model/iso_battery_info.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -31,7 +23,8 @@ class fingerPrint extends StatefulWidget {
   State<fingerPrint> createState() => _fingerPrintState();
 }
 
-var activecheck ;
+var activecheck;
+
 var prefs;
 
 Future<Time> getTime() async {
@@ -110,11 +103,13 @@ class _fingerPrintState extends State<fingerPrint> {
       // debugPrint(e);
     });
   }
-var TransType;
+
+  var TransType;
+
   @override
   void initState() {
     super.initState();
-    activecheck=true;
+    activecheck = true;
     setState(() {
       sharedPrefs();
       _getCurrentPosition();
@@ -125,20 +120,20 @@ var TransType;
 
   Future<void> sharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    Uri apiUrl = Uri.parse(Globalvireables.GetlASTaCTION+prefs.getString('man').toString());
+    Uri apiUrl = Uri.parse(
+        Globalvireables.GetlASTaCTION + prefs.getString('man').toString());
     http.Response response = await http.get(apiUrl);
     var jsonResponse = jsonDecode(response.body);
 
-    if(jsonResponse.toString().contains("1")){
+    if (jsonResponse.toString().contains("1")) {
       TransType = "2";
-
-    }else{
+    } else {
       TransType = "1";
     }
 
     SharePrefernce.setR('TransType', TransType);
 
-    print(jsonResponse.toString()+"  response.toString()");
+    print(jsonResponse.toString() + "  response.toString()");
   }
 
   /*void getBatteryPerentage() async {
@@ -153,6 +148,7 @@ var TransType;
   @override
   Widget build(BuildContext context) {
     // getTime();
+    String timee="";
     sharedPrefs();
     return StreamBuilder(
         stream:
@@ -161,6 +157,9 @@ var TransType;
           if (snapshot.hasData && prefs != null) {
             date = snapshot.data!.date.toString();
             time = snapshot.data!.time_24.toString();
+
+            if(snapshot.data!.time_24.toString().length>4)
+            timee=snapshot.data!.time_24.toString();
 
             return Stack(children: <Widget>[
               Image.asset(
@@ -226,9 +225,11 @@ var TransType;
                           margin: EdgeInsets.only(top: 5, left: 5, right: 5),
                           child: Text(
                             //   "الخميس - 22/8/2022",
-                            snapshot.data!.date_time_txt
-                                .toString()
-                                .substring(0, 27),
+                            snapshot.data!.date_time_txt.toString().length > 26
+                                ? snapshot.data!.date_time_txt
+                                    .toString()
+                                    .substring(0, 27)
+                                : snapshot.data!.date_time_txt.toString(),
                             style: TextStyle(
                               color: HexColor(Globalvireables.white),
                               fontSize: 18,
@@ -292,26 +293,28 @@ var TransType;
                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          if (activecheck){
-                                            checWork();}
-                                          else {
-
-                                          }
+                                          if (activecheck) {
+                                            checWork();
+                                          } else {}
                                         });
                                       },
-                                      child:
-                                      activecheck? Icon(
-          Icons.fingerprint,
-          size: 200.0,
-          color: prefs
-              .getString('TransType')
-              .toString() == "1" ? (Colors.green) : (Colors.redAccent),
-          ):Icon(
-          Icons.fingerprint,
-          size: 200.0,
-          color: (Colors.black12),
-          ),
-
+                                      child: activecheck
+                                          ? Icon(
+                                              Icons.fingerprint,
+                                              size: 200.0,
+                                              color: prefs
+                                                          .getString(
+                                                              'TransType')
+                                                          .toString() ==
+                                                      "1"
+                                                  ? (Colors.green)
+                                                  : (Colors.redAccent),
+                                            )
+                                          : Icon(
+                                              Icons.fingerprint,
+                                              size: 200.0,
+                                              color: (Colors.black12),
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -502,86 +505,84 @@ var TransType;
     try {
       TransType = prefs.getString('TransType').toString();
     } catch (_) {
-    //  TransType = '1';
+      //  TransType = '1';
     }
     if (TransType.toString().isEmpty) {
-
-      Uri apiUrl = Uri.parse(Globalvireables.GetlASTaCTION+prefs.getString('man').toString());
+      Uri apiUrl = Uri.parse(
+          Globalvireables.GetlASTaCTION + prefs.getString('man').toString());
       http.Response response = await http.get(apiUrl);
       var jsonResponse = jsonDecode(response.body);
 
-      if(jsonResponse.toString().contains("1")){
+      if (jsonResponse.toString().contains("1")) {
         TransType = "2";
-
-      }else{
+      } else {
         TransType = "1";
       }
       SharePrefernce.setR('TransType', TransType);
     }
-      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 20),
-        content: new Row(
-          children: <Widget>[
-            new CircularProgressIndicator(),
-            new Text("جار ارسال الحركه...")
-          ],
-        ),
+    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      duration: new Duration(seconds: 20),
+      content: new Row(
+        children: <Widget>[
+          new CircularProgressIndicator(),
+          new Text("جار ارسال الحركه...")
+        ],
+      ),
+    ));
+    var date2 = DateTime.now();
+    int c = 0;
+    Uri apiUrl = Uri.parse(Globalvireables.checWork);
+    final json = {
+      "ID": "1",
+      "UserID": prefs.getString('man').toString(),
+      "ActionNo": TransType, //1 =start , 2 = end
+      "ActionDate": date.toString(),
+      "ActionTime": time.toString(),
+      "Coor_X": _currentPosition!.altitude.toString(),
+      "Coor_Y": _currentPosition!.longitude.toString(),
+      "ManAddress": _currentAddress,
+      "Notes": "1",
+      "Img": "1",
+      "BattryLevel": "2",
+      "TabletName": "Flutter",
+      "DayNo": date2.weekday.toString(),
+      "DayNm": DateFormat('EEEE').format(date2).toString(),
+      "Msg": "Msg",
+    };
+
+    if (TransType == '1')
+      SharePrefernce.setR('TransType', "2");
+    else
+      SharePrefernce.setR('TransType', "1");
+
+    http.Response response = await http.post(apiUrl,
+        headers: {"Content-Type": "application/json"}, body: jsonEncode(json));
+
+    print(response.body.toString() + "ggggg");
+    print(json.toString() + "ggggg");
+
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse.toString() == "2") {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("تم تسجيل الحركه بنجاح"),
       ));
-      var date2 = DateTime.now();
-      int c = 0;
-      Uri apiUrl = Uri.parse(Globalvireables.checWork);
-      final json = {
-        "ID": "1",
-        "UserID": prefs.getString('man').toString(),
-        "ActionNo": TransType, //1 =start , 2 = end
-        "ActionDate": date.toString(),
-        "ActionTime": time.toString(),
-        "Coor_X": _currentPosition!.altitude.toString(),
-        "Coor_Y": _currentPosition!.longitude.toString(),
-        "ManAddress": _currentAddress,
-        "Notes": "1",
-        "Img": "1",
-        "BattryLevel": "2",
-        "TabletName": "Flutter",
-        "DayNo": date2.weekday.toString(),
-        "DayNm": DateFormat('EEEE').format(date2).toString(),
-        "Msg": "Msg",
-      };
-
-      if (TransType == '1')
-        SharePrefernce.setR('TransType', "2");
-      else
-        SharePrefernce.setR('TransType', "1");
-
-      http.Response response = await http.post(apiUrl,
-          headers: {"Content-Type": "application/json"}, body: jsonEncode(json));
-
-      print(response.body.toString() + "ggggg");
-      print(json.toString() + "ggggg");
-
-      var jsonResponse = jsonDecode(response.body);
-      if (jsonResponse.toString() == "2") {
+      setState(() {
+        activecheck = true;
+      });
+    } else {
+      try {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("تم تسجيل الحركه بنجاح"),
+          content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
         ));
-        setState(() {
-          activecheck = true;
-        });
-      } else {
-        try {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
-          ));
-        } catch (_) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
-          ));
-        }
+      } catch (_) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+        ));
       }
+    }
 
-      if (c == 0) {}
-
+    if (c == 0) {}
   }
 }

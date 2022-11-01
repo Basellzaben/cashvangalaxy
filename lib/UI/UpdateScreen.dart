@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
+import '../Models/Categ.dart';
+import '../Models/Items.dart';
 import '../Models/users.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import '../Sqlite/SharePrefernce.dart';
@@ -31,9 +33,9 @@ class UpdateScreen extends StatefulWidget {
 var i = 0;
 var checkedValue = true;
 
-List<bool> CheckSelected = [false, false];
-List<String> messageupdate = ["", ""];
-List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين'];
+List<bool> CheckSelected = [false, false,false,false];
+List<String> messageupdate = ["", "", "", ""];
+List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد'];
 
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
@@ -152,6 +154,58 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           ),
                         ],
                       ),
+
+
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: CheckboxListTile(
+                                checkColor: HexColor(Globalvireables.white),
+                                title: Text(
+                                  "المواد",
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                                //    <-- label
+                                value: CheckSelected[3],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    CheckSelected[3] = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: CheckboxListTile(
+                                checkColor: HexColor(Globalvireables.white),
+                                title: Text(
+                                  "فئات العملاء",
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                                //    <-- label
+                                value: CheckSelected[2],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    CheckSelected[2] = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+
                       Container(
                         margin: EdgeInsets.only(top: 20),
                         width: MediaQuery.of(context).size.width / 3,
@@ -251,7 +305,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
   Future<void> FillDataUsers() async {
     if (CheckSelected[1] == true) {
-      handler.DropCompanyInfo();
+      handler.Dropusers();
 
       // showLoaderDialog(context);
       Uri apiUrl = Uri.parse(Globalvireables.GetUsers);
@@ -260,12 +314,9 @@ class _UpdateScreenState extends State<UpdateScreen> {
       if (response.statusCode == 200) {
         handler.Dropusers();
         var jsonResponse = json.decode(response.body);
-
         print(jsonResponse.toString() + "reqquestt");
-
         String receivedJson = jsonResponse;
         List<dynamic> list = json.decode(receivedJson);
-
         if (response.body.isNotEmpty) {
           jsonResponse = json.decode(response.body);
         } else {
@@ -311,36 +362,208 @@ class _UpdateScreenState extends State<UpdateScreen> {
               messageupdate[1] = 'تم التحديث';
 
               //  UpdateStateDialog();
-
+              FillCateg();
               // Navigator.of(context, rootNavigator: true).pop();
             } else {
+              FillCateg();
+
               messageupdate[1] = 'فشل التحديث';
               //UpdateStateDialog();
             }
-
-
-
-
           });
         }
       } else {
         messageupdate[1] = 'فشل التحديث';
+        FillCateg();
 
-        Navigator.pop(context);
+
         //  UpdateStateDialog();
       }
     } else {
       messageupdate[1] = 'لم يتم التحديث';
-      Navigator.pop(context);
+      FillCateg();
+
+      //  Navigator.pop(context);
       print("error");
       //UpdateStateDialog();
     }
     if (mounted)
-      Navigator.pop(context);
+      FillCateg();
     else
-    Navigator.pop(context);
+      FillCateg();
+
   }
 
+
+  Future<void> FillCateg() async {
+    if (CheckSelected[2] == true) {
+      handler.DropCateg();
+
+      // showLoaderDialog(context);
+      Uri apiUrl = Uri.parse(Globalvireables.GetCateg);
+
+      http.Response response = await http.get(apiUrl).whenComplete(() => () {});
+      if (response.statusCode == 200) {
+        handler.DropCateg();
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString() + "reqquestt");
+        String receivedJson = jsonResponse;
+        List<dynamic> list = json.decode(receivedJson);
+        if (response.body.isNotEmpty) {
+          jsonResponse = json.decode(response.body);
+        } else {
+          print(users.fromJson(jsonDecode(jsonResponse[0])).Sname);
+        }
+
+      //  print(Categ.fromJson((list[0])).ItemCode.toString() +"   listtttta");
+        for (int j = 0; j < list.length; j++) {
+         // jsonResponse = json.decode(response.body)[i];
+          handler.initializeDB().whenComplete(() async {
+           // print(Categ.fromJson((list[j])).ItemCode.toString()+"  dddatatta");
+
+            Categ firstUser = Categ(
+            ItemCode: Categ.fromMap((list[j])).ItemCode.toString(),
+            CategNo: Categ.fromMap((list[j])).CategNo.toString(),
+            price: Categ.fromMap((list[j])).price.toString(),
+            MinPrice: Categ.fromMap((list[j])).MinPrice.toString(),
+            dis: Categ.fromMap((list[j])).dis.toString(),
+              bonus: Categ.fromMap((list[j])).bonus.toString(),
+            UnitNo: Categ.fromMap((list[j])).UnitNo.toString(),
+                );
+
+            int i = await addCateg(firstUser);
+            print(i.toString() + " iiiii");
+            if (i > 0) {
+              messageupdate[2] = 'تم التحديث';
+
+              //  UpdateStateDialog();
+
+              // Navigator.of(context, rootNavigator: true).pop();
+            } else {
+
+              messageupdate[2] = 'فشل التحديث';
+              //UpdateStateDialog();
+            }
+          });
+        }
+      } else {
+        messageupdate[2] = 'فشل التحديث';
+      // Navigator.pop(context);
+
+        //  UpdateStateDialog();
+      }
+    } else {
+      messageupdate[2] = 'لم يتم التحديث';
+     // Navigator.pop(context);
+
+
+      //  Navigator.pop(context);
+      print("error");
+      //UpdateStateDialog();
+    }
+
+    FillItems();
+
+  }
+
+
+
+
+  Future<void> FillItems() async {
+    if (CheckSelected[2] == true) {
+      handler.DropCateg();
+
+      // showLoaderDialog(context);
+      Uri apiUrl = Uri.parse(Globalvireables.GetItems);
+
+      http.Response response = await http.get(apiUrl);
+      if (response.statusCode == 200) {
+        handler.DropCateg();
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString() + "reqquestt");
+        String receivedJson = jsonResponse;
+        List<dynamic> list = json.decode(receivedJson);
+        if (response.body.isNotEmpty) {
+          jsonResponse = json.decode(response.body);
+        } else {
+          print(Items.fromJson(jsonDecode(jsonResponse[0])).Ename);
+        }
+int u=0;
+        //  print(Categ.fromJson((list[0])).ItemCode.toString() +"   listtttta");
+        for (int j = 0; j < list.length; j++) {
+          // jsonResponse = json.decode(response.body)[i];
+          handler.initializeDB().whenComplete(() async {
+            // print(Categ.fromJson((list[j])).ItemCode.toString()+"  dddatatta");
+
+            Items firstUser = Items(
+              Item_No: Items.fromMap((list[j])).Item_No.toString(),
+              Item_Name: Items.fromMap((list[j])).Item_Name.toString(),
+              Ename: Items.fromMap((list[j])).Ename.toString(),
+              Unit: Items.fromMap((list[j])).Unit.toString(),
+              OL: Items.fromMap((list[j])).OL.toString(),
+              Type_No: Items.fromMap((list[j])).Type_No.toString(),
+              Pack: Items.fromMap((list[j])).Pack.toString(),
+
+              Place: Items.fromMap((list[j])).Place.toString(),
+              Price: Items.fromMap((list[j])).Price.toString(),
+              dno: Items.fromMap((list[j])).dno.toString(),
+              tax: Items.fromMap((list[j])).tax.toString(),
+              OQ1: Items.fromMap((list[j])).OQ1.toString(),
+              ItemWeight: Items.fromMap((list[j])).ItemWeight.toString(),
+            );
+
+            int i = await addItems(firstUser);
+            print(i.toString() + " iiiii");
+            if (i > 0) {
+              messageupdate[3] = 'تم التحديث';
+             // Navigator.pop(context);
+
+              //  UpdateStateDialog();
+
+              // Navigator.of(context, rootNavigator: true).pop();
+            } else {
+             // Navigator.pop(context);
+
+              messageupdate[3] = 'فشل التحديث';
+              //UpdateStateDialog();
+            }
+          });
+        }
+       // Navigator.pop(context);
+
+      } else {
+        Navigator.pop(context);
+
+        messageupdate[3] = 'فشل التحديث';
+         Navigator.pop(context);
+        //  UpdateStateDialog();
+      }
+    } else {
+      messageupdate[3] = 'لم يتم التحديث';
+      // Navigator.pop(context);
+      Navigator.pop(context);
+
+
+      //  Navigator.pop(context);
+      print("error");
+      //UpdateStateDialog();
+    }
+
+
+
+  }
+  Future<int> addItems(Items firstItems) async {
+    List<Items> listOfItems = [
+      firstItems,
+    ];
+    return await handler.insertItems(listOfItems);
+  }
+  Future<int> addCateg(Categ firstCateg) async {
+    List<Categ> listOfCateg = [
+      firstCateg,
+    ];
+    return await handler.insertCateg(listOfCateg);
+  }
   Future<int> addUsers(users firstUser) async {
     /*CompanyInfo firstUser = CompanyInfo(
         ID: 22,
