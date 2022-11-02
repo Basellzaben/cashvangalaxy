@@ -84,6 +84,7 @@ flutter:
     - assets/img3.jpg
     - assets/finger.png
     - assets/updateback.png
+    - assets/notfound.png
 
 
   # To add assets to your application, add an assets section, like this:

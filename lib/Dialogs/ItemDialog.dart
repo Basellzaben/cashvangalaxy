@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
+import '../Models/Categ.dart';
+import '../Sqlite/DatabaseHandler.dart';
 
 class ItemDialog extends StatefulWidget {
   @override
@@ -15,11 +17,21 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   late http.Response response;
   List<Map<String, dynamic>> _journals = [];
   final TextEditingController searchcontroler = TextEditingController();
+  List<String> prices = [];
 
   @override
   void initState() {
+    if(Globalvireables.journals.isEmpty) {
+      Globalvireables.journals..clear();
+      _refreshItems();
+    } else {
+      final handler = DatabaseHandler();
 
+      _journals.clear();
+      _journals =Globalvireables.journals;
 
+    }
+//print(_journals[0]['Item_Name'].toString());
   }
 
 
@@ -27,6 +39,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   Widget build(BuildContext context) {
     //  if(_journals.length>0)
     return Container(
+      color: HexColor(Globalvireables.white2),
       child:   Center(
         child: Scaffold(
 
@@ -74,23 +87,209 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                           itemCount: _journals.length,
                           itemBuilder: (context, index)
                           =>GestureDetector(
-                            onTap: () {
-                              setState(() {
-                               /* Globalvireables.CustomerName=_journals[index]['name'];
-                                Globalvireables.cusNo=_journals[index]['no'];
+                              onTap: () {
+                                setState(() {
 
-                                print(_journals[index]['no'].toString()+" nooo");
 
-                                Navigator.pop(context);
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Home_Body()));
-*/
-                              });
-                            },child: Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              color: index %2==0 ? Colors.white:Colors.black26,
-                              height: 50,
-                              child: Center(child: Text(_journals[index]['name']))
-                          ),)
+                                  showModalBottomSheet(
+                                      context: context,
+                                      shape : RoundedRectangleBorder(
+                                          borderRadius : BorderRadius.circular(15)
+                                      ),
+                                      builder: (context) {
+                                        return Container(
+                                          decoration: new BoxDecoration(
+                                              color: HexColor(Globalvireables.basecolor),
+                                              borderRadius: new BorderRadius.only(
+                                                  topLeft: const Radius.circular(15.0),
+                                                  topRight: const Radius.circular(15.0))),
+                                          child: Container(
+                                            decoration: new BoxDecoration(
+                                                color: HexColor(Globalvireables.basecolor),
+                                                borderRadius: new BorderRadius.only(
+                                                    topLeft: const Radius.circular(22.0),
+                                                    topRight: const Radius.circular(22.0))),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  child: Row(
+                                                    children: [
+                                                      Spacer(),
+                                                      Text("33",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 20)),
+                                                      Text(": الخصم",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w200,
+                                                              fontSize: 20)),
+                                                      Spacer(),
+                                                      Text("40",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 20)),
+                                                      Text(" : المجموع  ",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w200,
+                                                              fontSize: 20)),
+
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  child: Row(
+                                                    children: [
+                                                      Spacer(),
+                                                      Text("22",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 20)),
+                                                      Text(": الاجمالي",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w200,
+                                                              fontSize: 20)),
+                                                      Spacer(),
+                                                      Text("40",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 20)),
+                                                      Text(" : الضريبه  ",
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w200,
+                                                              fontSize: 20)),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                Container(
+                                                  margin: EdgeInsets.only(top: 40,bottom: 20),
+                                                  child: Row(children: [
+                                                    Spacer(),
+                                                    ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary:HexColor(Globalvireables.white),
+                                                      ),
+                                                      child: Text(
+                                                        "حفظ"
+                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                                      ),
+                                                      onPressed:
+                                                          () async {
+                                                      },
+                                                    ),
+                                                    Spacer(),
+                                                    ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary:HexColor(Globalvireables.white),
+                                                      ),
+                                                      child: Text(
+                                                        "اعتماد"
+                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                                      ),
+                                                      onPressed:
+                                                          () async {
+                                                      },
+                                                    ),
+                                                    Spacer(),
+
+                                                    ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary:HexColor(Globalvireables.white),
+                                                      ),
+                                                      child: Text(
+                                                        "طباعه"
+                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                                      ),
+                                                      onPressed:
+                                                          () async {
+                                                      },
+                                                    ),
+                                                    Spacer(),
+
+                                                    ElevatedButton(
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary:HexColor(Globalvireables.white),
+                                                      ),
+                                                      child: Text(
+                                                        "حذف"
+                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
+                                                      ),
+                                                      onPressed:
+                                                          () async {
+                                                      },
+                                                    ),
+                                                    Spacer(),
+
+                                                  ],),
+                                                )
+
+
+
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      });
+
+                                });
+                              },
+                            child: Container(
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(10.0),
+                                ),
+                                child: Container(
+margin: EdgeInsets.all(5),
+                                  child: Row(
+                                    children: [
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          margin: const EdgeInsets.only(top: 15),
+                                          height: 50,
+                                          child: Container(child: Text(prices[index]
+                                            ,style: TextStyle(color: Colors.green,fontSize: 30,
+                                            height: 1.3,fontWeight: FontWeight.bold),)
+                                          ),),
+                                      ),
+                                      Spacer(),
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                            });
+                                          },child: Container(
+                                            margin: const EdgeInsets.only(top: 15),
+                                            height: 50,
+                                            child: Container(child: Text(_journals[index]['Item_Name'],style: TextStyle(color: Colors.black,fontSize: 16,
+                                            height: 1.3,fontWeight: FontWeight.bold)))
+                                        ),),
+                                      ),
+
+
+
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
 
 
 
@@ -154,13 +353,46 @@ class LogoutOverlayStatecard extends State<ItemDialog>
     });
   }
 
-  void refreshSearch(String txt) async {
-   /* var data = await SQLHelper.searchCustomers(txt);
-    setState(() {
-      _journals = data;
-    });*/
+  String getprice(String itemno,String unitno,String catNo){
+    final handler = DatabaseHandler();
+
+   // return handler.retrieveprice(itemno,unitno,catNo).;
+    handler.retrieveprice(itemno,unitno,catNo).then((result){
+
+      return result;
+    });
+    return "0.000";
   }
 
+  void _refreshItems() async {
+    final handler = DatabaseHandler();
+
+    //print(_journals[0]['price']  + "   thispriiice");
+
+    prices.clear();
+    Globalvireables.journals = await handler.retrieveItems2();
+    setState(() {
+      _journals =  Globalvireables.journals;
+    });
+for(int i=0;i<_journals.length;i++){
+  prices[i]=await handler.retrieveprice("1001", "0.0", "1.0");
+
+}
+
+  }
+  void refreshSearch(String txt) async {
+    final handler = DatabaseHandler();
+    var data = await handler.retrieveItems2search(txt);
+    setState(() {
+      _journals = data;
+    });
+    prices.clear();
+    for (int i = 0; i < _journals.length; i++) {
+      prices[i]=await handler.retrieveprice("1001", "0.0", "1.0");
+
+      //  prices[i] =
+    }
+  }
 
 
 

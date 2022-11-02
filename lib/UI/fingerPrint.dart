@@ -148,7 +148,8 @@ class _fingerPrintState extends State<fingerPrint> {
   @override
   Widget build(BuildContext context) {
     // getTime();
-    String timee="";
+    String timee = "00:00:00";
+    String datee = "";
     sharedPrefs();
     return StreamBuilder(
         stream:
@@ -157,9 +158,10 @@ class _fingerPrintState extends State<fingerPrint> {
           if (snapshot.hasData && prefs != null) {
             date = snapshot.data!.date.toString();
             time = snapshot.data!.time_24.toString();
-
-            if(snapshot.data!.time_24.toString().length>4)
-            timee=snapshot.data!.time_24.toString();
+            if (snapshot.data!.time_24.toString().length > 4) {
+              timee = snapshot.data!.time_24.toString();
+              datee = snapshot.data!.date_time_txt.toString().substring(0, 27);
+            }
 
             return Stack(children: <Widget>[
               Image.asset(
@@ -224,12 +226,13 @@ class _fingerPrintState extends State<fingerPrint> {
                         Container(
                           margin: EdgeInsets.only(top: 5, left: 5, right: 5),
                           child: Text(
+                            datee,
                             //   "الخميس - 22/8/2022",
-                            snapshot.data!.date_time_txt.toString().length > 26
+                            /* snapshot.data!.date_time_txt.toString().length > 26
                                 ? snapshot.data!.date_time_txt
                                     .toString()
                                     .substring(0, 27)
-                                : snapshot.data!.date_time_txt.toString(),
+                                : snapshot.data!.date_time_txt.toString(),*/
                             style: TextStyle(
                               color: HexColor(Globalvireables.white),
                               fontSize: 18,
@@ -273,7 +276,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                 child: Container(
                                   margin: EdgeInsets.only(top: 10),
                                   child: Text(
-                                    snapshot.data!.time_24.toString(),
+                                    timee,
 //atkinsonHyperlegible
                                     style: GoogleFonts.asar(
                                         textStyle: Theme.of(context)

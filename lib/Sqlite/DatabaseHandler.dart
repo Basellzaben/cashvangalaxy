@@ -1,4 +1,5 @@
 import 'package:cashvangalaxy/Models/Categ.dart';
+import 'package:cashvangalaxy/Models/UnitItem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -11,7 +12,7 @@ class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
-      join(path, 'cashvanPPPC.db'),
+      join(path, 'cashvant.db'),
       onCreate: (database, version) async {
         await database.execute(
           "CREATE TABLE CompanyInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -83,6 +84,21 @@ class DatabaseHandler {
           "OQ1 TEXT)",
         );
 
+
+        await database.execute(
+          "CREATE TABLE UnitItem(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "item_no TEXT,"
+              "barcode TEXT,"
+              "unitno TEXT,"
+              "Operand TEXT,"
+              "price TEXT,"
+              "Max TEXT,"
+              "Min TEXT,"
+              "posprice TEXT,"
+              "acc_num TEXT,"
+              "UnitSale TEXT)",
+        );
+
         await database.execute(
           "CREATE TABLE Customers(id INTEGER PRIMARY KEY AUTOINCREMENT, "
           "No TEXT,"
@@ -128,7 +144,7 @@ class DatabaseHandler {
           "OQ1 TEXT)",
         );
       },
-      version: 26,
+      version: 27,
     );
   }
 
@@ -140,6 +156,16 @@ class DatabaseHandler {
     }
     return result;
   }
+
+  Future<int> insertUnitItem(List<UnitItem> Items) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    for (var Itemss in Items) {
+      result = await db.insert('UnitItem', Itemss.toMap());
+    }
+    return result;
+  }
+
 
   Future<int> insertCateg(List<Categ> categ) async {
     int result = 0;
@@ -174,6 +200,69 @@ class DatabaseHandler {
         await db.query('CompanyInfo');
     return queryResult.map((e) => CompanyInfo.fromMap(e)).toList();
   }
+  Future<List<Items>> retrieveItems() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+    await db.query('items');
+    return queryResult.map((e) => Items.fromMap(e)).toList();
+
+  }
+
+  Future<List<Map<String,dynamic>>> retrieveItems2() async {
+    final Database db = await initializeDB();
+    return db.query('items', orderBy: "Item_No");
+
+  }
+
+  Future<List<Map<String,dynamic>>> retrieveItems2search(String? search) async {
+    final Database db = await initializeDB();
+    if(search!=null)
+      if (search.isNotEmpty) {
+        return db.query('items', orderBy: "Item_No",
+            where: " Item_No" " LIKE  '%" + search + "%'");
+      }
+
+    if(search=="All") {
+      return db.query('items', orderBy: "Item_No");
+    }
+
+    return db.query('items', orderBy: "Item_No");
+
+
+  }
+
+
+
+   retrieveprice(String itemno,String unitno,String catNo) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.query(
+        "Categ"+ " where ItemCode='"+itemno+"' and UnitNo='"+unitno+"' and CategNo='"+catNo+"'");
+
+    final List<Map<String, Object?>> queryResult2 = await db.query(
+        " UnitItem"+ " where item_no='"+itemno+"' and unitno='"+unitno+"'");
+
+try{
+    if(!queryResult.map((e) => Categ.fromMap(e)).toList().first.price.isEmpty && queryResult.map((e) => Categ.fromMap(e)).toList().first.price!="0.0"){
+      return queryResult
+          .map((e) => Categ.fromMap(e))
+          .toList()
+          .first.price.toString()
+      ;
+    }else if( ! queryResult2.map((e) => Categ.fromMap(e)).toList().first.price.isEmpty && queryResult2.map((e) => Categ.fromMap(e)).toList().first.price!="0.0"){
+      return queryResult2
+          .map((e) => Categ.fromMap(e))
+          .toList()
+          .first.price.toString()
+      ;}
+    }catch(_){
+
+    }
+
+    return "0.0";
+
+
+  }
+
 
   Future<List<users>> retrieveUsersInfo() async {
     final Database db = await initializeDB();
@@ -215,5 +304,9 @@ class DatabaseHandler {
   Future<void> DropCateg() async {
     final Database db = await initializeDB();
     db.delete('Categ');
+  }
+  Future<void> DropItems() async {
+    final Database db = await initializeDB();
+    db.delete('items');
   }
 }
