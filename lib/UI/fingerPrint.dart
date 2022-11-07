@@ -130,8 +130,7 @@ class _fingerPrintState extends State<fingerPrint> {
     } else {
       TransType = "1";
     }
-
-    SharePrefernce.setR('TransType', TransType);
+    prefs.setString('TransType', TransType);
 
     print(jsonResponse.toString() + "  response.toString()");
   }
@@ -155,7 +154,7 @@ class _fingerPrintState extends State<fingerPrint> {
         stream:
             Stream.periodic(Duration(seconds: 1)).asyncMap((i) => getTime()),
         builder: (context, snapshot) {
-          if (snapshot.hasData && prefs != null) {
+          if (snapshot.hasData && prefs != null && snapshot.data!.time_24.toString().length > 4) {
             date = snapshot.data!.date.toString();
             time = snapshot.data!.time_24.toString();
             if (snapshot.data!.time_24.toString().length > 4) {
@@ -296,9 +295,15 @@ class _fingerPrintState extends State<fingerPrint> {
                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          if (activecheck) {
+                                          if (activecheck && !(time.toString()=="00:00:00")) {
                                             checWork();
-                                          } else {}
+                                          } else {
+
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                              content: Text("يجب الانتظار لحين جلب الوقت..."),
+                                            ));
+
+                                          }
                                         });
                                       },
                                       child: activecheck
@@ -501,91 +506,99 @@ class _fingerPrintState extends State<fingerPrint> {
   }
 
   void checWork() async {
-    setState(() {
-      activecheck = false;
-    });
-
     try {
-      TransType = prefs.getString('TransType').toString();
-    } catch (_) {
-      //  TransType = '1';
-    }
-    if (TransType.toString().isEmpty) {
-      Uri apiUrl = Uri.parse(
-          Globalvireables.GetlASTaCTION + prefs.getString('man').toString());
-      http.Response response = await http.get(apiUrl);
-      var jsonResponse = jsonDecode(response.body);
-
-      if (jsonResponse.toString().contains("1")) {
-        TransType = "2";
-      } else {
-        TransType = "1";
-      }
-      SharePrefernce.setR('TransType', TransType);
-    }
-    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      duration: new Duration(seconds: 20),
-      content: new Row(
-        children: <Widget>[
-          new CircularProgressIndicator(),
-          new Text("جار ارسال الحركه...")
-        ],
-      ),
-    ));
-    var date2 = DateTime.now();
-    int c = 0;
-    Uri apiUrl = Uri.parse(Globalvireables.checWork);
-    final json = {
-      "ID": "1",
-      "UserID": prefs.getString('man').toString(),
-      "ActionNo": TransType, //1 =start , 2 = end
-      "ActionDate": date.toString(),
-      "ActionTime": time.toString(),
-      "Coor_X": _currentPosition!.altitude.toString(),
-      "Coor_Y": _currentPosition!.longitude.toString(),
-      "ManAddress": _currentAddress,
-      "Notes": "1",
-      "Img": "1",
-      "BattryLevel": "2",
-      "TabletName": "Flutter",
-      "DayNo": date2.weekday.toString(),
-      "DayNm": DateFormat('EEEE').format(date2).toString(),
-      "Msg": "Msg",
-    };
-
-    if (TransType == '1')
-      SharePrefernce.setR('TransType', "2");
-    else
-      SharePrefernce.setR('TransType', "1");
-
-    http.Response response = await http.post(apiUrl,
-        headers: {"Content-Type": "application/json"}, body: jsonEncode(json));
-
-    print(response.body.toString() + "ggggg");
-    print(json.toString() + "ggggg");
-
-    var jsonResponse = jsonDecode(response.body);
-    if (jsonResponse.toString() == "2") {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("تم تسجيل الحركه بنجاح"),
-      ));
       setState(() {
-        activecheck = true;
+        activecheck = false;
       });
-    } else {
+
       try {
+        TransType = prefs.getString('TransType').toString();
+      } catch (_) {
+          TransType = '1';
+      }
+      if (TransType
+          .toString()
+          .isEmpty) {
+        Uri apiUrl = Uri.parse(
+            Globalvireables.GetlASTaCTION + prefs.getString('man').toString());
+        http.Response response = await http.get(apiUrl);
+        var jsonResponse = jsonDecode(response.body);
+
+        if (jsonResponse.toString().contains("1")) {
+          TransType = "2";
+        } else {
+          TransType = "1";
+        }
+        SharePrefernce.setR('TransType', TransType);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+        duration: new Duration(seconds: 20),
+        content: new Row(
+          children: <Widget>[
+            new CircularProgressIndicator(),
+            new Text("جار ارسال الحركه...")
+          ],
+        ),
+      ));
+      var date2 = DateTime.now();
+      int c = 0;
+      Uri apiUrl = Uri.parse(Globalvireables.checWork);
+      final json = {
+        "ID": "1",
+        "UserID": prefs.getString('man').toString(),
+        "ActionNo": TransType, //1 =start , 2 = end
+        "ActionDate": date.toString(),
+        "ActionTime": time.toString(),
+        "Coor_X": _currentPosition!.altitude.toString(),
+        "Coor_Y": _currentPosition!.longitude.toString(),
+        "ManAddress": _currentAddress,
+        "Notes": "1",
+        "Img": "1",
+        "BattryLevel": "2",
+        "TabletName": "Flutter",
+        "DayNo": date2.weekday.toString(),
+        "DayNm": DateFormat('EEEE').format(date2).toString(),
+        "Msg": "Msg",
+      };
+
+      if (TransType == '1')
+        SharePrefernce.setR('TransType', "2");
+      else
+        SharePrefernce.setR('TransType', "1");
+
+      http.Response response = await http.post(apiUrl,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(json));
+
+      print(response.body.toString() + "ggggg");
+      print(json.toString() + "ggggg");
+
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse.toString() == "2") {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+          content: Text("تم تسجيل الحركه بنجاح"),
         ));
-      } catch (_) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
-        ));
+        setState(() {
+          activecheck = true;
+        });
+      } else {
+        try {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+          ));
+        } catch (_) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+          ));
+        }
       }
-    }
 
-    if (c == 0) {}
+      if (c == 0) {}
+    } catch(_){
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  content: Text("يوجد مشكلة , يرجى المحاولة لاحقا")));
   }
+}
 }

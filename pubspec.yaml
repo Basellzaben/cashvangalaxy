@@ -79,6 +79,7 @@ flutter:
   assets:
     - assets/
     - assets/shape1.png
+    - assets/shape5.png
     - assets/img1.jpg
     - assets/img2.jpg
     - assets/img3.jpg

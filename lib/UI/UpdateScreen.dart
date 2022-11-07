@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Models/Categ.dart';
+import '../Models/Customers.dart';
 import '../Models/Items.dart';
 import '../Models/UnitItem.dart';
 import '../Models/users.dart';
@@ -34,9 +35,9 @@ class UpdateScreen extends StatefulWidget {
 var i = 0;
 var checkedValue = true;
 
-List<bool> CheckSelected = [false, false,false,false,false];
-List<String> messageupdate = ["", "", "", "",""];
-List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد'];
+List<bool> CheckSelected = [false, false,false,false,false,false];
+List<String> messageupdate = ["", "", "", "","",""];
+List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد', 'العملاء'];
 
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
@@ -52,12 +53,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
     return Stack(
       children: <Widget>[
-        Image.asset(
-          "assets/updateback.png",
+       /* Image.asset(
+          "assets/shape5.png",
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           fit: BoxFit.cover,
-        ),
+        ),*/
         Scaffold(
             backgroundColor: HexColor(Globalvireables.white2),
 
@@ -232,6 +233,28 @@ class _UpdateScreenState extends State<UpdateScreen> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: CheckboxListTile(
+                                checkColor: HexColor(Globalvireables.white),
+                                title: Text(
+                                  "العملاء",
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                                //    <-- label
+                                value: CheckSelected[5],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    CheckSelected[5] = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
 
                         ],
                       ),
@@ -394,19 +417,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
             print(i.toString() + " iiiii");
             if (i > 0) {
               SharePrefernce.setR('CName', users.fromJson((list[0])).Sname);
-
               messageupdate[1] = 'تم التحديث';
-
-              //  UpdateStateDialog();
-              FillCateg();
-              // Navigator.of(context, rootNavigator: true).pop();
             } else {
-              FillCateg();
-
               messageupdate[1] = 'فشل التحديث';
-              //UpdateStateDialog();
             }
           });
+          if(j==list.length-1)
+            FillCateg();
         }
       } else {
         messageupdate[1] = 'فشل التحديث';
@@ -423,10 +440,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
       print("error");
       //UpdateStateDialog();
     }
-    if (mounted)
-      FillCateg();
-    else
-      FillCateg();
+
 
   }
 
@@ -481,10 +495,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
               //UpdateStateDialog();
             }
           });
+          if(j==list.length-1)
+            FillItems();
         }
       } else {
         messageupdate[2] = 'فشل التحديث';
       // Navigator.pop(context);
+        FillItems();
 
         //  UpdateStateDialog();
       }
@@ -492,13 +509,13 @@ class _UpdateScreenState extends State<UpdateScreen> {
       messageupdate[2] = 'لم يتم التحديث';
      // Navigator.pop(context);
 
+      FillItems();
 
       //  Navigator.pop(context);
       print("error");
       //UpdateStateDialog();
     }
 
-    FillItems();
 
   }
 
@@ -552,7 +569,6 @@ int u=0;
             print(i.toString() + " iiiii");
             if (i > 0) {
               messageupdate[3] = 'تم التحديث';
-              FillUnitItem();
 
               // Navigator.pop(context);
 
@@ -560,7 +576,6 @@ int u=0;
 
               // Navigator.of(context, rootNavigator: true).pop();
             } else {
-              FillUnitItem();
 
               // Navigator.pop(context);
 
@@ -568,6 +583,9 @@ int u=0;
               //UpdateStateDialog();
             }
           });
+          if(j==list.length-1)
+            FillUnitItem();
+
         }
        // Navigator.pop(context);
 
@@ -598,7 +616,7 @@ int u=0;
 
   Future<void> FillUnitItem() async {
     if (CheckSelected[4] == true) {
-      handler.DropItems();
+      handler.DropUnitItem();
 
       // showLoaderDialog(context);
       Uri apiUrl = Uri.parse(Globalvireables.GetUnit);
@@ -649,30 +667,175 @@ int u=0;
               messageupdate[4] = 'فشل التحديث';
               //UpdateStateDialog();
             }
+
+
+            if(j==list.length-1) {
+              FillCustomers();
+            }
           });
         }
         // Navigator.pop(context);
 
       } else {
-        Navigator.pop(context);
-
         messageupdate[4] = 'فشل التحديث';
         Navigator.pop(context);
+        FillCustomers();
+
         //  UpdateStateDialog();
       }
     } else {
+      Navigator.pop(context);
       messageupdate[4] = 'لم يتم التحديث';
-      // Navigator.pop(context);
-   //   Navigator.pop(context);
+      FillCustomers();
 
-
-      //  Navigator.pop(context);
-      print("error");
-      //UpdateStateDialog();
     }
 
 
+  }
 
+
+  Future<void> FillCustomers() async {
+   var prefs = await SharedPreferences.getInstance();
+    if (CheckSelected[5] == true) {
+      handler.DropUnitItem();
+
+      // showLoaderDialog(context);
+      Uri apiUrl = Uri.parse(Globalvireables.GetCustomers+prefs.getString('man').toString());
+print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString());
+      http.Response response = await http.get(apiUrl);
+      if (response.statusCode == 200) {
+        handler.DropCateg();
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString() + "reqquestt");
+        String receivedJson = jsonResponse;
+        List<dynamic> list = json.decode(receivedJson);
+        if (response.body.isNotEmpty) {
+          jsonResponse = json.decode(response.body);
+        } else {
+          print(Customers.fromJson(jsonDecode(jsonResponse[5])).Address);
+        }
+        int u=0;
+        //  print(Categ.fromJson((list[0])).ItemCode.toString() +"   listtttta");
+        for (int j = 0; j < list.length; j++) {
+          // jsonResponse = json.decode(response.body)[i];
+          handler.initializeDB().whenComplete(() async {
+            // print(Categ.fromJson((list[j])).ItemCode.toString()+"  dddatatta");
+
+        Customers firstUser = Customers(
+        CloseVisitWithoutimg: Customers.fromMap((list[j])).CloseVisitWithoutimg.toString(),
+            countryNo: Customers.fromMap((list[j])).countryNo.toString(),
+            countryNm: Customers.fromMap((list[j])).countryNm.toString(),
+            UpdateDate: Customers.fromMap((list[j])).UpdateDate.toString(),
+            BB: Customers.fromMap((list[j])).BB.toString(),
+            BB_Chaq: Customers.fromMap((list[j])).BB_Chaq.toString(),
+            sat1: Customers.fromMap((list[j])).sat1.toString(),
+            sun1: Customers.fromMap((list[j])).sun1.toString(),
+            mon1: Customers.fromMap((list[j])).mon1.toString(),
+
+
+            tues1: Customers.fromMap((list[j])).tues1.toString(),
+            Celing: Customers.fromMap((list[j])).Celing.toString(),
+            CatNo: Customers.fromMap((list[j])).CatNo.toString(),
+            State: Customers.fromMap((list[j])).State.toString(),
+            Cust_type: Customers.fromMap((list[j])).Cust_type.toString(),
+            CheckAlowedDay: Customers.fromMap((list[j])).CheckAlowedDay.toString(),
+            PromotionFlag: Customers.fromMap((list[j])).PromotionFlag.toString(),
+            No: Customers.fromMap((list[j])).No.toString(),
+
+
+            Note2: Customers.fromMap((list[j])).Note2.toString(),
+            sat: Customers.fromMap((list[j])).sat.toString(),
+            sun: Customers.fromMap((list[j])).sun.toString(),
+            mon: Customers.fromMap((list[j])).mon.toString(),
+            tues: Customers.fromMap((list[j])).tues.toString(),
+            wens: Customers.fromMap((list[j])).wens.toString(),
+            thurs: Customers.fromMap((list[j])).thurs.toString(),
+
+            CustType: Customers.fromMap((list[j])).Note2.toString(),
+            barCode: Customers.fromMap((list[j])).sat.toString(),
+            Address: Customers.fromMap((list[j])).sun.toString(),
+            SMan: Customers.fromMap((list[j])).mon.toString(),
+            Latitude: Customers.fromMap((list[j])).tues.toString(),
+            Longitude: Customers.fromMap((list[j])).wens.toString(),
+
+            name: Customers.fromMap((list[j])).name.toString(),
+            Ename: Customers.fromMap((list[j])).Ename.toString(),
+            CUST_PRV_MONTH: Customers.fromMap((list[j])).CUST_PRV_MONTH.toString(),
+            CUST_NET_BAL: Customers.fromMap((list[j])).CUST_NET_BAL.toString(),
+            Pay_How: Customers.fromMap((list[j])).Pay_How.toString(),
+            PAMENT_PERIOD_NO: Customers.fromMap((list[j])).PAMENT_PERIOD_NO.toString(),
+            TaxSts: Customers.fromMap((list[j])).TaxSts.toString(),
+          Chqceling: Customers.fromMap((list[j])).Chqceling.toString(),
+          wens1: Customers.fromMap((list[j])).wens1.toString(),
+          thurs1: Customers.fromMap((list[j])).thurs1.toString(),
+            );
+
+            int i = await addCustomers(firstUser);
+            print(i.toString() + " iiiii");
+            if (i > 0) {
+              messageupdate[5] = 'تم التحديث';
+              // Navigator.pop(context);
+
+              //  UpdateStateDialog();
+
+              // Navigator.of(context, rootNavigator: true).pop();
+            } else {
+              // Navigator.pop(context);
+
+              messageupdate[5] = 'فشل التحديث';
+              //UpdateStateDialog();
+            }
+
+
+            if(j==list.length-1) {
+              Navigator.pop(context);
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+
+                      content: setupAlertDialoadContainer(),
+                    );
+                  });
+
+            }
+          });
+        }
+        // Navigator.pop(context);
+
+      } else {
+        messageupdate[5] = 'فشل التحديث';
+        Navigator.pop(context);
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: setupAlertDialoadContainer(),
+              );
+            });
+        //  UpdateStateDialog();
+      }
+    } else {
+      Navigator.pop(context);
+      messageupdate[5] = 'لم يتم التحديث';
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: setupAlertDialoadContainer(),
+            );
+          });
+
+    }
+
+
+  }
+
+    Future<int> addCustomers(Customers firstCustomers) async {
+    List<Customers> listOfItems = [
+      firstCustomers,
+    ];
+    return await handler.insertCustomers(listOfItems);
   }
 
   Future<int> addUnitItem(UnitItem firstItems) async {
@@ -789,39 +952,32 @@ int u=0;
       },
     );
   }
+  Widget setupAlertDialoadContainer() {
+    return Container(
+      height: 500.0, // Change as per your requirement
+      width: 300.0, // Change as per your requirement
+      child: Column(
+        children: [
 
-  Future UpdateStateDialog() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('ملخص تحديث البيانات'),
-          content: const Text(''),
-          actions: <Widget>[
-            Container(
-              width: 200,
-              height: 300,
-              child: ListView.builder(
-                itemCount: updateitems.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 200,
-                    height: 300,
-                    child: ListTile(
-                        trailing: Text(
-                          updateitems[index],
-                          style: TextStyle(
-                              color: HexColor(Globalvireables.basecolor),
-                              fontSize: 15),
-                        ),
-                        title: Text(messageupdate[index])),
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-      );
-    });
+          Container(margin: EdgeInsets.only(bottom: 20),width:300,child: Center( child: Text("ملخص تحديث البيانات",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),))),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: messageupdate.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Row(
+                  children: [
+                    Text(messageupdate[index],style: TextStyle(color: messageupdate[index]=="تم التحديث"?Colors.black:Colors.redAccent,)),
+                    Spacer(),
+                    Text(updateitems[index]),
+
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import '../Models/CompanyInfo.dart';
+import '../Models/Customers.dart';
 import '../Models/Items.dart';
 import '../Models/users.dart';
 
@@ -12,7 +13,7 @@ class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
-      join(path, 'cashvant.db'),
+      join(path, 'cashvantt.db'),
       onCreate: (database, version) async {
         await database.execute(
           "CREATE TABLE CompanyInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -140,11 +141,10 @@ class DatabaseHandler {
           "countryNm,"
           "UpdateDate,"
           "BB,"
-          "BB_Chaq,"
-          "OQ1 TEXT)",
+          "BB_Chaq TEXT)",
         );
       },
-      version: 27,
+      version: 28,
     );
   }
 
@@ -165,7 +165,14 @@ class DatabaseHandler {
     }
     return result;
   }
-
+  Future<int> insertCustomers(List<Customers> Items) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    for (var Itemss in Items) {
+      result = await db.insert('Customers', Itemss.toMap());
+    }
+    return result;
+  }
 
   Future<int> insertCateg(List<Categ> categ) async {
     int result = 0;
@@ -240,7 +247,6 @@ class DatabaseHandler {
 
     final List<Map<String, Object?>> queryResult2 = await db.query(
         " UnitItem"+ " where item_no='"+itemno+"' and unitno='"+unitno+"'");
-
 try{
     if(!queryResult.map((e) => Categ.fromMap(e)).toList().first.price.isEmpty && queryResult.map((e) => Categ.fromMap(e)).toList().first.price!="0.0"){
       return queryResult
@@ -309,4 +315,10 @@ try{
     final Database db = await initializeDB();
     db.delete('items');
   }
+  Future<void> DropUnitItem() async {
+    final Database db = await initializeDB();
+    db.delete('UnitItem');
+  }
+
+
 }

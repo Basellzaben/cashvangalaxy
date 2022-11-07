@@ -20,7 +20,7 @@ class Globalvireables {
   static String GetlASTaCTION="http://10.0.1.60:88/api/Man/GetManAtten/";
   static String GetCateg="http://10.0.1.60:88/api/ItemsCateg/GetItems_Categ/1";
   static String GetItems="http://10.0.1.60:88/api/Items/GetItems_cashVan";
-  static String GetCustomers="http://10.0.1.60:88/api/Customers/GetCustomers_CashVan/";
+  static String GetCustomers="http://10.0.1.60:88/api/Customer/GetCustomers_CashVan/";
   static String GetUnit="http://10.0.1.60:88/api/Unites/GetUniItem";
   static List<Map<String, dynamic>> journals = [];
   static List<String> price = [];

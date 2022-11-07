@@ -21,298 +21,169 @@ class LogoutOverlayStatecard extends State<ItemDialog>
 
   @override
   void initState() {
-    if(Globalvireables.journals.isEmpty) {
+    if (Globalvireables.journals.isEmpty) {
       Globalvireables.journals..clear();
       _refreshItems();
     } else {
       final handler = DatabaseHandler();
-
       _journals.clear();
-      _journals =Globalvireables.journals;
-
+      _journals = Globalvireables.journals;
     }
 //print(_journals[0]['Item_Name'].toString());
   }
-
 
   @override
   Widget build(BuildContext context) {
     //  if(_journals.length>0)
     return Container(
       color: HexColor(Globalvireables.white2),
-      child:   Center(
+      child: Center(
         child: Scaffold(
-
             key: _scaffoldKey,
             backgroundColor: Colors.white,
-            body:Container(
+            body: Container(
               child: SingleChildScrollView(
-                child: Column(children: [
-                  SizedBox(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: Container(
-                        height: 65,
-                        margin: const EdgeInsets.only(top: 40,left: 10,right: 10),
-                        width: MediaQuery.of(context).size.width/1.3,
-                        child: TextField(
-                          controller: searchcontroler,
-                          onChanged: refrech(),
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: HexColor(Globalvireables.white),
-                            suffixIcon: Icon(Icons.search,color: HexColor(Globalvireables.basecolor),),
-                            hintText: "البحث",
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
+                child: Column(
+                  children: [
+                    SizedBox(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        child: Container(
+                          height: 65,
+                          margin: const EdgeInsets.only(
+                              top: 40, left: 10, right: 10),
+                          width: MediaQuery.of(context).size.width / 1.3,
+                          child: TextField(
+                            controller: searchcontroler,
+                            onChanged: refrech(),
+                            textAlign: TextAlign.right,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: HexColor(Globalvireables.white),
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: HexColor(Globalvireables.basecolor),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(color: HexColor(Globalvireables.basecolor)),
+                              hintText: "البحث",
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0)),
+                                borderSide: BorderSide(
+                                    color: HexColor(Globalvireables.basecolor)),
+                              ),
                             ),
                           ),
-                        ),
-                      )),
-                  if(_journals.isNotEmpty)
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
+                        )),
+                    if (_journals.isNotEmpty)
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _journals.length,
+                            itemBuilder: (context, index) => GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          builder: (context) {
+                                            return Container(
 
-                      child: ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _journals.length,
-                          itemBuilder: (context, index)
-                          =>GestureDetector(
-                              onTap: () {
-                                setState(() {
 
 
-                                  showModalBottomSheet(
-                                      context: context,
-                                      shape : RoundedRectangleBorder(
-                                          borderRadius : BorderRadius.circular(15)
+                                            );
+                                          });
+                                    });
+                                  },
+                                  child: Container(
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:BorderRadius.circular(10.0),
                                       ),
-                                      builder: (context) {
-                                        return Container(
-                                          decoration: new BoxDecoration(
-                                              color: HexColor(Globalvireables.basecolor),
-                                              borderRadius: new BorderRadius.only(
-                                                  topLeft: const Radius.circular(15.0),
-                                                  topRight: const Radius.circular(15.0))),
-                                          child: Container(
-                                            decoration: new BoxDecoration(
-                                                color: HexColor(Globalvireables.basecolor),
-                                                borderRadius: new BorderRadius.only(
-                                                    topLeft: const Radius.circular(22.0),
-                                                    topRight: const Radius.circular(22.0))),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  child: Row(
-                                                    children: [
-                                                      Spacer(),
-                                                      Text("33",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 20)),
-                                                      Text(": الخصم",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w200,
-                                                              fontSize: 20)),
-                                                      Spacer(),
-                                                      Text("40",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 20)),
-                                                      Text(" : المجموع  ",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w200,
-                                                              fontSize: 20)),
-
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.all(10),
-                                                  child: Row(
-                                                    children: [
-                                                      Spacer(),
-                                                      Text("22",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 20)),
-                                                      Text(": الاجمالي",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w200,
-                                                              fontSize: 20)),
-                                                      Spacer(),
-                                                      Text("40",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold,
-                                                              fontSize: 20)),
-                                                      Text(" : الضريبه  ",
-                                                          style: TextStyle(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w200,
-                                                              fontSize: 20)),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                                Container(
-                                                  margin: EdgeInsets.only(top: 40,bottom: 20),
-                                                  child: Row(children: [
-                                                    Spacer(),
-                                                    ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        primary:HexColor(Globalvireables.white),
-                                                      ),
-                                                      child: Text(
-                                                        "حفظ"
-                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
-                                                      ),
-                                                      onPressed:
-                                                          () async {
-                                                      },
-                                                    ),
-                                                    Spacer(),
-                                                    ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        primary:HexColor(Globalvireables.white),
-                                                      ),
-                                                      child: Text(
-                                                        "اعتماد"
-                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
-                                                      ),
-                                                      onPressed:
-                                                          () async {
-                                                      },
-                                                    ),
-                                                    Spacer(),
-
-                                                    ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        primary:HexColor(Globalvireables.white),
-                                                      ),
-                                                      child: Text(
-                                                        "طباعه"
-                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
-                                                      ),
-                                                      onPressed:
-                                                          () async {
-                                                      },
-                                                    ),
-                                                    Spacer(),
-
-                                                    ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                        primary:HexColor(Globalvireables.white),
-                                                      ),
-                                                      child: Text(
-                                                        "حذف"
-                                                        ,style: TextStyle(color: HexColor(Globalvireables.basecolor),fontSize: 22),
-                                                      ),
-                                                      onPressed:
-                                                          () async {
-                                                      },
-                                                    ),
-                                                    Spacer(),
-
-                                                  ],),
-                                                )
-
-
-
-                                              ],
+                                      child: Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 15),
+                                                height: 50,
+                                                child: Container(
+                                                    child: Text(
+                                                  "",
+                                                  style: TextStyle(
+                                                      color: Colors.green,
+                                                      fontSize: 30,
+                                                      height: 1.3,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                )),
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      });
-
-                                });
-                              },
-                            child: Container(
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(10.0),
-                                ),
-                                child: Container(
-margin: EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(top: 15),
-                                          height: 50,
-                                          child: Container(child: Text(prices[index]
-                                            ,style: TextStyle(color: Colors.green,fontSize: 30,
-                                            height: 1.3,fontWeight: FontWeight.bold),)
-                                          ),),
+                                            Spacer(),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {});
+                                                },
+                                                child: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            top: 15),
+                                                    height: 50,
+                                                    child: Container(
+                                                        child: Text(
+                                                            _journals[index]
+                                                                ['Item_Name'],
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize: 16,
+                                                                height: 1.3,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)))),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Spacer(),
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                            });
-                                          },child: Container(
-                                            margin: const EdgeInsets.only(top: 15),
-                                            height: 50,
-                                            child: Container(child: Text(_journals[index]['Item_Name'],style: TextStyle(color: Colors.black,fontSize: 16,
-                                            height: 1.3,fontWeight: FontWeight.bold)))
-                                        ),),
-                                      ),
-
-
-
-
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                )),
+                      )
+                    else
+                      Container(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 120),
+                            child: Image.asset(
+                              'assets/notfound.png',
+                              height: 100,
+                              width: 100,
                             ),
-                          )
+                          ))
 
-
-
-
-
-
-                      ),
-
-                    ) else
-                    Container(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 120),
-                          child: Image.asset('assets/notfound.png'
-                            ,height: 100,width: 100, ),
-
-                        ))
-
-                  //
-                ],),
+                    //
+                  ],
+                ),
               ),
-            )
-        ),
+            )),
       ),
     );
     /*else
@@ -331,17 +202,21 @@ margin: EdgeInsets.all(5),
     );*/
   }
 
-  showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
       content: Row(
         children: [
           const CircularProgressIndicator(),
-          Container(margin: const EdgeInsets.only(left: 7),child:const Text("تسجيل الدخول ..." )),
-        ],),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("تسجيل الدخول ...")),
+        ],
+      ),
     );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
         return alert;
       },
     );
@@ -353,12 +228,10 @@ margin: EdgeInsets.all(5),
     });
   }
 
-  String getprice(String itemno,String unitno,String catNo){
+  String getprice(String itemno, String unitno, String catNo) {
     final handler = DatabaseHandler();
-
-   // return handler.retrieveprice(itemno,unitno,catNo).;
-    handler.retrieveprice(itemno,unitno,catNo).then((result){
-
+    // return handler.retrieveprice(itemno,unitno,catNo).;
+    handler.retrieveprice(itemno, unitno, catNo).then((result) {
       return result;
     });
     return "0.000";
@@ -372,30 +245,28 @@ margin: EdgeInsets.all(5),
     prices.clear();
     Globalvireables.journals = await handler.retrieveItems2();
     setState(() {
-      _journals =  Globalvireables.journals;
+      _journals = Globalvireables.journals;
     });
-for(int i=0;i<_journals.length;i++){
-  prices[i]=await handler.retrieveprice("1001", "0.0", "1.0");
-
-}
-
+    if(prices.length!=_journals.length){
+      prices.clear();
+      for (int i = 0; i < _journals.length; i++) {
+      String p = await handler.retrieveprice("1001", "0.0", "1.0");
+      prices.add(p);
+    }}
   }
+
   void refreshSearch(String txt) async {
     final handler = DatabaseHandler();
     var data = await handler.retrieveItems2search(txt);
     setState(() {
       _journals = data;
     });
-    prices.clear();
-    for (int i = 0; i < _journals.length; i++) {
-      prices[i]=await handler.retrieveprice("1001", "0.0", "1.0");
-
+    if(prices.length!=_journals.length){
+      prices.clear();
+      for (int i = 0; i < _journals.length; i++) {
+      String p = await handler.retrieveprice("1001", "0.0", "1.0");
+      prices.add(p);
       //  prices[i] =
-    }
+    }}
   }
-
-
-
 }
-
-

@@ -411,7 +411,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                       child: Container(
 
 margin: EdgeInsets.only(bottom: 22),
-                        child: new Image.asset('assets/upbottom.png'
+                        child: new Image.asset('assets/shop.png'
                         ,width: 55,height: 55,
                         )
                        // child: Icon(Icons.settings_overscan,size: 55,color: HexColor(Globalvireables.basecolor),),
