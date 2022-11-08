@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
@@ -31,7 +32,7 @@ void main() => runApp(
 
 );
 class Login extends StatelessWidget {
-
+var prefs;
   final handler = DatabaseHandler();
    TextEditingController UserNameControler= TextEditingController();
    TextEditingController UserPasswordControler= TextEditingController();
@@ -42,6 +43,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<void> FillDataUsers() async {
+      prefs = await SharedPreferences.getInstance();
 
 
       try {
@@ -107,8 +109,16 @@ class Login extends StatelessWidget {
                 int i=   await addUsers(firstUser);
                 print(i.toString()+" iiiii");
                 if(i>0){
-                  SharePrefernce.setR('CName', users.fromJson((list[0])).Sname);
-                  SharePrefernce.setR('man', users.fromJson((list[0])).man);
+                  prefs.setString('CName', users.fromJson((list[0])).Sname);
+                  prefs.setString('man', users.fromJson((list[0])).man);
+                  prefs.setString('MaxDiscount', users.fromJson((list[0])).MaxDiscount.toString());
+                  prefs.setString('MaxBouns', users.fromJson((list[0])).MaxBouns.toString());
+
+                  print(i.toString()+" newdatta " + users.fromJson((list[0])).MaxDiscount.toString());
+
+                  // prefs.setString('TransType', TransType);
+
+
                 }else{
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -288,6 +298,9 @@ keyboardType: TextInputType.visiblePassword,
                                                     () async {
 
                                                     if (await handler.getLogin('Omarmaaitah', '1987')) {
+
+
+
                                                       Navigator.pushReplacement(
                                                           context,
                                                           MaterialPageRoute(

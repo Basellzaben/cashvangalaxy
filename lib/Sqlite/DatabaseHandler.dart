@@ -292,6 +292,9 @@ try{
         "SELECT * FROM users WHERE UserName = '$user' and Password = '$password'");
     if (res.length > 0) {
       await prefs.setString('EMPName', users.fromMap(res.first).name);
+      await prefs.setString('MaxDiscount',users.fromMap(res.first).MaxDiscount.toString() + " % ");
+      await prefs.setString('MaxBouns', users.fromMap(res.first).MaxBouns.toString()+ " % ");
+
       return true;
     }
     return false;

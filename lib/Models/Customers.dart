@@ -1,19 +1,17 @@
 class Customers {
-
   String No = "";
   String name = "";
   String Ename = "";
   String CUST_PRV_MONTH = "";
   String CUST_NET_BAL = "";
-  String Pay_How ="";
-  String PAMENT_PERIOD_NO ="";
-  String TaxSts ="";
-  String CustType ="";
+  String Pay_How = "";
+  String PAMENT_PERIOD_NO = "";
+  String TaxSts = "";
+  String CustType = "";
   String barCode = "";
   String Address = "";
   String SMan = "";
   String Latitude = "";
-
   String Longitude = "";
   String Note2 = "";
   String sat = "";
@@ -26,7 +24,6 @@ class Customers {
   String sun1 = "";
   String mon1 = "";
   String tues1 = "";
-
   String Chqceling = "";
   String wens1 = "";
   String thurs1 = "";
