@@ -97,22 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.8"
-  dropdown_textfield:
-    dependency: "direct main"
-    description:
-      name: dropdown_textfield
-      sha256: d9cd5881340fe555d8bc83d3f48ba9214d6072bf856ba583a8fe13a8e9b6a4ef
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.6"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -150,14 +134,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      sha256: "60fc7b78455b94e6de2333d2f95196d32cf5c22f4b0b0520a628804cb463503b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.7"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -248,38 +224,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  google_maps_flutter:
-    dependency: "direct main"
-    description:
-      name: google_maps_flutter
-      sha256: "460b8c3318c5be1346e7182b848e3c2b83fe65f2f5d404c871ac7e134ee59801"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.1"
-  google_maps_flutter_android:
-    dependency: transitive
-    description:
-      name: google_maps_flutter_android
-      sha256: "09e7e7fa642ea105bd507bb0c184c3d2fa9f9ad08f55bd8c8d609388d9078328"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.3.3"
-  google_maps_flutter_ios:
-    dependency: transitive
-    description:
-      name: google_maps_flutter_ios
-      sha256: "43a71553d9973af6886b6984e246dac18b8a62dc59581904d8d1292388b05ea5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.12"
-  google_maps_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: google_maps_flutter_platform_interface
-      sha256: cde5d8713fd61f48ba675190be5ab294a022eec966748a2f83063f487d076fbc
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.4"
   http:
     dependency: transitive
     description:
@@ -581,14 +525,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  stream_transform:
-    dependency: transitive
-    description:
-      name: stream_transform
-      sha256: f1d172e22a5432c042b5adfa9aff621372e4292231d9d73ad00f486ad01c2395
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   string_scanner:
     dependency: transitive
     description:
