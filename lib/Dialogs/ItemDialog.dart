@@ -633,7 +633,7 @@ try {
 print("priiiice  = "+result);
       return result;
     });
-    return "66.666";
+    return "00.000";
   }
 
   var prefs;
