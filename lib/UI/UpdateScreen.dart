@@ -13,6 +13,7 @@ import '../Models/Categ.dart';
 import '../Models/Customers.dart';
 import '../Models/Items.dart';
 import '../Models/UnitItem.dart';
+import '../Models/Unites.dart';
 import '../Models/users.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import '../Sqlite/SharePrefernce.dart';
@@ -34,10 +35,10 @@ class UpdateScreen extends StatefulWidget {
 
 var i = 0;
 var checkedValue = true;
-
-List<bool> CheckSelected = [false, false,false,false,false,false];
-List<String> messageupdate = ["", "", "", "","",""];
-List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد', 'العملاء'];
+bool CheckAll=false;
+List<bool> CheckSelected = [false, false,false,false,false,false,false];
+List<String> messageupdate = ["لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث","لم يتم التحديث","لم يتم التحديث","لم يتم التحديث"];
+List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد', 'العملاء', 'الوحدات'];
 
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
@@ -104,12 +105,46 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     ],
                   )),
               Container(
-                margin: EdgeInsets.only(top: 50),
+                margin: EdgeInsets.only(top: 30),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: CheckboxListTile(
+                              activeColor: Colors.green,
+    checkColor:Colors.white,
+
+                              title: Text(
+                                "تحديث الكل",
+                                style: TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w900,fontSize: 23),
+                              ),
+                              //    <-- label
+                              value: CheckAll,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  CheckAll = newValue!;
+                                  for(int i=0;i<CheckSelected.length;i++){
+                                    CheckSelected[i]=newValue;
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
                       Row(
                         children: [
+
+
+
+
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Directionality(
@@ -259,6 +294,36 @@ class _UpdateScreenState extends State<UpdateScreen> {
                         ],
                       ),
 
+                      Row(
+                        children: [
+                          Spacer(),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: CheckboxListTile(
+                                checkColor: HexColor(Globalvireables.white),
+                                title: Text(
+                                  "الوحدات",
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                                //    <-- label
+                                value: CheckSelected[6],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    CheckSelected[6] = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+
 
                       Container(
                         margin: EdgeInsets.only(top: 20),
@@ -335,6 +400,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
           int i = await addCompanyInfo(firstUser);
           print(i.toString() + " iiiii");
           if (i > 0) {
+
             // Navigator.pop(context);
             SharePrefernce.setR('CName', CompanyInfo.fromJson((list[0])).CName);
             messageupdate[1] = 'تم التحديث';
@@ -360,6 +426,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
       print("error");
       //  showCustomDialog(context);
     }
+    CheckSelected[0]=false;
   }
 
   Future<void> FillDataUsers() async {
@@ -441,6 +508,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
       //UpdateStateDialog();
     }
 
+    CheckSelected[1]=false;
 
   }
 
@@ -516,6 +584,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
       //UpdateStateDialog();
     }
 
+    CheckSelected[2]=false;
 
   }
 
@@ -609,6 +678,7 @@ int u=0;
     }
 
 
+    CheckSelected[3]=false;
 
   }
 
@@ -689,6 +759,7 @@ int u=0;
       FillCustomers();
 
     }
+    CheckSelected[4]=false;
 
 
   }
@@ -697,7 +768,7 @@ int u=0;
   Future<void> FillCustomers() async {
    var prefs = await SharedPreferences.getInstance();
     if (CheckSelected[5] == true) {
-      handler.DropUnitItem();
+      handler.DropCustomers();
 
       // showLoaderDialog(context);
       Uri apiUrl = Uri.parse(Globalvireables.GetCustomers+prefs.getString('man').toString());
@@ -788,6 +859,81 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
 
 
             if(j==list.length-1) {
+              FillUnites();
+
+            }
+          });
+        }
+        // Navigator.pop(context);
+
+      } else {
+        messageupdate[5] = 'فشل التحديث';
+        FillUnites();
+
+      }
+    } else {
+      FillUnites();
+
+
+    }
+
+   CheckSelected[5]=false;
+
+  }
+
+
+  Future<void> FillUnites() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (CheckSelected[6] == true) {
+      handler.DropUnites();
+
+      // showLoaderDialog(context);
+      Uri apiUrl = Uri.parse(Globalvireables.GetUnites);
+      print("uriiiii "+Globalvireables.GetUnites);
+      http.Response response = await http.get(apiUrl);
+      if (response.statusCode == 200) {
+        handler.DropCateg();
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString() + "reqquestt");
+        String receivedJson = jsonResponse;
+        List<dynamic> list = json.decode(receivedJson);
+        if (response.body.isNotEmpty) {
+          jsonResponse = json.decode(response.body);
+        } else {
+          print(Unites.fromJson(jsonDecode(jsonResponse[0])).UnitEname);
+        }
+        int u=0;
+        //  print(Categ.fromJson((list[0])).ItemCode.toString() +"   listtttta");
+        for (int j = 0; j < list.length; j++) {
+          // jsonResponse = json.decode(response.body)[i];
+          handler.initializeDB().whenComplete(() async {
+            // print(Categ.fromJson((list[j])).ItemCode.toString()+"  dddatatta");
+
+            Unites firstUser = Unites(
+              Unitno: Unites.fromMap((list[j])).Unitno.toString(),
+              UnitName: Unites.fromMap((list[j])).UnitName.toString(),
+              UnitEname: Unites.fromMap((list[j])).UnitEname.toString(),
+
+            );
+
+            int i = await addUnites(firstUser);
+            print(i.toString() + " iiiii");
+            if (i > 0) {
+              messageupdate[6] = 'تم التحديث';
+              // Navigator.pop(context);
+
+              //  UpdateStateDialog();
+
+              // Navigator.of(context, rootNavigator: true).pop();
+            } else {
+              // Navigator.pop(context);
+
+              messageupdate[6] = 'فشل التحديث';
+              //UpdateStateDialog();
+            }
+
+
+            if(j==list.length-1) {
               Navigator.pop(context);
               showDialog(
                   context: context,
@@ -804,7 +950,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
         // Navigator.pop(context);
 
       } else {
-        messageupdate[5] = 'فشل التحديث';
+        messageupdate[6] = 'فشل التحديث';
         Navigator.pop(context);
         showDialog(
             context: context,
@@ -817,7 +963,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
       }
     } else {
       Navigator.pop(context);
-      messageupdate[5] = 'لم يتم التحديث';
+      messageupdate[6] = 'لم يتم التحديث';
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -828,7 +974,17 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
 
     }
 
+    CheckSelected[6]=false;
+    setState(() {
+      CheckAll=false;
+    });
+  }
 
+  Future<int> addUnites(Unites firstCustomers) async {
+    List<Unites> listOfItems = [
+      firstCustomers,
+    ];
+    return await handler.insertUnites(listOfItems);
   }
 
     Future<int> addCustomers(Customers firstCustomers) async {
@@ -858,19 +1014,6 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
     return await handler.insertCateg(listOfCateg);
   }
   Future<int> addUsers(users firstUser) async {
-    /*CompanyInfo firstUser = CompanyInfo(
-        ID: 22,
-        CName: 'userProvider.userOne.CName',
-        Address: '',
-        SuperVisor: '',
-        TaxNo1: '',
-        TaxNo2: '',
-        AllowDay: '',
-        Lat: '',
-        Long: '',
-        StartDate: '',
-        CMobile: '',
-      );*/
     List<users> listOfUsers = [
       firstUser,
     ];
@@ -878,19 +1021,6 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
   }
 
   Future<int> addCompanyInfo(CompanyInfo firstUser) async {
-    /*CompanyInfo firstUser = CompanyInfo(
-        ID: 22,
-        CName: 'userProvider.userOne.CName',
-        Address: '',
-        SuperVisor: '',
-        TaxNo1: '',
-        TaxNo2: '',
-        AllowDay: '',
-        Lat: '',
-        Long: '',
-        StartDate: '',
-        CMobile: '',
-      );*/
     List<CompanyInfo> listOfUsers = [
       firstUser,
     ];

@@ -7,13 +7,14 @@ import 'package:path/path.dart';
 import '../Models/CompanyInfo.dart';
 import '../Models/Customers.dart';
 import '../Models/Items.dart';
+import '../Models/Unites.dart';
 import '../Models/users.dart';
 
 class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
-      join(path, 'cashvantt.db'),
+      join(path, 'cashvanttt.db'),
       onCreate: (database, version) async {
         await database.execute(
           "CREATE TABLE CompanyInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -83,6 +84,13 @@ class DatabaseHandler {
           "tax TEXT,"
           "ItemWeight TEXT,"
           "OQ1 TEXT)",
+        );
+
+        await database.execute(
+          "CREATE TABLE Unites(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "Unitno TEXT,"
+              "UnitName TEXT,"
+              "UnitEname TEXT)",
         );
 
 
@@ -173,6 +181,15 @@ class DatabaseHandler {
     }
     return result;
   }
+  Future<int> insertUnites(List<Unites> Items) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    for (var Itemss in Items) {
+      result = await db.insert('Unites', Itemss.toMap());
+    }
+    return result;
+  }
+
 
   Future<int> insertCateg(List<Categ> categ) async {
     int result = 0;
@@ -226,27 +243,38 @@ class DatabaseHandler {
     if(search!=null)
       if (search.isNotEmpty) {
         return db.query('items', orderBy: "Item_No",
-            where: " Item_No" " LIKE  '%" + search + "%'");
+            where: " Item_Name" " LIKE  '%" + search + "%'");
       }
 
     if(search=="All") {
       return db.query('items', orderBy: "Item_No");
     }
-
     return db.query('items', orderBy: "Item_No");
+  }
 
 
+  Future<List<Map<String,dynamic>>> retrieveUnitesOfItem(String? itemno) async {
+    final Database db = await initializeDB();
+    if(itemno!=null)
+      if (itemno.isNotEmpty) {
+        return db.rawQuery("SELECT Unites.UnitName,Unites.Unitno FROM Unites INNER JOIN "
+            "UnitItem ON Unites.Unitno=UnitItem.unitno where "
+            "UnitItem.item_no='"+itemno+"'");}
+    if(itemno=="All") {
+      return db.query("SELECT Unites.UnitName FROM Unites", orderBy: "item_no");
+    }
+    return db.query("SELECT Unites.UnitName FROM Unites", orderBy: "item_no");
   }
 
 
 
    retrieveprice(String itemno,String unitno,String catNo) async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query(
-        "Categ"+ " where ItemCode='"+itemno+"' and UnitNo='"+unitno+"' and CategNo='"+catNo+"'");
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        "select * from Categ"+ " where ItemCode='"+itemno+"' and UnitNo='"+unitno+"' and CategNo='"+catNo+"'");
 
-    final List<Map<String, Object?>> queryResult2 = await db.query(
-        " UnitItem"+ " where item_no='"+itemno+"' and unitno='"+unitno+"'");
+    final List<Map<String, Object?>> queryResult2 = await db.rawQuery(
+        "select * from UnitItem"+ " where item_no='"+itemno+"' and unitno='"+unitno+"'");
 try{
     if(!queryResult.map((e) => Categ.fromMap(e)).toList().first.price.isEmpty && queryResult.map((e) => Categ.fromMap(e)).toList().first.price!="0.0"){
       return queryResult
@@ -300,16 +328,16 @@ try{
     return false;
   }
 
+
+
   Future<void> DropCompanyInfo() async {
     final Database db = await initializeDB();
     db.delete('CompanyInfo');
   }
-
   Future<void> Dropusers() async {
     final Database db = await initializeDB();
     db.delete('users');
   }
-
   Future<void> DropCateg() async {
     final Database db = await initializeDB();
     db.delete('Categ');
@@ -322,6 +350,12 @@ try{
     final Database db = await initializeDB();
     db.delete('UnitItem');
   }
-
-
+  Future<void> DropUnites() async {
+    final Database db = await initializeDB();
+    db.delete('Unites');
+  }
+  Future<void> DropCustomers() async {
+    final Database db = await initializeDB();
+    db.delete('Customers');
+  }
 }

@@ -69,31 +69,33 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Container(
           margin: EdgeInsets.only(top: 200),
 
-          child: Column(children: [
-            Center(
-              child: new Image.asset('assets/logo.png'
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Center(
+                child: new Image.asset('assets/logo.png'
       ,height:selectedValue/3
       ,width:selectedValue/3),
-                  ),
+                    ),
 
-            Container(
-              margin: EdgeInsets.only(top: 5,bottom: 20),
-              child: Center(
-                //aBeeZee
-               /* child: Text('',
-                  style: GoogleFonts.alef(
-                      textStyle: Theme.of(context).textTheme.displayMedium,
-                      fontSize: 33,fontWeight: FontWeight.w800,color: Colors.black87
-                  ),
-                ),*/
+              Container(
+                margin: EdgeInsets.only(top: 5,bottom: 20),
+                child: Center(
+                  //aBeeZee
+                 /* child: Text('',
+                    style: GoogleFonts.alef(
+                        textStyle: Theme.of(context).textTheme.displayMedium,
+                        fontSize: 33,fontWeight: FontWeight.w800,color: Colors.black87
+                    ),
+                  ),*/
+                ),
               ),
+
+
+
+
+            ]
+
             ),
-
-
-
-
-          ]
-
           ),
         ));
 

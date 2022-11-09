@@ -17,12 +17,16 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late http.Response response;
   List<Map<String, dynamic>> _journals = [];
+
+  List<Map<String, dynamic>> Unites = [];
+
   final TextEditingController searchcontroler = TextEditingController();
   List<String> prices = [];
   int count = 1;
 
   @override
   void initState() {
+
     if (Globalvireables.journals.isEmpty) {
       Globalvireables.journals..clear();
       _refreshItems();
@@ -34,21 +38,19 @@ class LogoutOverlayStatecard extends State<ItemDialog>
 //print(_journals[0]['Item_Name'].toString());
   }
 
-  String dropdownvalue = 'Item 1';
+  TextEditingController PriceCounter = TextEditingController();
+   TextEditingController dropcontroler = TextEditingController();
 
   // List of items in our dropdown menu
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
-
+  List<String> items =[];
+  List<String> uniitem =[];
+ String selectedUnit="0";
   @override
   Widget build(BuildContext context) {
-    final TextEditingController counter = TextEditingController();
+
+     TextEditingController counter = TextEditingController();
     counter.text = count.toString();
+   // PriceCounter.text="44";
     //  if(_journals.length>0)
     return Container(
       color: HexColor(Globalvireables.white2),
@@ -105,7 +107,21 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                             itemCount: _journals.length,
                             itemBuilder: (context, index) => GestureDetector(
                                   onTap: () {
+
                                     setState(() {
+                                      getUnites( _journals[index]['Item_No']);
+
+try {
+  selectedUnit = uniitem.last.toString();
+  PriceCounter.text =
+      getprice(_journals[index]['Item_No'], selectedUnit, '1.0').substring(
+          0, 4);
+  print("lastindex  " + selectedUnit);
+}catch(_){}
+                                      /*   print("elllle "+items.elementAt(items.length-1).toString());
+                                      selectedUnit=items.indexOf(items.elementAt(items.length-1).toString()).toString();
+                                      PriceCounter.text=getprice(_journals[index]['Item_No'],selectedUnit,'1.0').substring(0,4);
+*/
                                       showModalBottomSheet(
                                           isScrollControlled: true,
                                           context: context,
@@ -150,21 +166,25 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                       textDirection:
                                                                           TextDirection
                                                                               .rtl,
-                                                                      child: Text(
-                                                                          _journals[index]
-                                                                              [
-                                                                              'Item_Name'],
-                                                                          textAlign: TextAlign
-                                                                              .justify,
-                                                                          overflow: TextOverflow
-                                                                              .ellipsis,
-                                                                          maxLines:
-                                                                              3,
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontSize: 20,
-                                                                              height: 1.3,
-                                                                              fontWeight: FontWeight.w900)),
+                                                                      child:
+                                                                          SizedBox(
+                                                                        width: MediaQuery.of(context).size.width /
+                                                                            1.2,
+                                                                        child: Text(
+                                                                            _journals[index][
+                                                                                'Item_Name'],
+                                                                            textAlign: TextAlign
+                                                                                .justify,
+                                                                            overflow: TextOverflow
+                                                                                .ellipsis,
+                                                                            maxLines:
+                                                                                3,
+                                                                            style: TextStyle(
+                                                                                color: Colors.black,
+                                                                                fontSize: 20,
+                                                                                height: 1.3,
+                                                                                fontWeight: FontWeight.w900)),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                   SizedBox(
@@ -172,17 +192,40 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                   ),
                                                                 ],
                                                               ),
-                                                              SizedBox(
-                                                                height: 30,
+
+                                                              Align(
+                                                                alignment: Alignment.centerRight,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.all(9.0),
+                                                                  child: Align(
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Spacer(),
+                                                                        Container(
+                                                                          width: MediaQuery.of(context).size.width/2.8,
+                                                                          child: TextField(
+                                                                            style: TextStyle(fontSize: 50,fontWeight: FontWeight.w900),
+                                                                            controller: PriceCounter,
+                                                                            textAlign: TextAlign.center,
+                                                                            decoration: InputDecoration(
+                                                                              border: InputBorder.none,
+                                                                             enabled: false,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Container(margin:EdgeInsets.only(top: 11),child: Text("JD"))
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
+
+
                                                               Row(
                                                                 children: [
                                                                   Spacer(),
                                                                   Text(
-                                                                      prefs
-                                                                          .getString(
-                                                                              'MaxBouns')
-                                                                          .toString(),
+                                                                      prefs.getString('MaxBouns').toString(),
                                                                       style: TextStyle(
                                                                           color: Colors
                                                                               .deepOrange,
@@ -215,10 +258,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                 children: [
                                                                   Spacer(),
                                                                   Text(
-                                                                      prefs
-                                                                          .getString(
-                                                                              'MaxDiscount')
-                                                                          .toString(),
+                                                                      prefs.getString('MaxDiscount').toString(),
                                                                       style: TextStyle(
                                                                           color: Colors
                                                                               .deepOrange,
@@ -315,10 +355,12 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                   Container(
                                                                     width: 50,
                                                                     height: 50,
-                                                                    child: GestureDetector(
+                                                                    child:
+                                                                        GestureDetector(
                                                                       onTap:
                                                                           () {
-                                                                        setState(() {
+                                                                        setState(
+                                                                            () {
                                                                           if (count >
                                                                               0) {
                                                                             count -=
@@ -326,7 +368,8 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                             counter.text =
                                                                                 count.toString();
                                                                           } else {}
-                                                                        });},
+                                                                        });
+                                                                      },
                                                                       child: Image
                                                                           .asset(
                                                                         "assets/minuse.png",
@@ -351,7 +394,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                 child: Row(
                                                                   children: [
                                                                     Spacer(),
-                                                                    DropdownButton(
+                                                                 /*   DropdownButton(
                                                                       value:
                                                                           dropdownvalue,
                                                                       icon: const Icon(
@@ -377,8 +420,50 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                               newValue!;
                                                                         });
                                                                       },
+                                                                    ),*/
+
+                                                                    Container(
+                                                                      width: MediaQuery.of(context).size.width/1.1,
+                                                                      height: 50,
+                                                                      child: TextField(
+                                                                        textAlign: TextAlign.center,
+                                                                        readOnly: true,
+                                                                        controller: dropcontroler,
+                                                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                                                                        decoration: InputDecoration(
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderSide: const BorderSide(color: Colors.grey, width: 3.0),
+                                                                          ),
+                                                                          suffixIcon: PopupMenuButton<String>(
+                                                                            icon: const Icon(Icons.arrow_drop_down),
+                                                                            onSelected: (String value) {
+                                                                              dropcontroler.text = value;
+                                                                              selectedUnit=uniitem.elementAt(items.indexOf(value));//(Unites.indexOf(value)+1).toString();
+                                                                            print("indexselected "+selectedUnit.toString());
+                                                                              PriceCounter.text=getprice(_journals[index]['Item_No'],selectedUnit,'1.0').substring(0,4);
+
+                                                                            },
+                                                                            itemBuilder: (BuildContext context) {
+                                                                              return items
+                                                                                  .map<PopupMenuItem<String>>((String? value) {
+                                                                                return new PopupMenuItem(
+                                                                                    child: new Text(value!, style: TextStyle(
+                                                                                        color: Colors
+                                                                                            .black,
+                                                                                        fontSize:
+                                                                                        25,
+                                                                                        height:
+                                                                                        1.3,
+                                                                                        fontWeight:
+                                                                                        FontWeight.bold)), value: value);
+                                                                              }).toList();
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                    Text(
+
+                                                                   /* Text(
                                                                         ' : الوحده',
                                                                         style: TextStyle(
                                                                             color: Colors
@@ -388,7 +473,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                             height:
                                                                                 1.3,
                                                                             fontWeight:
-                                                                                FontWeight.bold)),
+                                                                                FontWeight.bold))*/
                                                                     Spacer(),
                                                                   ],
                                                                 ),
@@ -448,17 +533,25 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                             top: 15),
                                                     height: 50,
                                                     child: Container(
-                                                        child: Text(
-                                                            _journals[index]
-                                                                ['Item_Name'],
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 16,
-                                                                height: 1.3,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)))),
+                                                        width: MediaQuery.of(context).size.width / 1.2,
+                                                        child: Directionality(
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          child: Text(
+                                                              _journals[index]
+                                                                  ['Item_Name'],
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .clip,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 16,
+                                                                  height: 1.3,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                        ))),
                                               ),
                                             ),
                                           ],
@@ -530,17 +623,23 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   }
 
   String getprice(String itemno, String unitno, String catNo) {
+
+    print("inputs  itemno="+itemno+", unitno="+unitno);
+
     final handler = DatabaseHandler();
     // return handler.retrieveprice(itemno,unitno,catNo).;
     handler.retrieveprice(itemno, unitno, catNo).then((result) {
+        PriceCounter.text=result;
+print("priiiice  = "+result);
       return result;
     });
-    return "0.000";
+    return "66.666";
   }
 
   var prefs;
 
   void _refreshItems() async {
+    getUnites("All");
     final handler = DatabaseHandler();
     prefs = await SharedPreferences.getInstance();
     //print(_journals[0]['price']  + "   thispriiice");
@@ -574,4 +673,30 @@ class LogoutOverlayStatecard extends State<ItemDialog>
       }
     }
   }
+
+
+  void getUnites(String itemNo) async {
+    final handler = DatabaseHandler();
+    var data = await handler.retrieveUnitesOfItem(itemNo);
+    setState(() {
+      Unites = data;
+      print("lennnngth  "+data.length.toString());
+    });
+if(data.length>0){
+    items.clear();
+    uniitem.clear();
+      for (int i = 0; i < data.length; i++) {
+        items.add(data[i]['UnitName']);
+        uniitem.add(data[i]['Unitno']);
+        //if(i==data.length-1)
+       //   selectedUnit=1.toString();
+
+      //  selectedUnit=items.indexOf(data[data.length-1]['UnitName']).toString();
+
+      }
+    dropcontroler.text = items.last;
+
+}
+  }
+
 }
