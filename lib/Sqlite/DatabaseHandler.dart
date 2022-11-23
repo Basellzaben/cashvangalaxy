@@ -7,14 +7,17 @@ import 'package:path/path.dart';
 import '../Models/CompanyInfo.dart';
 import '../Models/Customers.dart';
 import '../Models/Items.dart';
+import '../Models/MaxOrder.dart';
 import '../Models/Unites.dart';
+import '../Models/salDetails.dart';
 import '../Models/users.dart';
 
 class DatabaseHandler {
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
+
     return openDatabase(
-      join(path, 'cashvanttt.db'),
+      join(path, 'cashvann.db'),
       onCreate: (database, version) async {
         await database.execute(
           "CREATE TABLE CompanyInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -93,6 +96,36 @@ class DatabaseHandler {
               "UnitEname TEXT)",
         );
 
+        await database.execute(
+          "CREATE TABLE salDetails(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "name TEXT,"
+              "itemno TEXT,"
+              "netprice TEXT,"
+              "dis TEXT,"
+              "bounse TEXT,"
+              "qt TEXT,"
+              "unit TEXT,"
+              "distype TEXT,"
+              "tax TEXT,"
+              "price TEXT)",
+        );
+
+
+        await database.execute(
+          "CREATE TABLE MaxOrder(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+              "Sales TEXT,"
+              "Payment TEXT,"
+              "SalesOrder TEXT,"
+              "PrepareQty TEXT,"
+              "RetSales TEXT,"
+              "PostDely TEXT,"
+              "ReturnQty TEXT,"
+              "CustCash TEXT,"
+              "EnterQty TEXT,"
+              "TransferQty TEXT,"
+              "ItemRecepit TEXT,"
+              "Visits TEXT)",
+        );
 
         await database.execute(
           "CREATE TABLE UnitItem(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -105,8 +138,7 @@ class DatabaseHandler {
               "Min TEXT,"
               "posprice TEXT,"
               "acc_num TEXT,"
-              "UnitSale TEXT)",
-        );
+              "UnitSale TEXT)",);
 
         await database.execute(
           "CREATE TABLE Customers(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -152,10 +184,93 @@ class DatabaseHandler {
           "BB_Chaq TEXT)",
         );
       },
-      version: 28,
+      version: 31,
     );
+
   }
 
+
+  Future<int> DeleteItemfromSalDet(String itemno) async {
+    int result = 0;
+    final Database db = await initializeDB();
+      result = await db.delete('salDetails',where: 'itemno = ?',
+          whereArgs: [itemno]);
+    return result;
+  }
+
+  Future<void> SaveSal(String name, String itemno,String netprice, String dis,
+  String bounse, String qt,String unit, String distype,String price,String tax) async {
+    final Database dbClient = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await dbClient.rawQuery(
+        "select * from salDetails where itemno='"+itemno+"'");
+    Map<String, dynamic> row = {
+      'name' : name,
+      'tax':tax,
+      'itemno' : itemno,
+      'netprice' : netprice,
+      'dis' : dis,
+      'qt' : qt,
+      'unit' : unit,
+      'bounse':bounse,
+      'distype' : distype,
+      'price' : price,
+    };
+    var res;
+    try{   print("length :"+ queryResult
+        .map((e) => salDetails.fromMap(e))
+        .toList().first.itemno);
+   if( queryResult
+        .map((e) => salDetails.fromMap(e))
+        .toList().first.itemno==itemno)
+    {
+
+     await dbClient.update("salDetails", row ,where: 'itemno = ?',
+          whereArgs: [itemno]);
+       }else{
+   await dbClient.insert('salDetails', row);
+    }}catch(_){
+     await dbClient.insert('salDetails', row);
+
+   }
+    print("add row :"+row.toString());
+
+    /* print("add setails statue :"+res.toString());
+    print("add row :"+row.toString());
+   //await dbClient.insert('salDetails', row);
+    res = await dbClient.update("salDetails", row ,where: 'itemno = ?',
+        whereArgs: [1011]);*/
+  }
+
+  Future<int> insertsalDetails(List<salDetails> categ) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    for (var Catego in categ) {
+      result = await db.insert('salDetails', Catego.toMap());
+    }
+    return result;
+  }
+
+
+
+  GetMaxSal() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        "select * from MaxOrder");
+        return queryResult
+            .map((e) => MaxOrder.fromMap(e))
+            .toList()
+            .first.Sales.toString();
+  }
+
+
+  Future<int> insertMaxOrder(List<MaxOrder> categ) async {
+    int result = 0;
+    final Database db = await initializeDB();
+    for (var Catego in categ) {
+      result = await db.insert('MaxOrder', Catego.toMap());
+    }
+    return result;
+  }
   Future<int> insertItems(List<Items> Items) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -235,6 +350,10 @@ class DatabaseHandler {
   Future<List<Map<String,dynamic>>> retrieveItems2() async {
     final Database db = await initializeDB();
     return db.query('items', orderBy: "Item_No");
+  }
+  Future<List<Map<String,dynamic>>> retrievesalDetails() async {
+    final Database db = await initializeDB();
+    return db.query('salDetails', orderBy: "itemno");
 
   }
 
@@ -354,8 +473,21 @@ try{
     final Database db = await initializeDB();
     db.delete('Unites');
   }
+  Future<void> DropMaxOrder() async {
+    final Database db = await initializeDB();
+    db.delete('MaxOrder');
+  }
   Future<void> DropCustomers() async {
     final Database db = await initializeDB();
     db.delete('Customers');
   }
+  Future<void> DropsalDetails() async {
+    final Database db = await initializeDB();
+    db.delete('salDetails');
+  }
+
+
+
+
+
 }

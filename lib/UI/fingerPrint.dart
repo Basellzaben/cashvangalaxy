@@ -31,13 +31,13 @@ Future<Time> getTime() async {
   prefs = await SharedPreferences.getInstance();
 
   Uri apiUrl = Uri.parse(Globalvireables.urltime);
-
   http.Response response = await http.get(apiUrl);
-
   var jsonResponse = json.decode(response.body);
+  print("mohh = "+jsonResponse);
 
-  // var parsedJson = json.decode(jsonResponse);
-  var time = Time.fromJson(jsonResponse);
+  var parsedJson = json.decode(jsonResponse);
+  var time = Time.fromJson(parsedJson);
+  print("mohh = "+time.Date);
   return time;
 }
 
@@ -130,6 +130,7 @@ class _fingerPrintState extends State<fingerPrint> {
     } else {
       TransType = "1";
     }
+
     prefs.setString('TransType', TransType);
 
     print(jsonResponse.toString() + "  response.toString()");
@@ -146,7 +147,7 @@ class _fingerPrintState extends State<fingerPrint> {
 */
   @override
   Widget build(BuildContext context) {
-    // getTime();
+    getTime();
     String timee = "00:00:00";
     String datee = "";
     sharedPrefs();
@@ -154,12 +155,12 @@ class _fingerPrintState extends State<fingerPrint> {
         stream:
             Stream.periodic(Duration(seconds: 1)).asyncMap((i) => getTime()),
         builder: (context, snapshot) {
-          if (snapshot.hasData && prefs != null && snapshot.data!.time_24.toString().length > 4) {
-            date = snapshot.data!.date.toString();
-            time = snapshot.data!.time_24.toString();
-            if (snapshot.data!.time_24.toString().length > 4) {
-              timee = snapshot.data!.time_24.toString();
-              datee = snapshot.data!.date_time_txt.toString().substring(0, 27);
+          if (snapshot.hasData && prefs != null /*&& snapshot.data!.Timee.toString().length > 4*/) {
+            date = snapshot.data!.Date.toString();
+            time = snapshot.data!.Timee.toString();
+            if (snapshot.data!.Timee.toString().length > 4) {
+              timee = snapshot.data!.Timee.toString();
+              datee = snapshot.data!.Date.toString().substring(0, 10);
             }
 
             return Stack(children: <Widget>[
@@ -179,7 +180,8 @@ class _fingerPrintState extends State<fingerPrint> {
                     Row(
                       children: [
                         Container(
-                            margin: EdgeInsets.all(30),
+                            margin: EdgeInsets.only(top: 30,left: 20),
+
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -193,7 +195,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                 ))),
                         Spacer(),
                         Container(
-                          margin: EdgeInsets.only(top: 60, left: 5, right: 5),
+                          margin: EdgeInsets.only(top: 30, left: 5, right: 5),
                           child: Text(
                             prefs.getString('TransType').toString() == "1"
                                 ? "بدايه الدوام"
@@ -205,7 +207,7 @@ class _fingerPrintState extends State<fingerPrint> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 55, left: 10, right: 10),
+                          margin: EdgeInsets.only(top: 30, left: 10, right: 10),
                           height: 30,
                           width: 30,
                           decoration: BoxDecoration(
@@ -291,8 +293,8 @@ class _fingerPrintState extends State<fingerPrint> {
                               Center(
                                 child: Container(
                                   child: Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    child: GestureDetector(
+                                        margin: EdgeInsets.only(top: 30,left: 20),
+                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           if (activecheck && !(time.toString()=="00:00:00")) {
@@ -370,7 +372,8 @@ class _fingerPrintState extends State<fingerPrint> {
                     Row(
                       children: [
                         Container(
-                            margin: EdgeInsets.all(30),
+                            margin: EdgeInsets.only(top: 30,left: 20),
+
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -384,7 +387,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                 ))),
                         Spacer(),
                         Container(
-                          margin: EdgeInsets.only(top: 60, left: 5, right: 5),
+                          margin: EdgeInsets.only(top: 25, left: 5, right: 5),
                           child: Text(
                             "الدوام",
                             style: TextStyle(
@@ -394,7 +397,7 @@ class _fingerPrintState extends State<fingerPrint> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 55, left: 10, right: 10),
+                          margin: EdgeInsets.only(top: 25, left: 10, right: 10),
                           height: 30,
                           width: 30,
                           decoration: BoxDecoration(
@@ -529,6 +532,7 @@ class _fingerPrintState extends State<fingerPrint> {
         } else {
           TransType = "1";
         }
+        print("TransType "+TransType);
         SharePrefernce.setR('TransType', TransType);
       }
       ScaffoldMessenger.of(context).showSnackBar(new SnackBar(

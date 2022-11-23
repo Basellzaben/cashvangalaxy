@@ -2,14 +2,19 @@ import 'dart:async';
 import 'package:cashvangalaxy/provider/CompanyProvider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gif/flutter_gif.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'GlobalVar.dart';
 import 'HexaColor.dart';
+import 'UI/ItineraryScreen.dart';
 import 'UI/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 Future<void> main() async {
+
   Provider.debugCheckInvalidValueType = null;
   runApp(
     MultiProvider(
@@ -50,19 +55,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
     );
   }
-
+  Future<void> saveSize(String value)async{
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('isLargeScreen', value);
+  }
   @override
   Widget build(BuildContext context) {
+  //  FlutterGifController controller= FlutterGifController();
     var isLargeScreen = false;
+    String isLarge = "0";
+
     var selectedValue = 0.0;
     if (MediaQuery.of(context).size.width > 600) {
       isLargeScreen = true;
+      isLarge="1";
       selectedValue=MediaQuery.of(context).size.width as double;
     } else {
       isLargeScreen = false;
+      isLarge="0";
+
       selectedValue=MediaQuery.of(context).size.height as double;
 
     }
+    saveSize(isLarge);
+
     return Scaffold(
 
         backgroundColor:HexColor(Globalvireables.basecolor),
@@ -72,11 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
           child: SingleChildScrollView(
             child: Column(children: [
               Center(
-                child: new Image.asset('assets/logo.png'
+               /* child: new Image.asset('assets/galaxy.gif'
       ,height:selectedValue/3
-      ,width:selectedValue/3),
-                    ),
+      ,width:selectedValue/3),*/
 
+
+            child: Image(image: new AssetImage("assets/galaxy2.gif"))),
               Container(
                 margin: EdgeInsets.only(top: 5,bottom: 20),
                 child: Center(
@@ -88,6 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),*/
                 ),
+
               ),
 
 

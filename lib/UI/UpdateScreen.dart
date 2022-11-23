@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cashvangalaxy/Models/CompanyInfo.dart';
+import 'package:cashvangalaxy/Models/MaxOrder.dart';
 import 'package:cashvangalaxy/provider/CompanyProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,9 +37,9 @@ class UpdateScreen extends StatefulWidget {
 var i = 0;
 var checkedValue = true;
 bool CheckAll=false;
-List<bool> CheckSelected = [false, false,false,false,false,false,false];
-List<String> messageupdate = ["لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث","لم يتم التحديث","لم يتم التحديث","لم يتم التحديث"];
-List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد', 'العملاء', 'الوحدات'];
+List<bool> CheckSelected = [false, false,false,false,false,false,false,false];
+List<String> messageupdate = ["لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث", "لم يتم التحديث","لم يتم التحديث","لم يتم التحديث","لم يتم التحديث","لم يتم التحديث"];
+List<String> updateitems = ["معلومات المؤسسة", 'المستخدمين', 'فئات العملاء', 'المواد', 'فئات المواد', 'العملاء', 'الوحدات',"التسلسلات"];
 
 class _UpdateScreenState extends State<UpdateScreen> {
   @override
@@ -100,7 +101,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                           child: Text(
                             "تحديث البيانات",
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 22, fontWeight: FontWeight.w900),
                           ))
                     ],
                   )),
@@ -117,13 +118,12 @@ class _UpdateScreenState extends State<UpdateScreen> {
                             textDirection: TextDirection.rtl,
                             child: CheckboxListTile(
                               activeColor: Colors.green,
-    checkColor:Colors.white,
-
+                              checkColor:Colors.white,
                               title: Text(
                                 "تحديث الكل",
                                 style: TextStyle(
                                     color: Colors.black87,
-                                    fontWeight: FontWeight.w900,fontSize: 23),
+                                    fontWeight: FontWeight.w900,fontSize: 20),
                               ),
                               //    <-- label
                               value: CheckAll,
@@ -296,7 +296,28 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
                       Row(
                         children: [
-                          Spacer(),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: CheckboxListTile(
+                                checkColor: HexColor(Globalvireables.white),
+                                title: Text(
+                                  "التسلسلات",
+                                  style: TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                                //    <-- label
+                                value: CheckSelected[7],
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    CheckSelected[7] = newValue!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Directionality(
@@ -326,20 +347,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
 
                       Container(
-                        margin: EdgeInsets.only(top: 20),
-                        width: MediaQuery.of(context).size.width / 3,
-                        color: HexColor(Globalvireables.basecolor),
+                        decoration: BoxDecoration(
+                            color: HexColor(Globalvireables.basecolor),
+
+                            borderRadius: BorderRadius.all(Radius.circular(15))
+                        ),
+
+                        margin: EdgeInsets.only(top: 30),
+                        width: MediaQuery.of(context).size.width / 1.3,
                         child: TextButton(
                           onPressed: () {
-                            //showLoaderDialog(context);
-
-                            //.delayed(Duration.zero, () => yourFunc(context));
-
                             FillData();
                           },
                           child: Text(
                             'تحديث البيانات',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 19),
                           ),
                         ),
                       )
@@ -600,7 +622,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
 
       http.Response response = await http.get(apiUrl);
       if (response.statusCode == 200) {
-        handler.DropCateg();
+
         var jsonResponse = json.decode(response.body);
         print(jsonResponse.toString() + "reqquestt");
         String receivedJson = jsonResponse;
@@ -693,7 +715,7 @@ int u=0;
 
       http.Response response = await http.get(apiUrl);
       if (response.statusCode == 200) {
-        handler.DropCateg();
+
         var jsonResponse = json.decode(response.body);
         print(jsonResponse.toString() + "reqquestt");
         String receivedJson = jsonResponse;
@@ -748,13 +770,13 @@ int u=0;
 
       } else {
         messageupdate[4] = 'فشل التحديث';
-        Navigator.pop(context);
+       // Navigator.pop(context);
         FillCustomers();
 
         //  UpdateStateDialog();
       }
     } else {
-      Navigator.pop(context);
+     // Navigator.pop(context);
       messageupdate[4] = 'لم يتم التحديث';
       FillCustomers();
 
@@ -775,7 +797,7 @@ int u=0;
 print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString());
       http.Response response = await http.get(apiUrl);
       if (response.statusCode == 200) {
-        handler.DropCateg();
+
         var jsonResponse = json.decode(response.body);
         print(jsonResponse.toString() + "reqquestt");
         String receivedJson = jsonResponse;
@@ -887,12 +909,75 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
     if (CheckSelected[6] == true) {
       handler.DropUnites();
 
-      // showLoaderDialog(context);
       Uri apiUrl = Uri.parse(Globalvireables.GetUnites);
       print("uriiiii "+Globalvireables.GetUnites);
       http.Response response = await http.get(apiUrl);
       if (response.statusCode == 200) {
-        handler.DropCateg();
+
+        var jsonResponse = json.decode(response.body);
+        print(jsonResponse.toString() + "reqquestt");
+        String receivedJson = jsonResponse;
+        List<dynamic> list = json.decode(receivedJson);
+        if (response.body.isNotEmpty) {
+          jsonResponse = json.decode(response.body);
+        } else {
+          print(Unites.fromJson(jsonDecode(jsonResponse[0])).UnitEname);
+        }
+        int u=0;
+        for (int j = 0; j < list.length; j++) {
+          handler.initializeDB().whenComplete(() async {
+
+            Unites firstUser = Unites(
+              Unitno: Unites.fromMap((list[j])).Unitno.toString(),
+              UnitName: Unites.fromMap((list[j])).UnitName.toString(),
+              UnitEname: Unites.fromMap((list[j])).UnitEname.toString(),
+
+            );
+
+            int i = await addUnites(firstUser);
+            print(i.toString() + " iiiii");
+            if (i > 0) {
+              messageupdate[6] = 'تم التحديث';
+            } else {
+              messageupdate[6] = 'فشل التحديث';
+            }
+            if(j==list.length-1) {
+            //  Navigator.pop(context);
+              FillMaxOrder();
+            }
+          });
+        }
+
+      } else {
+        messageupdate[6] = 'فشل التحديث';
+      //  Navigator.pop(context);
+        FillMaxOrder();
+      }
+    } else {
+      //Navigator.pop(context);
+      messageupdate[6] = 'لم يتم التحديث';
+      FillMaxOrder();
+    }
+
+    CheckSelected[6]=false;
+    setState(() {
+      CheckAll=false;
+    });
+  }
+
+
+  Future<void> FillMaxOrder() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (CheckSelected[7] == true) {
+      handler.DropMaxOrder();
+
+      // showLoaderDialog(context);
+      var prefs = await SharedPreferences.getInstance();
+      Uri apiUrl = Uri.parse(Globalvireables.GetMaxOrder+prefs.getString('man').toString());
+      print("uriiiii "+Globalvireables.GetUnites);
+      http.Response response = await http.get(apiUrl);
+      if (response.statusCode == 200) {
+
         var jsonResponse = json.decode(response.body);
         print(jsonResponse.toString() + "reqquestt");
         String receivedJson = jsonResponse;
@@ -909,27 +994,32 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
           handler.initializeDB().whenComplete(() async {
             // print(Categ.fromJson((list[j])).ItemCode.toString()+"  dddatatta");
 
-            Unites firstUser = Unites(
-              Unitno: Unites.fromMap((list[j])).Unitno.toString(),
-              UnitName: Unites.fromMap((list[j])).UnitName.toString(),
-              UnitEname: Unites.fromMap((list[j])).UnitEname.toString(),
+
+            MaxOrder firstUser = MaxOrder(
+            Sales: MaxOrder.fromMap((list[j])).Sales.toString(),
+            Payment: MaxOrder.fromMap((list[j])).Payment.toString(),
+            SalesOrder: MaxOrder.fromMap((list[j])).SalesOrder.toString(),
+
+            PrepareQty: MaxOrder.fromMap((list[j])).PrepareQty.toString(),
+            RetSales: MaxOrder.fromMap((list[j])).RetSales.toString(),
+            PostDely: MaxOrder.fromMap((list[j])).PostDely.toString(),
+
+            ReturnQty: MaxOrder.fromMap((list[j])).ReturnQty.toString(),
+            CustCash: MaxOrder.fromMap((list[j])).CustCash.toString(),
+            EnterQty: MaxOrder.fromMap((list[j])).EnterQty.toString(),
+
+            TransferQty: MaxOrder.fromMap((list[j])).TransferQty.toString(),
+            ItemRecepit: MaxOrder.fromMap((list[j])).ItemRecepit.toString(),
+            Visits: MaxOrder.fromMap((list[j])).Visits.toString(),
 
             );
 
-            int i = await addUnites(firstUser);
+            int i = await addMaxOrder(firstUser);
             print(i.toString() + " iiiii");
             if (i > 0) {
-              messageupdate[6] = 'تم التحديث';
-              // Navigator.pop(context);
-
-              //  UpdateStateDialog();
-
-              // Navigator.of(context, rootNavigator: true).pop();
+              messageupdate[7] = 'تم التحديث';
             } else {
-              // Navigator.pop(context);
-
-              messageupdate[6] = 'فشل التحديث';
-              //UpdateStateDialog();
+              messageupdate[7] = 'فشل التحديث';
             }
 
 
@@ -950,7 +1040,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
         // Navigator.pop(context);
 
       } else {
-        messageupdate[6] = 'فشل التحديث';
+        messageupdate[7] = 'فشل التحديث';
         Navigator.pop(context);
         showDialog(
             context: context,
@@ -963,7 +1053,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
       }
     } else {
       Navigator.pop(context);
-      messageupdate[6] = 'لم يتم التحديث';
+      messageupdate[7] = 'لم يتم التحديث';
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -974,7 +1064,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
 
     }
 
-    CheckSelected[6]=false;
+    CheckSelected[7]=false;
     setState(() {
       CheckAll=false;
     });
@@ -986,6 +1076,14 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
     ];
     return await handler.insertUnites(listOfItems);
   }
+
+  Future<int> addMaxOrder(MaxOrder firstCustomers) async {
+    List<MaxOrder> listOfItems = [
+      firstCustomers,
+    ];
+    return await handler.insertMaxOrder(listOfItems);
+  }
+
 
     Future<int> addCustomers(Customers firstCustomers) async {
     List<Customers> listOfItems = [
@@ -1086,27 +1184,45 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
     return Container(
       height: 500.0, // Change as per your requirement
       width: 300.0, // Change as per your requirement
-      child: Column(
-        children: [
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
 
-          Container(margin: EdgeInsets.only(bottom: 20),width:300,child: Center( child: Text("ملخص تحديث البيانات",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),))),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: messageupdate.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Row(
-                  children: [
-                    Text(messageupdate[index],style: TextStyle(color: messageupdate[index]=="تم التحديث"?Colors.black:Colors.redAccent,)),
-                    Spacer(),
-                    Text(updateitems[index]),
 
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+
+
+            Container(margin: EdgeInsets.only(bottom: 2),width:300,child: Center( child: Text("ملخص تحديث البيانات",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),))),
+
+
+
+
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: messageupdate.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Row(
+                    children: [
+                      Text(messageupdate[index],style: TextStyle(color: messageupdate[index]=="تم التحديث"?Colors.black:Colors.redAccent,)),
+                      Spacer(),
+                      Text(updateitems[index]),
+
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            Center(
+              child: Image.asset('assets/done.gif'
+
+                  ,height:200
+                  ,width:300
+              ),
+            ),
+
+          ],
+        ),
       ),
     );
   }

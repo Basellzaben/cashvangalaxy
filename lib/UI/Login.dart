@@ -33,6 +33,7 @@ void main() => runApp(
 );
 class Login extends StatelessWidget {
 var prefs;
+var islarge;
   final handler = DatabaseHandler();
    TextEditingController UserNameControler= TextEditingController();
    TextEditingController UserPasswordControler= TextEditingController();
@@ -44,7 +45,7 @@ var prefs;
   Widget build(BuildContext context) {
     Future<void> FillDataUsers() async {
       prefs = await SharedPreferences.getInstance();
-
+islarge=prefs.getString('isLargeScreen');
 
       try {
         final result = await InternetAddress.lookup('google.com');
@@ -179,10 +180,10 @@ var prefs;
                           children: <Widget>[
                             SizedBox(
                               child: Center(
-                                child: new Image.asset('assets/logo.png'
+                                child: new Image.asset('assets/logogif.gif'
 
-    ,height:selectedValue/4
-    ,width:selectedValue/3
+    ,height:selectedValue/3
+    ,width:selectedValue/2
                                 ),
                               ),
                             ),
@@ -192,7 +193,7 @@ var prefs;
                               alignment: Alignment.center,
                               child: SizedBox(
                                   width:MediaQuery.of(context).size.width/1.1,
-                                  height:MediaQuery.of(context).size.width,
+                                  height: isLargeScreen=="1"? MediaQuery.of(context).size.width/1.1 : MediaQuery.of(context).size.height/1.5,
                                   child: Card(
                                     elevation: 10,
                                     color: Colors.white,
@@ -251,7 +252,7 @@ Spacer(),
                                               margin: EdgeInsets.only(left: 25,right: 25,top: 30),
                                               child: TextField(
                                                 controller: UserPasswordControler,
-keyboardType: TextInputType.visiblePassword,
+                                                 keyboardType: TextInputType.visiblePassword,
                                                 decoration: InputDecoration(
                                                   prefixIcon: Icon(Icons.password),
                                                   border: OutlineInputBorder(),
@@ -452,5 +453,8 @@ Future<int> addUsers(users firstUser) async {
       },
     );
   }
+
+
+
 
 }

@@ -10,6 +10,7 @@ import '../HexaColor.dart';
 import '../Models/Time.dart';
 import 'package:http/http.dart' as http;
 
+import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
 
 void main() => runApp(MaterialApp(
@@ -164,350 +165,365 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     String timee = "00:00:00";
     String datee = "";
 
-    return StreamBuilder(
-        stream: Stream.periodic(const Duration(seconds: 1))
-            .asyncMap((i) => getTime()),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && prefs != null) {
-            date = snapshot.data!.date.toString();
-            time = snapshot.data!.time_24.toString();
-            if (snapshot.data!.time_24.toString().length > 4) {
-              timee = snapshot.data!.time_24.toString();
-              datee = snapshot.data!.date_time_txt.toString().substring(0, 27);
-            }
+    return WillPopScope(
+      onWillPop: _onBackPressed,
 
-            return Scaffold(
+      child: Scaffold(
+        body: StreamBuilder(
+            stream: Stream.periodic(const Duration(seconds: 1))
+                .asyncMap((i) => getTime()),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && prefs != null) {
+                date = snapshot.data!.Date.toString();
+                time = snapshot.data!.Timee.toString();
+                if (snapshot.data!.Timee.toString().length > 4) {
+                  timee = snapshot.data!.Timee.toString();
+                  datee = snapshot.data!.Date.toString().substring(0, 27);
+                }
 
-                appBar: AppBar(
-                  backgroundColor: HexColor(Globalvireables.basecolor),
-                  title: Row(children: <Widget>[
-                    Text(timee),
-                    Spacer(),
-                    Text("خط السير"),
-                  ]),
-                  leading: GestureDetector(
-                    onTap: () {},
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios_new,
-                        size: 30.0,
-                        color: HexColor(Globalvireables.white),
-                      ),
-                      onPressed: () {}, // add custom icons also
-                    ),
-                  ),
-                ),
-                backgroundColor: Colors.white70,
-                body: Column(children: [
-                  Container(
-                    color: Colors.white70,
-                    height: 30,
-                    child: Center(
-                        child: Text(
-                      datee,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(color: HexColor(Globalvireables.basecolor)),
-                    )),
-                  ),
-                  Stack(children: <Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      height: 200,
-                      child: Container(
-                        color: Colors.white70,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                            bottomLeft: Radius.circular(30),
+                return Scaffold(
+
+                    appBar: AppBar(
+                      backgroundColor: HexColor(Globalvireables.basecolor),
+                      title: Row(children: <Widget>[
+                        Text(timee),
+                        Spacer(),
+                        Text("خط السير"),
+                      ]),
+                      leading: GestureDetector(
+                        onTap: () {},
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            size: 30.0,
+                            color: HexColor(Globalvireables.white),
                           ),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            heightFactor: 0.3,
-                            widthFactor: 2.5,
-                            child: currentLatLng.longitude == 0.0
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : GoogleMap(
-                                    onMapCreated: _onMapCreated,
-                                    mapType: MapType.hybrid,
-                                    initialCameraPosition: CameraPosition(
-                                      target: currentLatLng,
-                                      zoom: 18.0,
-                                    ),
-                                    markers: _markers,
-                                    onCameraMove: _onCameraMove),
-                          ),
+                          onPressed: () {}, // add custom icons also
                         ),
                       ),
                     ),
-                    SafeArea(
-                      child: Container(
-                        alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
-                            color: HexColor(Globalvireables.white2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50))),
-                        margin: EdgeInsets.only(top: 170),
-                        height: MediaQuery.of(context).size.height / 1.6,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 60,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: Container(
-                                      margin: const EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        'assets/barcode.png',
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  ),
-                                  Text("30M"),
-                                  Text(":المسافة المسموح بها",
-                                      style: TextStyle(fontSize: 10)),
-                                  Text("30M"),
-                                  Container(
-                                      child: Text(":المسافة المسموح بها",
-                                          style: TextStyle(fontSize: 10)),
-                                      margin: const EdgeInsets.all(8.0)),
-                                ],
+                    backgroundColor: Colors.white70,
+                    body: SingleChildScrollView(child: Column(children: [
+                      Container(
+                        color: Colors.white70,
+                        height: 30,
+                        child: Center(
+                            child: Text(
+                          datee,
+                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(color: HexColor(Globalvireables.basecolor)),
+                        )),
+                      ),
+                      Stack(children: <Widget>[
+                        SizedBox(
+                          width: double.infinity,
+                          height: 200,
+                          child: Container(
+                            color: Colors.white70,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                              ),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                heightFactor: 0.3,
+                                widthFactor: 2.5,
+                                child: currentLatLng.longitude == 0.0
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : GoogleMap(
+                                        onMapCreated: _onMapCreated,
+                                        mapType: MapType.hybrid,
+                                        initialCameraPosition: CameraPosition(
+                                          target: currentLatLng,
+                                          zoom: 18.0,
+                                        ),
+                                        markers: _markers,
+                                        onCameraMove: _onCameraMove),
                               ),
                             ),
-                            Card(
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "محمد الخالدي",
-                                              style: TextStyle(fontSize: 12),
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(": اسم العميل",
-                                                style: TextStyle(
-                                                    color: HexColor(
-                                                        Globalvireables
-                                                            .basecolor),
-                                                    fontSize: 16))),
-                                      )
-                                    ],
-                                  ),
-                                  Text(""),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "158525464",
-                                              style: TextStyle(fontSize: 12),
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(": رقم العميل",
-                                                style: TextStyle(
-                                                    color: HexColor(
-                                                        Globalvireables
-                                                            .basecolor),
-                                                    fontSize: 16))),
-                                      )
-                                    ],
-                                  ),
-                                  Text(""),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "لم تتم فتح الزيارة بعد ",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.red),
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              ": وقت بداية الزيارة",
-                                              style: TextStyle(
-                                                  color: HexColor(
-                                                      Globalvireables
-                                                          .basecolor),
-                                                  fontSize: 16),
-                                            )),
-                                      )
-                                    ],
-                                  ),
-                                  Text(""),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          height: 25,
-                                          child: Text(""),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "00:00:00",
-                                              style: TextStyle(fontSize: 12),
-                                            )),
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                        child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(": مدة الزيارة",
-                                                style: TextStyle(
-                                                    color: HexColor(
-                                                        Globalvireables
-                                                            .basecolor),
-                                                    fontSize: 16))),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-
-                            Expanded(
-                              child: Card(
+                          ),
+                        ),
+                        SafeArea(
+                          child: Container(
+                            alignment: Alignment.topCenter,
+                            decoration: BoxDecoration(
                                 color: HexColor(Globalvireables.white2),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Row(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50))),
+                            margin: EdgeInsets.only(top: 170),
+                            height: MediaQuery.of(context).size.height / 1.6,
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 60,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: 100,
+                                        height: 100,
+                                        child: Container(
+                                          margin: const EdgeInsets.all(8.0),
+                                          child: Image.asset(
+                                            'assets/barcode.png',
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
+                                      Text("30M"),
+                                      Text(":المسافة المسموح بها",
+                                          style: TextStyle(fontSize: 10)),
+                                      Text("30M"),
+                                      Container(
+                                          child: Text(":المسافة المسموح بها",
+                                              style: TextStyle(fontSize: 10)),
+                                          margin: const EdgeInsets.all(8.0)),
+                                    ],
+                                  ),
+                                ),
+                                Card(
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "محمد الخالدي",
+                                                  style: TextStyle(fontSize: 12),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(": اسم العميل",
+                                                    style: TextStyle(
+                                                        color: HexColor(
+                                                            Globalvireables
+                                                                .basecolor),
+                                                        fontSize: 16))),
+                                          )
+                                        ],
+                                      ),
+                                      Text(""),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "158525464",
+                                                  style: TextStyle(fontSize: 12),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(": رقم العميل",
+                                                    style: TextStyle(
+                                                        color: HexColor(
+                                                            Globalvireables
+                                                                .basecolor),
+                                                        fontSize: 16))),
+                                          )
+                                        ],
+                                      ),
+                                      Text(""),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "لم تتم فتح الزيارة بعد ",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.red),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  ": وقت بداية الزيارة",
+                                                  style: TextStyle(
+                                                      color: HexColor(
+                                                          Globalvireables
+                                                              .basecolor),
+                                                      fontSize: 16),
+                                                )),
+                                          )
+                                        ],
+                                      ),
+                                      Text(""),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: SizedBox(
+                                              height: 25,
+                                              child: Text(""),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "00:00:00",
+                                                  style: TextStyle(fontSize: 12),
+                                                )),
+                                          ),
+                                          SizedBox(
+                                            height: 25,
+                                            child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(": مدة الزيارة",
+                                                    style: TextStyle(
+                                                        color: HexColor(
+                                                            Globalvireables
+                                                                .basecolor),
+                                                        fontSize: 16))),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+
+                                Expanded(
+                                  child: Card(
+                                    color: HexColor(Globalvireables.white2),
+                                    child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Home()));
-
-                                      //   Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                        margin: EdgeInsets.all(5),
-                                        child: Icon(
-                                          Icons.add_circle,
-                                          color: HexColor(Globalvireables.basecolor),
-                                          size: 75,
-                                        )),
-                                  )
-                                    ]),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-
                                       children: [
-                                       
-                                       SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("خروج",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: Colors.grey,)))
-                                        ,SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("جولة استثنائية",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: HexColor(Globalvireables.basecolor),)))
-                                        ,  SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("بداية الزيارة",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: HexColor(Globalvireables.basecolor),)))
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Home()));
+
+                                          //   Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                            margin: EdgeInsets.all(5),
+                                            child: Icon(
+                                              Icons.add_circle,
+                                              color: HexColor(Globalvireables.basecolor),
+                                              size: 75,
+                                            )),
+                                      )
+                                        ]),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+
+                                          children: [
+
+                                           SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("خروج",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: Colors.grey,)))
+                                            ,SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("جولة استثنائية",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: HexColor(Globalvireables.basecolor),)))
+                                            ,  SizedBox(width: 100,child: TextButton(onPressed:(){}, child: Text("بداية الزيارة",style: TextStyle(color: Colors.white)),style: OutlinedButton.styleFrom(backgroundColor: HexColor(Globalvireables.basecolor),)))
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ])
-                ]));
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        });
+                          ),
+                        )
+                      ])
+                    ])));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }),
+      ),
+    );
+  }
+  Future<bool> _onBackPressed() async{
+   /* final handler = DatabaseHandler();
+    handler.DropsalDetails();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => Home(),
+    ));
+*/
+    return true;
   }
 }

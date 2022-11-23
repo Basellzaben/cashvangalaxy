@@ -10,12 +10,8 @@ class Globalvireables {
   static String white="#ffffff";
   static String black="#000000";
   static String black2="#191919";
-
-
-
   static String GetCInfo="http://10.0.1.60:88/api/Company/GetCompanyInfo";
   static String GetUsers="http://10.0.1.60:88/api/Man/GetManf";
-  static String urltime = "https://api.ipgeolocation.io/timezone?apiKey=df8fec67e8274796b4692ba576c3fbe5&lat=32.01931692665541&long=35.92699122528424";
   static String checWork="http://10.0.1.60:88/api/Man/SaveManAtten";
   static String GetlASTaCTION="http://10.0.1.60:88/api/Man/GetManAtten/";
   static String GetCateg="http://10.0.1.60:88/api/ItemsCateg/GetItems_Categ/1";
@@ -25,5 +21,7 @@ class Globalvireables {
   static String GetUnites="http://10.0.1.60:88/api/Unites/GetUnites";
   static List<Map<String, dynamic>> journals = [];
   static List<String> price = [];
+  static String urltime = "http://10.0.1.60:88/api/data/GetDatetime";
+  static String GetMaxOrder = "http://10.0.1.60:88/api/Order/GetMaxOrders/";
 
 }
