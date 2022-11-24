@@ -138,47 +138,24 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                               itemCount: _journals.length,
                               itemBuilder: (context, index) => GestureDetector(
                                     onTap: () {
-                                      setState(() {
-                                        getUnites(_journals[index]['Item_No']);
+                                      setState(() async {
+                                       await getUnites(_journals[index]['Item_No']).then((value) => {
+                                       selectedUnit = uniitem.last.toString(),
+                                           PriceCounter.text = getprice(
+                                           _journals[index]['Item_No'],
+                                           selectedUnit,
+                                           '1.0')
+                                           .substring(0, 4),
+                                       print("lastindex  " + selectedUnit),
+                                       print("PriceCounter  " +
+                                           PriceCounter.text),
 
-                                        try {
-                                          selectedUnit = uniitem.last.toString();
-                                          PriceCounter.text = getprice(
-                                                  _journals[index]['Item_No'],
-                                                  selectedUnit,
-                                                  '1.0')
-                                              .substring(0, 4);
-                                          print("lastindex  " + selectedUnit);
-                                          print("PriceCounter  " +
-                                              PriceCounter.text);
+                                       discontroler.text="0.0",
+                                       bounsecontroler.text="0.0",
+                                       val=0
+                                       });
 
-                                          discontroler.text="0.0";
-                                          bounsecontroler.text="0.0";
-                                          val=0;
-                                        } catch (_) {
 
-                                          try{
-                                            selectedUnit = uniitem.last.toString();
-                                            PriceCounter.text = getprice(
-                                                _journals[index]['Item_No'],
-                                                selectedUnit,
-                                                '1.0')
-                                                .substring(0, 4);
-                                            print("lastindex  " + selectedUnit);
-                                            print("PriceCounter  " +
-                                                PriceCounter.text);
-
-                                            discontroler.text="0.0";
-                                            bounsecontroler.text="0.0";
-                                            val=0;
-                                          }catch(_){
-
-                                          }
-                                        }
-                                        /*   print("elllle "+items.elementAt(items.length-1).toString());
-                                        selectedUnit=items.indexOf(items.elementAt(items.length-1).toString()).toString();
-                                        PriceCounter.text=getprice(_journals[index]['Item_No'],selectedUnit,'1.0').substring(0,4);
-*/
                                         showModalBottomSheet(
                                             isScrollControlled: true,
                                             context: context,
@@ -636,32 +613,6 @@ Spacer(),
                                                                                      {
                                                                                      Navigator.pop(context)
                                                                                   });
-
-                                                                              /* String data="[{\"name\":\"$name\",\"itemno\":\"$itemno\",\"netprice\":\"$netprice\",\"dis\":\"$dis\""
-                                                                              ",\"bounse\":\"$bounse\",\"qt\":\"$qt\",\"unit\":\"$unit\",distype\":\"$distype\""
-                                                                              ",\"price\":\"$price\"}]";
-                                                                              print(data +"   jssonnnn");
-
-                                                                              var jsonResponse = json.decode(data);
-                                                                              String receivedJson = jsonResponse;
-                                                                              List<dynamic> list = json.decode(receivedJson);
-
-                                                                              print(data +"   jssonnnn");
-
-                                                                              salDetails firstUser = salDetails(
-                                                                              name: salDetails.fromJson((list[0])).name,
-                                                                              itemno: salDetails.fromJson((list[0])).itemno,
-                                                                              netprice: salDetails.fromJson((list[0])).netprice,
-                                                                              dis: salDetails.fromJson((list[0])).dis,
-                                                                              bounse: salDetails.fromJson((list[0])).bounse,
-                                                                              qt: salDetails.fromJson((list[0])).qt,
-                                                                              unit: salDetails.fromJson((list[0])).unit,
-                                                                              distype: salDetails.fromJson((list[0])).distype,
-                                                                              price: salDetails.fromJson((list[0])).price);
-
-                                                                              int i = await addSal(firstUser);
-*/
-
                                                                         },
                                                                       ),
                                                                     ),
@@ -880,7 +831,7 @@ Spacer(),
     }catch(_){}
   }
 
-  void getUnites(String itemNo) async {
+  Future<bool> getUnites(String itemNo) async {
     final handler = DatabaseHandler();
     var data = await handler.retrieveUnitesOfItem(itemNo);
     setState(() {
@@ -900,6 +851,7 @@ Spacer(),
       }
       dropcontroler.text = items.last;
     }
+    return true;
   }
 
   Future<int> addSal(salDetails firstUser) async {

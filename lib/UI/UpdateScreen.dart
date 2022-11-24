@@ -205,7 +205,8 @@ class _UpdateScreenState extends State<UpdateScreen> {
                                   "المواد",
                                   style: TextStyle(
                                       color: Colors.black87,
-                                      fontWeight: FontWeight.w900),
+                                      fontWeight: FontWeight.w900
+                                  ),
                                 ),
                                 //    <-- label
                                 value: CheckSelected[3],
@@ -970,7 +971,6 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
     var prefs = await SharedPreferences.getInstance();
     if (CheckSelected[7] == true) {
       handler.DropMaxOrder();
-
       // showLoaderDialog(context);
       var prefs = await SharedPreferences.getInstance();
       Uri apiUrl = Uri.parse(Globalvireables.GetMaxOrder+prefs.getString('man').toString());
@@ -1127,12 +1127,20 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
-      content: new Row(
-        children: [
-          CircularProgressIndicator(),
-          Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
-        ],
+      content: Container(
+        height: 300,
+        child: new Column(
+          children: [
+            Image.asset('assets/loading.gif'
+                ,height:200
+                ,width:300
+            ),
+            // CircularProgressIndicator(),
+            Container(
+                margin: EdgeInsets.only(left: 7), child: Text(" ... جار تحديث البيانات",
+              style: TextStyle(fontWeight: FontWeight.bold),)),
+          ],
+        ),
       ),
     );
     showDialog(

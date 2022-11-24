@@ -439,9 +439,13 @@ Future<int> addUsers(users firstUser) async {
     AlertDialog alert = AlertDialog(
       content: new Row(
         children: [
-          CircularProgressIndicator(),
+          Image.asset('assets/loading.gif'
+              ,height:100
+              ,width:100
+          ),
+          //CircularProgressIndicator(),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: EdgeInsets.only(left: 7), child: Text("جار تسجيل الدخول...")),
         ],
       ),
     );

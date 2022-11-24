@@ -25,7 +25,7 @@ class SalesInvoice extends StatefulWidget {
   State<SalesInvoice> createState() => _SalesInvoiceState();
 }
 
-final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+ GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class _SalesInvoiceState extends State<SalesInvoice> {
   List<Map<String, dynamic>> _journals = [];
@@ -61,7 +61,6 @@ class _SalesInvoiceState extends State<SalesInvoice> {
         Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-              key: _scaffoldKey,
               backgroundColor: HexColor(Globalvireables.white2),
               body: Directionality(
                 textDirection: TextDirection.ltr,
@@ -90,7 +89,13 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
                                           GestureDetector(
                                             onTap: () {
-                                              Navigator.pop(context);
+                                              final handler = DatabaseHandler();
+                                              handler.DropsalDetails().then((value) => {
+                                                Navigator.of(context).pop(),
+                                                Navigator.of(context).push(MaterialPageRoute(
+                                                  builder: (context) => Home(),
+                                                ))
+                                              });
                                             },
                                             child: Icon(
                                               Icons.arrow_back_ios_sharp,
@@ -203,6 +208,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
+                                                      Navigator.pop(context);
+
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -567,11 +574,12 @@ class _SalesInvoiceState extends State<SalesInvoice> {
   }
 
   void _refreshItems() async {
+    try{
     final handler = DatabaseHandler();
     Globalvireables.journals = await handler.retrievesalDetails();
     setState(() {
       _journals = Globalvireables.journals;
-    });
+    });}catch(_){}
   }
 
 
@@ -585,7 +593,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
     var net;
     if(IncludeTax) {
       if (DisType == "1") {
-        disVal = priceT * disT;
+        disVal = priceT * (disT/100);
+        print("type 100");
       } else {
         disVal = disT;
       }
@@ -638,11 +647,13 @@ bool r=false;
   }
   Future<bool> _onBackPressed() async{
      final handler = DatabaseHandler();
-    handler.DropsalDetails();
-     Navigator.of(context).pop();
-    Navigator.of(context).push(MaterialPageRoute(
+    handler.DropsalDetails().then((value) => {
+    Navigator.of(context).pop(),
+        Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => Home(),
-    ));
+    ))
+    });
+
     return true;
   }
 }
