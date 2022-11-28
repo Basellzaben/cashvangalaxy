@@ -278,7 +278,6 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
                         SizedBox(
                             height: MediaQuery.of(context).size.height/1.55,
-
                             child: ListView.builder(
                                 physics: const ClampingScrollPhysics(),
                                 shrinkWrap: true,
@@ -418,7 +417,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 child: Row(
                                                   children: [
                                                     Spacer(),
-                                                    Text(SumDis.toString(),
+                                                    Text(SumDis.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -429,7 +428,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                             fontWeight: FontWeight.w200,
                                                             fontSize: 20)),
                                                     Spacer(),
-                                                    Text(Sum.toString(),
+                                                    Text(Sum.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -447,7 +446,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 child: Row(
                                                   children: [
                                                     Spacer(),
-                                                    Text(Total.toString(),
+                                                    Text(Total.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -458,7 +457,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                             fontWeight: FontWeight.w200,
                                                             fontSize: 20)),
                                                     Spacer(),
-                                                    Text(SumTax.toString(),
+                                                    Text(SumTax.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -551,11 +550,11 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                     });
                               },
                               child: Container(
-                                  margin: EdgeInsets.only(bottom: 22),
+                                  margin: EdgeInsets.only(bottom: 0),
                                   child: new Image.asset(
                                     'assets/upbottom.png',
-                                    width: 55,
-                                    height: 55,
+                                    width: 44,
+                                    height: 44,
                                   )
                                   // child: Icon(Icons.settings_overscan,size: 55,color: HexColor(Globalvireables.basecolor),),
                                   ),
@@ -630,7 +629,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
 
     }
-    return net.toString();
+    //String inString = d.toStringAsFixed(2);
+    return net.toStringAsFixed(2);
   }
 
 

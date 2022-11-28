@@ -9,7 +9,6 @@ import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Models/Time.dart';
 import 'package:http/http.dart' as http;
-
 import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
 
@@ -177,16 +176,13 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             stream: Stream.periodic(const Duration(seconds: 1))
                 .asyncMap((i) => getTime()),
             builder: (context, snapshot) {
-              if (1==1/*snapshot.hasData && prefs != null*/) {
+              if (snapshot.hasData && prefs != null) {
                 date = snapshot.data!.Date.toString();
                 time = snapshot.data!.Timee.toString();
                 if (snapshot.data!.Timee.toString().length > 4) {
                   timee = snapshot.data!.Timee.toString();
-                  datee = snapshot.data!.Date.toString().substring(0, 10);
-                }
-
+                  datee = snapshot.data!.Date.toString().substring(0, 10);}
                 return Scaffold(
-
                     appBar: AppBar(
                       backgroundColor: HexColor(Globalvireables.basecolor),
                       title: Row(children: <Widget>[
@@ -437,8 +433,7 @@ SizedBox(height: 15,),
                                             //   Navigator.pop(context);
                                           },
                                           child: Container(
-                                             ),
-                                        )
+                                             ),)
                                           ]),
                                           Row(
                                             mainAxisAlignment:

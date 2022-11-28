@@ -96,8 +96,10 @@ class _fingerPrintState extends State<fingerPrint> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress =
-            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        _currentAddress ='${place.street},'
+            ' ${place.subLocality},'
+            ' ${place.subAdministrativeArea},'
+            ' ${place.postalCode}';
       });
     }).catchError((_) {
       // debugPrint(e);
@@ -115,7 +117,6 @@ class _fingerPrintState extends State<fingerPrint> {
       _getCurrentPosition();
     });
 
-    // getBatteryPerentage();
   }
 
   Future<void> sharedPrefs() async {
@@ -136,15 +137,6 @@ class _fingerPrintState extends State<fingerPrint> {
     print(jsonResponse.toString() + "  response.toString()");
   }
 
-  /*void getBatteryPerentage() async {
-    if (Platform.isAndroid) PathProviderAndroid.registerWith();
-    if (Platform.isIOS) PathProviderIOS.registerWith();
-    final level = await battery.batteryLevel;
-    percentage = level;
-
-    setState(() {});
-  }
-*/
   @override
   Widget build(BuildContext context) {
     getTime();
@@ -480,7 +472,18 @@ class _fingerPrintState extends State<fingerPrint> {
                                           margin: EdgeInsets.all(20),
                                           child: Center(
                                               child:
-                                                  CircularProgressIndicator()))),
+                                                  Column(
+                                                    children: [
+                                                      Container(
+                                                        width: 200,
+                                                        height: 200,
+                                                        margin: EdgeInsets.only(
+                                                        bottom: 5, top: 10),
+                                                        child: Image.asset("assets/load.png", fit: BoxFit.contain,),
+                                                      ),
+                                                      CircularProgressIndicator(),
+                                                    ],
+                                                  )))),
                                 ),
                               ),
                               Center(
