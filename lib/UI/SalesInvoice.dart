@@ -1,6 +1,4 @@
-import 'package:cashvangalaxy/UI/UpdateScreen.dart';
-import 'package:cashvangalaxy/UI/fingerPrint.dart';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../Dialogs/ItemDialog.dart';
@@ -9,7 +7,7 @@ import '../HexaColor.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
 import 'NavBar.dart';
-
+import 'package:http/http.dart' as http;
 void main() =>
     runApp(ResponsiveSizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
@@ -505,7 +503,10 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                                     .basecolor),
                                                             fontSize: 22),
                                                       ),
-                                                      onPressed: () async {},
+                                                      onPressed: () async {
+                                                        SendData();
+
+                                                      },
                                                     ),
                                                     Spacer(),
                                                     ElevatedButton(
@@ -656,4 +657,50 @@ bool r=false;
 
     return true;
   }
+
+
+
+
+  void SendData()async {
+    var products = <Map<String, dynamic>>[
+      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"24.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس  ملح البحر24 * 75  غم","no":"103","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"}
+      ,{"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"48.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس ملح البحر والخل 48 *  35 غم","no":"202","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"}
+    ];
+
+    var _body = <String, dynamic>{
+      'Cust_No':"1130695"
+      ,'Date':"2022/12/07"
+      ,'UserID':"7"
+      ,'OrderNo':"0700490"
+      ,'hdr_dis_per':"0.0"
+      ,'hdr_dis_value':"0.0"
+      ,'Total':"24.0"
+      ,'Net_Total':"27.84"
+      ,'Tax_Total':"3.84"
+      ,'bounce_Total':"0"
+      ,'include_Tax':"-1"
+      ,'disc_Total':"0"
+      ,'inovice_type':"0"
+      ,'CashCustNm':"باسل"
+      ,'V_OrderNo':"0700002","DocType":"1"
+      ,'DriverNo':"0"
+      ,'Pos_System':"0"
+      ,'OrderDesc':""
+      ,'MOVE':"0"
+      ,'GSPN':"0"
+      ,'detailsmodel':products
+    };
+
+    var bytes = utf8.encode(json.encode(_body));
+    Uri apiUrl = Uri.parse(Globalvireables.PostSales);
+    http.Response response = await http.post(apiUrl,
+        headers: { "Content-Type": "application/json"},
+        body: bytes);
+    var jsonResponse = jsonDecode(response.body);
+    print("wheen" + _body.toString());
+    print("wheenresponse" + jsonResponse.toString());
+
+  }
+
+
 }
