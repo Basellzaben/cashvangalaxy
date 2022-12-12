@@ -682,7 +682,8 @@ bool r=false;
       ,'disc_Total':"0"
       ,'inovice_type':"0"
       ,'CashCustNm':"باسل"
-      ,'V_OrderNo':"0700002","DocType":"1"
+      ,'V_OrderNo':"0700002",
+      "DocType":"1"
       ,'DriverNo':"0"
       ,'Pos_System':"0"
       ,'OrderDesc':""

@@ -66,66 +66,76 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
-                          height: 120,
-                          width: MediaQuery.of(context).size.width,
-                          child: Container(
-                            height: 65,
-                            margin: const EdgeInsets.only(
-                                top: 40, left: 10, right: 10),
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width / 8,
-                                  child: GestureDetector(
-                                      child: Icon(Icons.arrow_back),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => SalesInvoice(),
-                                        ));
-                                      }),
-                                ),
-                                Center(
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.height /
-                                        2.6,
-                                    child: TextField(
-                                      controller: searchcontroler,
-                                      onChanged: refrech(),
-                                      textAlign: TextAlign.right,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor:
-                                            HexColor(Globalvireables.white),
-                                        suffixIcon: Icon(
-                                          Icons.search,
-                                          color: HexColor(
-                                        Globalvireables.basecolor),),
-                                        hintText: "البحث",
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
+                      Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 65,
+                              margin: const EdgeInsets.only(
+                                  top: 40, left: 10, right: 10),
+                              width: MediaQuery.of(context).size.width / 1.3,
+                              child: Center(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width / 8,
+                                        child: GestureDetector(
+                                            child: Icon(Icons.arrow_back),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) => SalesInvoice(),
+                                              ));
+                                            }),
+                                      ),
+                                      Center(
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.height /
+                                              2.6,
+                                          child: TextField(
+                                            controller: searchcontroler,
+                                            onChanged: refrech(),
+                                            textAlign: TextAlign.right,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  HexColor(Globalvireables.white),
+                                              suffixIcon: Icon(
+                                                Icons.search,
+                                                color: HexColor(
+                                              Globalvireables.basecolor),),
+                                              hintText: "البحث",
+                                              enabledBorder: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0)),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                                focusedBorder: OutlineInputBorder(
+                                                borderRadius: const BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                                borderSide: BorderSide(
+                                                    color: HexColor(
+                                                    Globalvireables.basecolor)),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                          focusedBorder: OutlineInputBorder(
-                                          borderRadius: const BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                          borderSide: BorderSide(
-                                              color: HexColor(
-                                              Globalvireables.basecolor)),
-                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          )),
+                              ),
+                            )),
+                      ),
                       if (_journals.isNotEmpty)
                         SizedBox(
                           height: MediaQuery.of(context).size.height,
