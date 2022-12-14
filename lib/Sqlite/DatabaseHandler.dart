@@ -8,6 +8,7 @@ import '../Models/CompanyInfo.dart';
 import '../Models/Customers.dart';
 import '../Models/Items.dart';
 import '../Models/MaxOrder.dart';
+import '../Models/SalesInvoiceH.dart';
 import '../Models/Unites.dart';
 import '../Models/salDetails.dart';
 import '../Models/users.dart';
@@ -314,6 +315,17 @@ class DatabaseHandler {
         .first
         .Sales
         .toString();
+  }
+
+  GetMaxSalOrderNonshare() async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+    await db.rawQuery("select * from SalesInvoiceH");
+    if(queryResult.map((e) => SalesInvoiceH.fromMap(e))
+        .toList().length>0)
+    return queryResult.map((e) => SalesInvoiceH.fromMap(e)).toList()
+        .last.OrderNo.toString();
+    return "0";
   }
 
   Future<int> insertMaxOrder(List<MaxOrder> categ) async {

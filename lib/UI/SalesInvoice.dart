@@ -39,7 +39,13 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
   Future<void> FillMax() async {
     max = await handler.GetMaxSal();
+
+    String inphonemax= await handler.GetMaxSalOrderNonshare();
+
+if(int.parse(max)>int.parse(inphonemax))
     maxcontroler.text ="("+ max+")";
+else
+  maxcontroler.text="("+inphonemax+")";
   }
 
   @override
@@ -663,9 +669,12 @@ bool r=false;
 
   void SendData()async {
     var products = <Map<String, dynamic>>[
-      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"24.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس  ملح البحر24 * 75  غم","no":"103","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"},
-      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"48.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس ملح البحر والخل 48 *  35 غم","no":"202","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"}
-    ];
+      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0"
+        ,"ItemOrgPrice":"12.0","Operand":"24.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0"
+        ,"Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس  ملح البحر24 * 75  غم"
+        ,"no":"103","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92"
+        ,"total":"13.92","weight":"0.0"}
+                                         ];
 
     var _body = <String, dynamic>{
       'Cust_No':"1130695"
