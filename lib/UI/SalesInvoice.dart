@@ -8,7 +8,7 @@ import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
-import 'NavBar.dart';
+
 
 void main() =>
     runApp(ResponsiveSizer(builder: (context, orientation, deviceType) {
@@ -74,12 +74,12 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                             height: 230.0,
                             color: Colors.transparent,
                             child: Container(
-                                decoration: new BoxDecoration(
+                                decoration: BoxDecoration(
                                     color: HexColor(Globalvireables.basecolor),
-                                    borderRadius: new BorderRadius.only(
-                                      bottomLeft: const Radius.circular(0.0),
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(0.0),
                                     )),
-                                child: new Column(
+                                child: Column(
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(top: 40),
@@ -97,7 +97,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 ))
                                               });
                                             },
-                                            child: Icon(
+                                            child: const Icon(
                                               Icons.arrow_back_ios_sharp,
                                               color: Colors.white,
                                               size: 30,

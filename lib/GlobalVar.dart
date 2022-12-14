@@ -23,7 +23,7 @@ class Globalvireables {
   static String GetCustomers="http://10.0.1.60:88/api/Customer/GetCustomers_CashVan/";
   static String GetUnit="http://10.0.1.60:88/api/Unites/GetUniItem";
   static String GetUnites="http://10.0.1.60:88/api/Unites/GetUnites";
-  static String urltime = "http://10.0.1.60:88/api/data/GetDatetime";
+  static String urltime = "http://10.0.1.60:88/api/data/GetDatetimesp";
   static String GetMaxOrder = "http://10.0.1.60:88/api/Order/GetMaxOrders/";
 
 }

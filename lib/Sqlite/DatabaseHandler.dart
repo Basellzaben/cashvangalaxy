@@ -183,8 +183,25 @@ class DatabaseHandler {
           "BB,"
           "BB_Chaq TEXT)",
         );
+        await database.execute(("CREATE TABLE IF NOT EXISTS  SaleManRounds "
+            "( no integer primary key autoincrement,"
+            " ManNo text null"
+            ", CusNo text null "
+            " , DayNum integer null "
+            ", Tr_Data  text null"
+            " ,Start_Time text null"
+            " ,End_Time text null"
+            ", Duration Text null"
+            ",Closed Text Null "
+            " , Posted integer null"
+            " , Note text null"
+            " , X_Lat text null"
+            " , Y_Long text null"
+            " , Loct text null"
+            " , IsException text null"
+            ", OrderNo  text null ) "),);
       },
-      version: 31,
+      version: 32,
     );
 
   }
@@ -371,6 +388,20 @@ class DatabaseHandler {
     return db.query('items', orderBy: "Item_No");
   }
 
+  Future<List<Map<String,dynamic>>> GetCustomersList(String? search,String? day) async {
+    print(day);
+    final Database db = await initializeDB();
+    if(search!=null)
+      if (search.isNotEmpty) {
+        return db.query('Customers', orderBy: "No",
+            where: "( name" " LIKE  '%" + search + "%' or No LIKE '%"+search+"%') and "+day!);
+      }
+
+    if(search=="All") {
+      return db.query('Customers', orderBy: "No",where: day);
+    }
+    return db.query('Customers', orderBy: "No",where: day);
+  }
 
   Future<List<Map<String,dynamic>>> retrieveUnitesOfItem(String? itemno) async {
     final Database db = await initializeDB();
@@ -407,6 +438,33 @@ try{
           .toList()
           .first.price.toString()
       ;}
+    }catch(_){
+
+    }
+
+    return "0.0";
+
+
+  }
+  GetVisitCustomersList(String dayofweek) async {
+    final Database db = await initializeDB();
+    String x= "select * from Customers  where "+dayofweek;
+    print(x);
+
+    final List<Map<String, Object?>> queryResult = await db.rawQuery(
+        x);
+
+
+    try{
+      print(queryResult
+          .map((e) => Customers.fromMap(e))
+          .toList());
+        return queryResult
+            .map((e) => Customers.fromMap(e))
+            .toList();
+
+
+
     }catch(_){
 
     }

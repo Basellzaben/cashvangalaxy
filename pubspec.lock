@@ -665,10 +665,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: d13ac5deea7327f027b3b97ee19ee210f68256ecf3f1a304bcfb992ee947637c
+      sha256: "9555cd63283445e101f0df32105862fdc0b30adb9b84fd0553e9433b3e074d4c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "3.0.1"
   xdg_directories:
     dependency: transitive
     description:
@@ -681,10 +681,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: "979ee37d622dec6365e2efa4d906c37470995871fe9ae080d967e192d88286b5"
+      sha256: "1a235945f0831980f690291fe7744e440d73acb20fc18b923cea373f391a2837"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.2"
+    version: "6.2.0"
 sdks:
   dart: ">=2.19.0-31.0.dev <4.0.0"
   flutter: ">=3.3.0"

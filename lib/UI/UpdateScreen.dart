@@ -849,8 +849,8 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
             barCode: Customers.fromMap((list[j])).sat.toString(),
             Address: Customers.fromMap((list[j])).sun.toString(),
             SMan: Customers.fromMap((list[j])).mon.toString(),
-            Latitude: Customers.fromMap((list[j])).tues.toString(),
-            Longitude: Customers.fromMap((list[j])).wens.toString(),
+            Latitude: Customers.fromMap((list[j])).Latitude.toString(),
+            Longitude: Customers.fromMap((list[j])).Longitude.toString(),
 
             name: Customers.fromMap((list[j])).name.toString(),
             Ename: Customers.fromMap((list[j])).Ename.toString(),
