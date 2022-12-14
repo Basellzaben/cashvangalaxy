@@ -1,3 +1,4 @@
+import 'package:cashvangalaxy/UI/toutorial/screen1.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,7 +120,7 @@ class NavBar extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 30),
+                          margin: EdgeInsets.only(top: 15),
                           child: Row(
                             children: [
                               Spacer(),
@@ -140,7 +141,7 @@ class NavBar extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 30),
+                          margin: EdgeInsets.only(top: 15),
                           child: Row(
                             children: [
                               Spacer(),
@@ -157,6 +158,33 @@ class NavBar extends StatelessWidget {
                                 color: HexColor(Globalvireables.basecolor),
                               ),
                             ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => screen1(),
+                            ));
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(top: 15),
+                            child: Row(
+                              children: [
+                                Spacer(),
+                                Text(
+                                  "دليل المستخدم",
+                                  style: TextStyle(
+                                      color: HexColor(Globalvireables.basecolor),
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200),
+                                ),
+                                Icon(
+                                  Icons.account_balance_wallet_outlined,
+                                  size: 40.0,
+                                  color: HexColor(Globalvireables.basecolor),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       ],

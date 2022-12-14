@@ -17,7 +17,7 @@ class DatabaseHandler {
     String path = await getDatabasesPath();
 
     return openDatabase(
-      join(path, 'cashvann.db'),
+      join(path, 'cashvannh.db'),
       onCreate: (database, version) async {
         await database.execute(
           "CREATE TABLE CompanyInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -91,54 +91,104 @@ class DatabaseHandler {
 
         await database.execute(
           "CREATE TABLE Unites(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-              "Unitno TEXT,"
-              "UnitName TEXT,"
-              "UnitEname TEXT)",
+          "Unitno TEXT,"
+          "UnitName TEXT,"
+          "UnitEname TEXT)",
         );
 
         await database.execute(
           "CREATE TABLE salDetails(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-              "name TEXT,"
-              "itemno TEXT,"
-              "netprice TEXT,"
-              "dis TEXT,"
-              "bounse TEXT,"
-              "qt TEXT,"
-              "unit TEXT,"
-              "distype TEXT,"
-              "tax TEXT,"
-              "price TEXT)",
+          "name TEXT,"
+          "itemno TEXT,"
+          "netprice TEXT,"
+          "dis TEXT,"
+          "bounse TEXT,"
+          "qt TEXT,"
+          "unit TEXT,"
+          "distype TEXT,"
+          "tax TEXT,"
+          "price TEXT)",
         );
-
 
         await database.execute(
           "CREATE TABLE MaxOrder(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-              "Sales TEXT,"
-              "Payment TEXT,"
-              "SalesOrder TEXT,"
-              "PrepareQty TEXT,"
-              "RetSales TEXT,"
-              "PostDely TEXT,"
-              "ReturnQty TEXT,"
-              "CustCash TEXT,"
-              "EnterQty TEXT,"
-              "TransferQty TEXT,"
-              "ItemRecepit TEXT,"
-              "Visits TEXT)",
+          "Sales TEXT,"
+          "Payment TEXT,"
+          "SalesOrder TEXT,"
+          "PrepareQty TEXT,"
+          "RetSales TEXT,"
+          "PostDely TEXT,"
+          "ReturnQty TEXT,"
+          "CustCash TEXT,"
+          "EnterQty TEXT,"
+          "TransferQty TEXT,"
+          "ItemRecepit TEXT,"
+          "Visits TEXT)",
+        );
+        await database.execute(
+          "CREATE TABLE SalesInvoiceD(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+          "Bounce TEXT,"
+          "DisAmtFromHdr TEXT,"
+          "DisPerFromHdr TEXT,"
+          "Dis_Amt TEXT,"
+          "Discount TEXT,"
+          "ItemOrgPrice TEXT,"
+          "Operand TEXT,"
+          "ProID TEXT,"
+          "Pro_amt TEXT,"
+          "Pro_bounce TEXT,"
+          "Pro_dis_Per TEXT,"
+          "Unite TEXT,"
+          "UniteNm TEXT,"
+          "name TEXT,"
+          "no TEXT,"
+          "price TEXT,"
+          "pro_Total TEXT,"
+          "qty TEXT,"
+          "tax TEXT,"
+          "tax_Amt TEXT,"
+          "total TEXT,"
+          "weight TEXT)",
+        );
+
+        await database.execute(
+          "CREATE TABLE SalesInvoiceH(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+          "Cust_No TEXT,"
+          "Date TEXT,"
+          "UserID TEXT,"
+          "OrderNo TEXT,"
+          "hdr_dis_per TEXT,"
+          "hdr_dis_value TEXT,"
+          "Total TEXT,"
+          "Net_Total TEXT,"
+          "Tax_Total TEXT,"
+          "bounce_Total TEXT,"
+          "include_Tax TEXT,"
+          "disc_Total TEXT,"
+          "inovice_type TEXT,"
+          "CashCustNm TEXT,"
+          "V_OrderNo TEXT,"
+          "DocType TEXT,"
+          "DriverNo TEXT,"
+          "Pos_System TEXT,"
+          "OrderDesc TEXT,"
+          "MOVE TEXT,"
+          "GSPN TEXT)",
         );
 
         await database.execute(
           "CREATE TABLE UnitItem(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-              "item_no TEXT,"
-              "barcode TEXT,"
-              "unitno TEXT,"
-              "Operand TEXT,"
-              "price TEXT,"
-              "Max TEXT,"
-              "Min TEXT,"
-              "posprice TEXT,"
-              "acc_num TEXT,"
-              "UnitSale TEXT)",);
+          "item_no TEXT,"
+          "barcode TEXT,"
+          "unitno TEXT,"
+          "Operand TEXT,"
+          "price TEXT,"
+          "Max TEXT,"
+          "Min TEXT,"
+          "posprice TEXT,"
+          "acc_num TEXT,"
+          "UnitSale TEXT)",
+        );
 
         await database.execute(
           "CREATE TABLE Customers(id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -210,46 +260,52 @@ class DatabaseHandler {
   Future<int> DeleteItemfromSalDet(String itemno) async {
     int result = 0;
     final Database db = await initializeDB();
-      result = await db.delete('salDetails',where: 'itemno = ?',
-          whereArgs: [itemno]);
+    result =
+        await db.delete('salDetails', where: 'itemno = ?', whereArgs: [itemno]);
     return result;
   }
 
-  Future<void> SaveSal(String name, String itemno,String netprice, String dis,
-  String bounse, String qt,String unit, String distype,String price,String tax) async {
+  Future<void> SaveSal(
+      String name,
+      String itemno,
+      String netprice,
+      String dis,
+      String bounse,
+      String qt,
+      String unit,
+      String distype,
+      String price,
+      String tax) async {
     final Database dbClient = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await dbClient.rawQuery(
-        "select * from salDetails where itemno='"+itemno+"'");
+    final List<Map<String, Object?>> queryResult = await dbClient
+        .rawQuery("select * from salDetails where itemno='" + itemno + "'");
     Map<String, dynamic> row = {
-      'name' : name,
-      'tax':tax,
-      'itemno' : itemno,
-      'netprice' : netprice,
-      'dis' : dis,
-      'qt' : qt,
-      'unit' : unit,
-      'bounse':bounse,
-      'distype' : distype,
-      'price' : price,
+      'name': name,
+      'tax': tax,
+      'itemno': itemno,
+      'netprice': netprice,
+      'dis': dis,
+      'qt': qt,
+      'unit': unit,
+      'bounse': bounse,
+      'distype': distype,
+      'price': price,
     };
     var res;
-    try{   print("length :"+ queryResult
-        .map((e) => salDetails.fromMap(e))
-        .toList().first.itemno);
-   if( queryResult
-        .map((e) => salDetails.fromMap(e))
-        .toList().first.itemno==itemno)
-    {
-
-     await dbClient.update("salDetails", row ,where: 'itemno = ?',
-          whereArgs: [itemno]);
-       }else{
-   await dbClient.insert('salDetails', row);
-    }}catch(_){
-     await dbClient.insert('salDetails', row);
-
-   }
-    print("add row :"+row.toString());
+    try {
+      print("length :" +
+          queryResult.map((e) => salDetails.fromMap(e)).toList().first.itemno);
+      if (queryResult.map((e) => salDetails.fromMap(e)).toList().first.itemno ==
+          itemno) {
+        await dbClient.update("salDetails", row,
+            where: 'itemno = ?', whereArgs: [itemno]);
+      } else {
+        await dbClient.insert('salDetails', row);
+      }
+    } catch (_) {
+      await dbClient.insert('salDetails', row);
+    }
+    print("add row :" + row.toString());
 
     /* print("add setails statue :"+res.toString());
     print("add row :"+row.toString());
@@ -267,16 +323,16 @@ class DatabaseHandler {
     return result;
   }
 
-
-
   GetMaxSal() async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        "select * from MaxOrder");
-        return queryResult
-            .map((e) => MaxOrder.fromMap(e))
-            .toList()
-            .first.Sales.toString();
+    final List<Map<String, Object?>> queryResult =
+        await db.rawQuery("select * from MaxOrder");
+    return queryResult
+        .map((e) => MaxOrder.fromMap(e))
+        .toList()
+        .first
+        .Sales
+        .toString();
   }
 
 
@@ -288,6 +344,7 @@ class DatabaseHandler {
     }
     return result;
   }
+
   Future<int> insertItems(List<Items> Items) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -305,6 +362,7 @@ class DatabaseHandler {
     }
     return result;
   }
+
   Future<int> insertCustomers(List<Customers> Items) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -313,6 +371,7 @@ class DatabaseHandler {
     }
     return result;
   }
+
   Future<int> insertUnites(List<Unites> Items) async {
     int result = 0;
     final Database db = await initializeDB();
@@ -321,7 +380,6 @@ class DatabaseHandler {
     }
     return result;
   }
-
 
   Future<int> insertCateg(List<Categ> categ) async {
     int result = 0;
@@ -356,38 +414,39 @@ class DatabaseHandler {
         await db.query('CompanyInfo');
     return queryResult.map((e) => CompanyInfo.fromMap(e)).toList();
   }
+
   Future<List<Items>> retrieveItems() async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult =
-    await db.query('items');
+    final List<Map<String, Object?>> queryResult = await db.query('items');
     return queryResult.map((e) => Items.fromMap(e)).toList();
-
   }
 
-  Future<List<Map<String,dynamic>>> retrieveItems2() async {
+  Future<List<Map<String, dynamic>>> retrieveItems2() async {
     final Database db = await initializeDB();
     return db.query('items', orderBy: "Item_No");
   }
-  Future<List<Map<String,dynamic>>> retrievesalDetails() async {
+
+  Future<List<Map<String, dynamic>>> retrievesalDetails() async {
     final Database db = await initializeDB();
     return db.query('salDetails', orderBy: "itemno");
-
   }
 
-  Future<List<Map<String,dynamic>>> retrieveItems2search(String? search) async {
+  Future<List<Map<String, dynamic>>> retrieveItems2search(
+      String? search) async {
     final Database db = await initializeDB();
-    if(search!=null)
-      if (search.isNotEmpty) {
-        return db.query('items', orderBy: "Item_No",
-            where: " Item_Name" " LIKE  '%" + search + "%'");
-      }
+    if (search != null) if (search.isNotEmpty) {
+      return db.query('items',
+          orderBy: "Item_No", where: " Item_Name" " LIKE  '%" + search + "%'");
+    }
 
-    if(search=="All") {
+    if (search == "All") {
       return db.query('items', orderBy: "Item_No");
     }
     return db.query('items', orderBy: "Item_No");
   }
 
+  Future<List<Map<String, dynamic>>> retrieveUnitesOfItem(
+      String? itemno) async {
   Future<List<Map<String,dynamic>>> GetCustomersList(String? search,String? day) async {
     print(day);
     final Database db = await initializeDB();
@@ -405,23 +464,31 @@ class DatabaseHandler {
 
   Future<List<Map<String,dynamic>>> retrieveUnitesOfItem(String? itemno) async {
     final Database db = await initializeDB();
-    if(itemno!=null)
-      if (itemno.isNotEmpty) {
-        return db.rawQuery("SELECT Unites.UnitName,Unites.Unitno FROM Unites INNER JOIN "
-            "UnitItem ON Unites.Unitno=UnitItem.unitno where "
-            "UnitItem.item_no='"+itemno+"'");}
-    if(itemno=="All") {
+    if (itemno != null) if (itemno.isNotEmpty) {
+      return db.rawQuery(
+          "SELECT Unites.UnitName,Unites.Unitno FROM Unites INNER JOIN "
+                  "UnitItem ON Unites.Unitno=UnitItem.unitno where "
+                  "UnitItem.item_no='" +
+              itemno +
+              "'");
+    }
+    if (itemno == "All") {
       return db.query("SELECT Unites.UnitName FROM Unites", orderBy: "item_no");
     }
     return db.query("SELECT Unites.UnitName FROM Unites", orderBy: "item_no");
   }
 
-
-
-   retrieveprice(String itemno,String unitno,String catNo) async {
+  retrieveprice(String itemno, String unitno, String catNo) async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.rawQuery(
-        "select * from Categ"+ " where ItemCode='"+itemno+"' and UnitNo='"+unitno+"' and CategNo='"+catNo+"'");
+        "select * from Categ" +
+            " where ItemCode='" +
+            itemno +
+            "' and UnitNo='" +
+            unitno +
+            "' and CategNo='" +
+            catNo +
+            "'");
 
     final List<Map<String, Object?>> queryResult2 = await db.rawQuery(
         "select * from UnitItem"+ " where item_no='"+itemno+"' and unitno='"+unitno+"'");
@@ -468,12 +535,46 @@ try{
     }catch(_){
 
     }
+        "select * from UnitItem" +
+            " where item_no='" +
+            itemno +
+            "' and unitno='" +
+            unitno +
+            "'");
+    try {
+      if (!queryResult
+              .map((e) => Categ.fromMap(e))
+              .toList()
+              .first
+              .price
+              .isEmpty &&
+          queryResult.map((e) => Categ.fromMap(e)).toList().first.price !=
+              "0.0") {
+        return queryResult
+            .map((e) => Categ.fromMap(e))
+            .toList()
+            .first
+            .price
+            .toString();
+      } else if (!queryResult2
+              .map((e) => Categ.fromMap(e))
+              .toList()
+              .first
+              .price
+              .isEmpty &&
+          queryResult2.map((e) => Categ.fromMap(e)).toList().first.price !=
+              "0.0") {
+        return queryResult2
+            .map((e) => Categ.fromMap(e))
+            .toList()
+            .first
+            .price
+            .toString();
+      }
+    } catch (_) {}
 
     return "0.0";
-
-
   }
-
 
   Future<List<users>> retrieveUsersInfo() async {
     final Database db = await initializeDB();
@@ -497,8 +598,10 @@ try{
         "SELECT * FROM users WHERE UserName = '$user' and Password = '$password'");
     if (res.length > 0) {
       await prefs.setString('EMPName', users.fromMap(res.first).name);
-      await prefs.setString('MaxDiscount',users.fromMap(res.first).MaxDiscount.toString() + " % ");
-      await prefs.setString('MaxBouns', users.fromMap(res.first).MaxBouns.toString()+ " % ");
+      await prefs.setString('MaxDiscount',
+          users.fromMap(res.first).MaxDiscount.toString() + " % ");
+      await prefs.setString(
+          'MaxBouns', users.fromMap(res.first).MaxBouns.toString() + " % ");
 
       return true;
     }
@@ -511,41 +614,44 @@ try{
     final Database db = await initializeDB();
     db.delete('CompanyInfo');
   }
+
   Future<void> Dropusers() async {
     final Database db = await initializeDB();
     db.delete('users');
   }
+
   Future<void> DropCateg() async {
     final Database db = await initializeDB();
     db.delete('Categ');
   }
+
   Future<void> DropItems() async {
     final Database db = await initializeDB();
     db.delete('items');
   }
+
   Future<void> DropUnitItem() async {
     final Database db = await initializeDB();
     db.delete('UnitItem');
   }
+
   Future<void> DropUnites() async {
     final Database db = await initializeDB();
     db.delete('Unites');
   }
+
   Future<void> DropMaxOrder() async {
     final Database db = await initializeDB();
     db.delete('MaxOrder');
   }
+
   Future<void> DropCustomers() async {
     final Database db = await initializeDB();
     db.delete('Customers');
   }
+
   Future<void> DropsalDetails() async {
     final Database db = await initializeDB();
     db.delete('salDetails');
   }
-
-
-
-
-
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cashvangalaxy/Models/MaxOrder.dart';
 import 'package:cashvangalaxy/UI/SalesInvoice.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +19,6 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late http.Response response;
   List<Map<String, dynamic>> _journals = [];
-
   List<Map<String, dynamic>> Unites = [];
 
   final TextEditingController searchcontroler = TextEditingController();
@@ -36,13 +34,10 @@ class LogoutOverlayStatecard extends State<ItemDialog>
       //Globalvireables.journals.clear();
     } else {
       final handler = DatabaseHandler();
-      //_journals.clear();
       _journals = Globalvireables.journals;
       _refreshItems();
     }
     _refreshItems();
-
-//print(_journals[0]['Item_Name'].toString());
   }
 
   TextEditingController PriceCounter = TextEditingController();
@@ -59,8 +54,6 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   Widget build(BuildContext context) {
     TextEditingController counter = TextEditingController();
     counter.text = count.toString();
-    // PriceCounter.text="44";
-    //  if(_journals.length>0)
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Container(
@@ -73,62 +66,76 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
-                          height: 100,
-                          width: MediaQuery.of(context).size.width,
-                          child: Container(
-                            height: 65,
-                            margin: const EdgeInsets.only(
-                                top: 40, left: 10, right: 10),
-                            width: MediaQuery.of(context).size.width / 1.3,
-                            child: Row(children:[
-                              Container(
-                                width: MediaQuery.of(context).size.width/8,
-                                child: GestureDetector(child: Icon(Icons.arrow_back),
-                                    onTap: () {
+                      Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
 
-                                      Navigator.pop(context);
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => SalesInvoice(),
-                                      ));
-
-                                    }),
-                              ),  Container(
-                                 width: MediaQuery.of(context).size.height/2.1,
-                                 child: TextField(
-                                  controller: searchcontroler,
-                                  onChanged: refrech(),
-                                  textAlign: TextAlign.right,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: HexColor(Globalvireables.white),
-                                    suffixIcon: Icon(
-                                      Icons.search,
-                                      color: HexColor(Globalvireables.basecolor),
-                                    ),
-                                    hintText: "البحث",
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20.0)),
-                                      borderSide: BorderSide(
-                                        color: Colors.grey,
+                            height: 120,
+                            width: MediaQuery.of(context).size.width,
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 65,
+                              margin: const EdgeInsets.only(
+                                  top: 40, left: 10, right: 10),
+                              width: MediaQuery.of(context).size.width / 1.3,
+                              child: Center(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width / 8,
+                                        child: GestureDetector(
+                                            child: Icon(Icons.arrow_back),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) => SalesInvoice(),
+                                              ));
+                                            }),
                                       ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      borderSide: BorderSide(
-                                          color: HexColor(Globalvireables.basecolor)),
-                                    ),
+                                      Center(
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.height /
+                                              2.6,
+                                          child: TextField(
+                                            controller: searchcontroler,
+                                            onChanged: refrech(),
+                                            textAlign: TextAlign.right,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor:
+                                                  HexColor(Globalvireables.white),
+                                              suffixIcon: Icon(
+                                                Icons.search,
+                                                color: HexColor(
+                                              Globalvireables.basecolor),),
+                                              hintText: "البحث",
+                                              enabledBorder: const OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0)),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                                focusedBorder: OutlineInputBorder(
+                                                borderRadius: const BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                                borderSide: BorderSide(
+                                                    color: HexColor(
+                                                    Globalvireables.basecolor)),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
                               ),
-                               )
-                            ,
-
-
-                            ],
-                            ),
-                          )),
+                            )),
+                      ),
                       if (_journals.isNotEmpty)
                         SizedBox(
                           height: MediaQuery.of(context).size.height,
@@ -139,22 +146,25 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                               itemBuilder: (context, index) => GestureDetector(
                                     onTap: () {
                                       setState(() async {
-                                       await getUnites(_journals[index]['Item_No']).then((value) => {
-                                       selectedUnit = uniitem.last.toString(),
-                                           PriceCounter.text = getprice(
-                                           _journals[index]['Item_No'],
-                                           selectedUnit,
-                                           '1.0')
-                                           .substring(0, 4),
-                                       print("lastindex  " + selectedUnit),
-                                       print("PriceCounter  " +
-                                           PriceCounter.text),
-
-                                       discontroler.text="0.0",
-                                       bounsecontroler.text="0.0",
-                                       val=0
-                                       });
-
+                                        await getUnites(
+                                                _journals[index]['Item_No'])
+                                            .then((value) => {
+                                                  selectedUnit =
+                                                      uniitem.last.toString(),
+                                                  PriceCounter.text = getprice(
+                                                          _journals[index]
+                                                              ['Item_No'],
+                                                          selectedUnit,
+                                                          '1.0')
+                                                      .substring(0, 4),
+                                                  print("lastindex  " +
+                                                      selectedUnit),
+                                                  print("PriceCounter  " +
+                                                      PriceCounter.text),
+                                                  discontroler.text = "0.0",
+                                                  bounsecontroler.text = "0.0",
+                                                  val = 0
+                                                });
 
                                         showModalBottomSheet(
                                             isScrollControlled: true,
@@ -173,12 +183,14 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                         BorderRadius.circular(
                                                             20.0),
                                                   ),
-                                                  shadowColor: Colors.blueAccent,
+                                                  shadowColor:
+                                                      Colors.blueAccent,
                                                   child: Container(
-                                                    height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.7,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.7,
                                                     child: Padding(
                                                       padding:
                                                           MediaQuery.of(context)
@@ -187,14 +199,14 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                         child: Stack(
                                                           children: <Widget>[
                                                             Container(
-                                                              margin:
-                                                                  EdgeInsets.only(
+                                                              margin: EdgeInsets
+                                                                  .only(
                                                                       bottom:
                                                                           100),
                                                             ),
                                                             Container(
-                                                              margin:
-                                                                  EdgeInsets.only(
+                                                              margin: EdgeInsets
+                                                                  .only(
                                                                       top: 10),
                                                               child:
                                                                   SingleChildScrollView(
@@ -205,20 +217,15 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                         Spacer(),
                                                                         Container(
                                                                           width:
-                                                                          MediaQuery.of(context).size.width/1.1,
+                                                                              MediaQuery.of(context).size.width / 1.1,
                                                                           child:
                                                                               Directionality(
                                                                             textDirection:
                                                                                 TextDirection.rtl,
                                                                             child:
                                                                                 SizedBox(
-                                                                              width:
-                                                                                  MediaQuery.of(context).size.width ,
-                                                                              child: Text(_journals[index]['Item_Name'],
-                                                                                  textAlign: TextAlign.justify,
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  maxLines: 3,
-                                                                                  style: TextStyle(color: Colors.black, fontSize: 20, height: 1.3, fontWeight: FontWeight.w900)),
+                                                                              width: MediaQuery.of(context).size.width,
+                                                                              child: Text(_journals[index]['Item_Name'], textAlign: TextAlign.justify, overflow: TextOverflow.ellipsis, maxLines: 3, style: TextStyle(color: Colors.black, fontSize: 20, height: 1.3, fontWeight: FontWeight.w900)),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -235,8 +242,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                       child:
                                                                           Padding(
                                                                         padding:
-                                                                            const EdgeInsets.all(
-                                                                                9.0),
+                                                                            const EdgeInsets.all(9.0),
                                                                         child:
                                                                             Align(
                                                                           child:
@@ -255,9 +261,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                              Container(
-                                                                                  margin: EdgeInsets.only(top: 11),
-                                                                                  child: Text("JD"))
+                                                                              Container(margin: EdgeInsets.only(top: 11), child: Text("JD"))
                                                                             ],
                                                                           ),
                                                                         ),
@@ -267,14 +271,18 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                       children: [
                                                                         Spacer(),
                                                                         Container(
-                                                                          height: 50,
-                                                                          width:MediaQuery.of(context).size.width/4,
-                                                                          child: TextField(
-                                                                            keyboardType: TextInputType.number,
+                                                                          height:
+                                                                              50,
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width / 4,
+                                                                          child:
+                                                                              TextField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
                                                                             controller:
-                                                                            discontroler,
+                                                                                discontroler,
                                                                             decoration:
-                                                                            InputDecoration(
+                                                                                InputDecoration(
                                                                               border: OutlineInputBorder(),
                                                                               labelText: 'الخصم',
                                                                             ),
@@ -284,7 +292,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                             },
                                                                           ),
                                                                         ),
-Spacer(),
+                                                                        Spacer(),
                                                                         Text(
                                                                             MaxBounse,
                                                                             style: TextStyle(
@@ -309,21 +317,26 @@ Spacer(),
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                    SizedBox(height: 20,),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
                                                                     Row(
                                                                       children: [
-
-
-Spacer(),
+                                                                        Spacer(),
                                                                         Container(
-                                                                          height: 50,
-                                                                          width:MediaQuery.of(context).size.width/4,
-                                                                          child: TextField(
-                                                                            keyboardType: TextInputType.number,
+                                                                          height:
+                                                                              50,
+                                                                          width:
+                                                                              MediaQuery.of(context).size.width / 4,
+                                                                          child:
+                                                                              TextField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
                                                                             controller:
-                                                                            bounsecontroler,
+                                                                                bounsecontroler,
                                                                             decoration:
-                                                                            InputDecoration(
+                                                                                InputDecoration(
                                                                               border: OutlineInputBorder(),
                                                                               labelText: 'البونص',
                                                                             ),
@@ -333,13 +346,8 @@ Spacer(),
                                                                             },
                                                                           ),
                                                                         ),
-
                                                                         Spacer(),
-                                                                        Text(
-                                                                            prefs
-                                                                                .getString(
-                                                                                    'MaxDiscount')
-                                                                                .toString(),
+                                                                        Text(prefs.getString('MaxDiscount').toString(),
                                                                             style: TextStyle(
                                                                                 color: Colors.deepOrange,
                                                                                 fontSize: 22,
@@ -363,7 +371,8 @@ Spacer(),
                                                                       ],
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 40,
+                                                                      height:
+                                                                          40,
                                                                     ),
                                                                     Row(
                                                                       children: [
@@ -385,10 +394,8 @@ Spacer(),
                                                                             child:
                                                                                 Image.asset(
                                                                               "assets/plus.png",
-                                                                              height:
-                                                                                  100,
-                                                                              width:
-                                                                                  100,
+                                                                              height: 100,
+                                                                              width: 100,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -404,21 +411,12 @@ Spacer(),
                                                                                 EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                                                             child:
                                                                                 TextField(
-                                                                              scrollPadding:
-                                                                                  EdgeInsets.only(bottom: 40),
-                                                                              keyboardType:
-                                                                                  TextInputType.number,
-                                                                              style: TextStyle(
-                                                                                  fontSize: 40.0,
-                                                                                  height: 2.0,
-                                                                                  color: Colors.black,
-                                                                                  fontWeight: FontWeight.bold),
-                                                                              textAlign:
-                                                                                  TextAlign.center,
-                                                                              controller:
-                                                                                  counter,
-                                                                              decoration:
-                                                                                  InputDecoration(),
+                                                                              scrollPadding: EdgeInsets.only(bottom: 40),
+                                                                              keyboardType: TextInputType.number,
+                                                                              style: TextStyle(fontSize: 40.0, height: 2.0, color: Colors.black, fontWeight: FontWeight.bold),
+                                                                              textAlign: TextAlign.center,
+                                                                              controller: counter,
+                                                                              decoration: InputDecoration(),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -442,10 +440,8 @@ Spacer(),
                                                                             child:
                                                                                 Image.asset(
                                                                               "assets/minuse.png",
-                                                                              height:
-                                                                                  100,
-                                                                              width:
-                                                                                  100,
+                                                                              height: 100,
+                                                                              width: 100,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -453,14 +449,16 @@ Spacer(),
                                                                       ],
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 40,
+                                                                      height:
+                                                                          40,
                                                                     ),
                                                                     Container(
                                                                       width: MediaQuery.of(
                                                                               context)
                                                                           .size
                                                                           .width,
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         children: [
                                                                           Spacer(),
                                                                           Container(
@@ -470,16 +468,11 @@ Spacer(),
                                                                                 50,
                                                                             child:
                                                                                 TextField(
-                                                                              textAlign:
-                                                                                  TextAlign.center,
-                                                                              readOnly:
-                                                                                  true,
-                                                                              controller:
-                                                                                  dropcontroler,
-                                                                              style:
-                                                                                  TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                                                              decoration:
-                                                                                  InputDecoration(
+                                                                              textAlign: TextAlign.center,
+                                                                              readOnly: true,
+                                                                              controller: dropcontroler,
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                                              decoration: InputDecoration(
                                                                                 enabledBorder: const OutlineInputBorder(
                                                                                   borderSide: const BorderSide(color: Colors.grey, width: 3.0),
                                                                                 ),
@@ -506,66 +499,55 @@ Spacer(),
                                                                       ),
                                                                     ),
                                                                     SizedBox(
-                                                                      height: 40,
+                                                                      height:
+                                                                          40,
                                                                     ),
                                                                     Row(
                                                                       children: [
                                                                         Spacer(),
                                                                         Container(
                                                                           width:
-                                                                              MediaQuery.of(context).size.width /
-                                                                                  3,
+                                                                              MediaQuery.of(context).size.width / 3,
                                                                           child:
                                                                               ListTile(
-                                                                            title: Text(
-                                                                                "نسبه",
-                                                                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                                                                            title:
+                                                                                Text("نسبه", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
                                                                             leading:
                                                                                 Radio(
-                                                                              value:
-                                                                                  1,
-                                                                              groupValue:
-                                                                                  val,
-                                                                              onChanged:
-                                                                                  (value) {
+                                                                              value: 1,
+                                                                              groupValue: val,
+                                                                              onChanged: (value) {
                                                                                 setState(() {
                                                                                   val = value!;
                                                                                   print(val.toString() + "  vall 1");
                                                                                 });
                                                                               },
-                                                                              activeColor:
-                                                                                  Colors.green,
+                                                                              activeColor: Colors.green,
                                                                             ),
                                                                           ),
                                                                         ),
                                                                         Spacer(),
                                                                         Container(
                                                                           width:
-                                                                              MediaQuery.of(context).size.width /
-                                                                                  3,
+                                                                              MediaQuery.of(context).size.width / 3,
                                                                           child:
                                                                               ListTile(
                                                                             title:
                                                                                 Text(
                                                                               "مبلغ",
-                                                                              style:
-                                                                                  TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                                                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                                                                             ),
                                                                             leading:
                                                                                 Radio(
-                                                                              value:
-                                                                                  0,
-                                                                              groupValue:
-                                                                                  val,
-                                                                              onChanged:
-                                                                                  (value) {
+                                                                              value: 0,
+                                                                              groupValue: val,
+                                                                              onChanged: (value) {
                                                                                 setState(() {
                                                                                   val = value!;
                                                                                   print(val.toString() + "  vall 2");
                                                                                 });
                                                                               },
-                                                                              activeColor:
-                                                                                  Colors.green,
+                                                                              activeColor: Colors.green,
                                                                             ),
                                                                           ),
                                                                         ),
@@ -580,46 +562,77 @@ Spacer(),
                                                                         Spacer(),
                                                                       ],
                                                                     ),
-
                                                                     Container(
-                                                                      height: 50,
-                                                                      width: 240,
-                                                                      margin: EdgeInsets.only(top: 60,bottom: 30),
-                                                                      color:HexColor(Globalvireables.white),
-                                                                      child: ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                          primary:HexColor(Globalvireables.basecolor),
+                                                                      height:
+                                                                          70,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      margin: EdgeInsets.only(
+                                                                          top:
+                                                                              60,
+                                                                          bottom:
+                                                                              0),
+                                                                      color: HexColor(
+                                                                          Globalvireables
+                                                                              .white),
+                                                                      child:
+                                                                          ElevatedButton(
+                                                                        style: ElevatedButton
+                                                                            .styleFrom(
+                                                                          primary:
+                                                                              HexColor(Globalvireables.basecolor),
                                                                         ),
-                                                                        child: Text(
-                                                                          "اضافه"
-                                                                          ,style: TextStyle(color: HexColor(Globalvireables.white),fontSize: 22),
+                                                                        child:
+                                                                            Text(
+                                                                          "اضافه",
+                                                                          style: TextStyle(
+                                                                              color: HexColor(Globalvireables.white),
+                                                                              fontSize: 22),
                                                                         ),
                                                                         onPressed:
                                                                             () async {
+                                                                          String
+                                                                              name =
+                                                                              _journals[index]['Item_Name'];
+                                                                          String
+                                                                              itemno =
+                                                                              _journals[index]['Item_No'];
+                                                                          String
+                                                                              tax =
+                                                                              _journals[index]['tax'];
+                                                                          String
+                                                                              netprice =
+                                                                              PriceCounter.text;
+                                                                          String
+                                                                              dis =
+                                                                              discontroler.text;
+                                                                          String
+                                                                              bounse =
+                                                                              bounsecontroler.text;
+                                                                          String
+                                                                              qt =
+                                                                              counter.text;
+                                                                          String
+                                                                              unit =
+                                                                              selectedUnit;
+                                                                          String
+                                                                              distype =
+                                                                              val.toString();
+                                                                          String
+                                                                              price =
+                                                                              val.toString();
 
-                                                                              String name= _journals[index]['Item_Name'];
-                                                                              String itemno= _journals[index]['Item_No'];
-                                                                              String tax= _journals[index]['tax'];
-                                                                              String netprice= PriceCounter.text ;
-                                                                              String dis= discontroler.text;
-                                                                              String bounse= bounsecontroler.text;
-                                                                              String qt= counter.text;
-                                                                              String unit= selectedUnit;
-                                                                              String distype= val.toString();
-                                                                              String price= val.toString();
-
-                                                                              final handler = DatabaseHandler();
-                                                                                    await handler.SaveSal(name,itemno,netprice,dis,bounse,qt,unit,distype,price,tax).then((value) =>
-                                                                                     {
-                                                                                     Navigator.pop(context)
-                                                                                  });
+                                                                          final handler =
+                                                                              DatabaseHandler();
+                                                                          await handler.SaveSal(name, itemno, netprice, dis, bounse, qt, unit, distype, price, tax).then((value) =>
+                                                                              {
+                                                                                Navigator.pop(context)
+                                                                              });
                                                                         },
                                                                       ),
                                                                     ),
-
-
-
-
                                                                   ],
                                                                 ),
                                                               ),
@@ -684,18 +697,26 @@ Spacer(),
                                                               1.2,
                                                           child: Directionality(
                                                             textDirection:
-                                                                TextDirection.rtl,
+                                                                TextDirection
+                                                                    .rtl,
                                                             child: Text(
                                                                 _journals[index]
-                                                                    ['Item_Name']==null?"":_journals[index]
-                                                                ['Item_Name'] ,
+                                                                            [
+                                                                            'Item_Name'] ==
+                                                                        null
+                                                                    ? ""
+                                                                    : _journals[
+                                                                            index]
+                                                                        [
+                                                                        'Item_Name'],
                                                                 overflow:
                                                                     TextOverflow
                                                                         .clip,
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .black,
-                                                                    fontSize: 16,
+                                                                    fontSize:
+                                                                        16,
                                                                     height: 1.3,
                                                                     fontWeight:
                                                                         FontWeight
@@ -809,8 +830,7 @@ Spacer(),
       }
     }
 
-   // print("listtta  "+_journals[0]['Item_Name'].toString());
-
+    // print("listtta  "+_journals[0]['Item_Name'].toString());
   }
 
   void refreshSearch(String txt) async {
@@ -828,7 +848,7 @@ Spacer(),
           //  prices[i] =x
         }
       }
-    }catch(_){}
+    } catch (_) {}
   }
 
   Future<bool> getUnites(String itemNo) async {
@@ -862,7 +882,8 @@ Spacer(),
     ];
     return await handler.insertsalDetails(listOfUsers);
   }
-  Future<bool> _onBackPressed() async{
+
+  Future<bool> _onBackPressed() async {
     Navigator.pop(context);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SalesInvoice(),

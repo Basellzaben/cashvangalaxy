@@ -1,3 +1,4 @@
+import 'package:cashvangalaxy/UI/CatchReceipt.dart';
 import 'package:cashvangalaxy/UI/ItineraryScreen.dart';
 import 'package:cashvangalaxy/UI/Login.dart';
 import 'package:cashvangalaxy/UI/SalesInvoice.dart';
@@ -134,7 +135,7 @@ class _HomeState extends State<Home> {
                                               margin: EdgeInsets.only(
                                                   bottom: 36, top: 20),
                                               child: Image.asset(
-                                                "assets/img1.jpg",
+                                                "assets/work.png",
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
@@ -171,9 +172,9 @@ class _HomeState extends State<Home> {
                                           children: [
                                             Container(
                                               margin: EdgeInsets.only(
-                                                  bottom: 36, top: 20),
+                                                  bottom: 20, top: 10),
                                               child: Image.asset(
-                                                "assets/img2.jpg",
+                                                "assets/visit.png",
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
@@ -211,9 +212,9 @@ class _HomeState extends State<Home> {
                                             children: [
                                               Container(
                                                 margin: EdgeInsets.only(
-                                                    bottom: 0, top: 0),
+                                                    bottom: 40, top: 10),
                                                 child: Image.asset(
-                                                  "assets/img3.jpg",
+                                                  "assets/update.png",
                                                   fit: BoxFit.contain,
                                                 ),
                                               ),
@@ -299,31 +300,41 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              width: MediaQuery.of(context).size.width / 1.1,
-                              height: 90,
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                color: HexColor(Globalvireables.basecolor),
-                                child: Container(
-                                  padding: EdgeInsets.all(17),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.payment,
-                                        size: 45.0,
-                                        color: HexColor(Globalvireables.white),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        "سند قبض",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 24),
-                                      ),
-                                    ],
+
+
+
+                        GestureDetector(
+                            onTap: () {
+                               Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CatchReceipt(),
+                            ));
+                            },
+                           child: Container(
+                                margin: EdgeInsets.only(top: 20),
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                height: 90,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  color: HexColor(Globalvireables.basecolor),
+                                  child: Container(
+                                    padding: EdgeInsets.all(17),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.payment,
+                                          size: 45.0,
+                                          color: HexColor(Globalvireables.white),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "سند قبض",
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 24),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

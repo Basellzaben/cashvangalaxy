@@ -1,6 +1,4 @@
-import 'package:cashvangalaxy/UI/UpdateScreen.dart';
-import 'package:cashvangalaxy/UI/fingerPrint.dart';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../Dialogs/ItemDialog.dart';
@@ -8,8 +6,8 @@ import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
-
-
+import 'NavBar.dart';
+import 'package:http/http.dart' as http;
 void main() =>
     runApp(ResponsiveSizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
@@ -74,12 +72,12 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                             height: 230.0,
                             color: Colors.transparent,
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: new BoxDecoration(
                                     color: HexColor(Globalvireables.basecolor),
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(0.0),
+                                    borderRadius: new BorderRadius.only(
+                                      bottomLeft: const Radius.circular(0.0),
                                     )),
-                                child: Column(
+                                child: new Column(
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(top: 40),
@@ -97,7 +95,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 ))
                                               });
                                             },
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.arrow_back_ios_sharp,
                                               color: Colors.white,
                                               size: 30,
@@ -278,7 +276,6 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
                         SizedBox(
                             height: MediaQuery.of(context).size.height/1.55,
-
                             child: ListView.builder(
                                 physics: const ClampingScrollPhysics(),
                                 shrinkWrap: true,
@@ -418,7 +415,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 child: Row(
                                                   children: [
                                                     Spacer(),
-                                                    Text(SumDis.toString(),
+                                                    Text(SumDis.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -429,7 +426,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                             fontWeight: FontWeight.w200,
                                                             fontSize: 20)),
                                                     Spacer(),
-                                                    Text(Sum.toString(),
+                                                    Text(Sum.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -447,7 +444,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 child: Row(
                                                   children: [
                                                     Spacer(),
-                                                    Text(Total.toString(),
+                                                    Text(Total.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -458,7 +455,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                             fontWeight: FontWeight.w200,
                                                             fontSize: 20)),
                                                     Spacer(),
-                                                    Text(SumTax.toString(),
+                                                    Text(SumTax.toStringAsFixed(3).toString(),
                                                         style: TextStyle(
                                                             color: Colors.white,
                                                             fontWeight: FontWeight.bold,
@@ -506,7 +503,10 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                                     .basecolor),
                                                             fontSize: 22),
                                                       ),
-                                                      onPressed: () async {},
+                                                      onPressed: () async {
+                                                        SendData();
+
+                                                      },
                                                     ),
                                                     Spacer(),
                                                     ElevatedButton(
@@ -551,11 +551,11 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                     });
                               },
                               child: Container(
-                                  margin: EdgeInsets.only(bottom: 22),
+                                  margin: EdgeInsets.only(bottom: 0),
                                   child: new Image.asset(
                                     'assets/upbottom.png',
-                                    width: 55,
-                                    height: 55,
+                                    width: 44,
+                                    height: 44,
                                   )
                                   // child: Icon(Icons.settings_overscan,size: 55,color: HexColor(Globalvireables.basecolor),),
                                   ),
@@ -630,7 +630,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
 
     }
-    return net.toString();
+    //String inString = d.toStringAsFixed(2);
+    return net.toStringAsFixed(2);
   }
 
 
@@ -656,4 +657,51 @@ bool r=false;
 
     return true;
   }
+
+
+
+
+  void SendData()async {
+    var products = <Map<String, dynamic>>[
+      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"24.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس  ملح البحر24 * 75  غم","no":"103","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"},
+      {"Bounce":"0.0","DisAmtFromHdr":"0.0","DisPerFromHdr":"0.0","Dis_Amt":"0.0","Discount":"0.0","ItemOrgPrice":"12.0","Operand":"48.0","ProID":"0","Pro_amt":"0","Pro_bounce":"0","Pro_dis_Per":"0","Unite":"3","UniteNm":"كرتونة","name":"ميجا شيبس ملح البحر والخل 48 *  35 غم","no":"202","price":"12.0","pro_Total":"0","qty":"1.0","tax":"16.0","tax_Amt":"1.92","total":"13.92","weight":"0.0"}
+    ];
+
+    var _body = <String, dynamic>{
+      'Cust_No':"1130695"
+      ,'Date':"2022/12/07"
+      ,'UserID':"7"
+      ,'OrderNo':"0700490"
+      ,'hdr_dis_per':"0.0"
+      ,'hdr_dis_value':"0.0"
+      ,'Total':"24.0"
+      ,'Net_Total':"27.84"
+      ,'Tax_Total':"3.84"
+      ,'bounce_Total':"0"
+      ,'include_Tax':"-1"
+      ,'disc_Total':"0"
+      ,'inovice_type':"0"
+      ,'CashCustNm':"باسل"
+      ,'V_OrderNo':"0700002",
+      "DocType":"1"
+      ,'DriverNo':"0"
+      ,'Pos_System':"0"
+      ,'OrderDesc':""
+      ,'MOVE':"0"
+      ,'GSPN':"0"
+      ,'detailsmodel':products
+    };
+
+    var bytes = utf8.encode(json.encode(_body));
+    Uri apiUrl = Uri.parse(Globalvireables.PostSales);
+    http.Response response = await http.post(apiUrl,
+        headers: { "Content-Type": "application/json"},
+        body: bytes);
+    var jsonResponse = jsonDecode(response.body);
+    print("wheen" + _body.toString());
+    print("wheenresponse" + jsonResponse.toString());
+
+  }
+
+
 }

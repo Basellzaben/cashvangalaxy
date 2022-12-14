@@ -10,10 +10,8 @@ class Globalvireables {
   static String white="#ffffff";
   static String black="#000000";
   static String black2="#191919";
-
   static List<Map<String, dynamic>> journals = [];
   static List<String> price = [];
-
   static String GetCInfo="http://10.0.1.60:88/api/Company/GetCompanyInfo";
   static String GetUsers="http://10.0.1.60:88/api/Man/GetManf";
   static String checWork="http://10.0.1.60:88/api/Man/SaveManAtten";
@@ -25,5 +23,6 @@ class Globalvireables {
   static String GetUnites="http://10.0.1.60:88/api/Unites/GetUnites";
   static String urltime = "http://10.0.1.60:88/api/data/GetDatetimesp";
   static String GetMaxOrder = "http://10.0.1.60:88/api/Order/GetMaxOrders/";
+  static String PostSales="http://10.0.1.60:88/api/SaveSale/PostSaveSale";
 
 }

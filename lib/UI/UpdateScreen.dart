@@ -110,42 +110,42 @@ class _UpdateScreenState extends State<UpdateScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: CheckboxListTile(
-                              activeColor: Colors.green,
-                              checkColor:Colors.white,
-                              title: Text(
-                                "تحديث الكل",
-                                style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w900,fontSize: 20),
+
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width / 2,
+                              child: Directionality(
+                                textDirection: TextDirection.rtl,
+                                child: CheckboxListTile(
+                                  activeColor: Colors.green,
+                                  checkColor:Colors.white,
+                                  title: Text(
+                                    "تحديث الكل",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w900,fontSize: 20),
+                                  ),
+                                  //    <-- label
+                                  value: CheckAll,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      CheckAll = newValue!;
+                                      for(int i=0;i<CheckSelected.length;i++){
+                                        CheckSelected[i]=newValue;
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
-                              //    <-- label
-                              value: CheckAll,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  CheckAll = newValue!;
-                                  for(int i=0;i<CheckSelected.length;i++){
-                                    CheckSelected[i]=newValue;
-                                  }
-                                });
-                              },
                             ),
                           ),
-                        ),
-                      ),
+
+
+
                       Row(
                         children: [
-
-
-
-
-                          SizedBox(
+             SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
                             child: Directionality(
                               textDirection: TextDirection.rtl,
