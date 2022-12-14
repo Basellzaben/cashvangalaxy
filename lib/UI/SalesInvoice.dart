@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../Dialogs/ItemDialog.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Sqlite/DatabaseHandler.dart';
+import '../provider/CustomerProvider.dart';
 import 'Home.dart';
 import 'NavBar.dart';
 import 'package:http/http.dart' as http;
@@ -136,7 +138,7 @@ else
                                           Spacer(),
                                           Spacer(),
                                           Spacer(),
-                                          Text("باسل الزبن",
+                                          Text("${context.watch<CustomerProvider>().Name}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -147,7 +149,7 @@ else
                                                   fontWeight: FontWeight.w200,
                                                   fontSize: 15)),
                                           Spacer(),
-                                          Text("6657345",
+                                          Text("${context.watch<CustomerProvider>().No}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,

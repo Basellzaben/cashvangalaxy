@@ -277,8 +277,7 @@ class DatabaseHandler {
     try {
       print("length :" +
           queryResult.map((e) => salDetails.fromMap(e)).toList().first.itemno);
-      if (queryResult.map((e) => salDetails.fromMap(e)).toList().first.itemno ==
-          itemno) {
+      if (queryResult.map((e) => salDetails.fromMap(e)).toList().first.itemno == itemno) {
         await dbClient.update("salDetails", row,
             where: 'itemno = ?', whereArgs: [itemno]);
       } else {
@@ -585,4 +584,20 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     db.delete('salDetails');
   }
+
+  Future<List<Map<String,dynamic>>> GetCustomersList(String? search,String? day) async {
+    print(day);
+    final Database db = await initializeDB();
+    if(search!=null)
+      if (search.isNotEmpty) {
+        return db.query('Customers', orderBy: "No",
+            where: "( name" " LIKE  '%" + search + "%' or No LIKE '%"+search+"%') and "+day!);
+      }
+
+    if(search=="All") {
+      return db.query('Customers', orderBy: "No",where: day);
+    }
+    return db.query('Customers', orderBy: "No",where: day);
+  }
+
 }
