@@ -12,6 +12,7 @@ import '../Models/Time.dart';
 import '../Sqlite/SharePrefernce.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -26,7 +27,12 @@ class fingerPrint extends StatefulWidget {
 var activecheck;
 
 var prefs;
-
+Future<void> _launchUrl(String lat1,String lon1,String lat2,String long2) async {
+  String googleUrl = "http://maps.google.com/maps?" + "saddr="+ lat1 + "," + lon1 + "&daddr=" + lat2 + "," +long2+"";
+  Uri myUri = Uri.parse(googleUrl);
+  if (!await launchUrl(myUri)) {
+    throw 'Could not launch $myUri';
+  }}
 Future<Time> getTime() async {
   prefs = await SharedPreferences.getInstance();
 
@@ -71,7 +77,8 @@ class _fingerPrintState extends State<fingerPrint> {
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+              'Location permissions are permanently denied,'
+                  ' we cannot request permissions.')));
       return false;
     }
     return true;
@@ -100,9 +107,12 @@ class _fingerPrintState extends State<fingerPrint> {
             ' ${place.subLocality},'
             ' ${place.subAdministrativeArea},'
             ' ${place.postalCode}';
-      });
+      }
+      );
     }).catchError((_) {
+
       // debugPrint(e);
+
     });
   }
 
@@ -131,14 +141,19 @@ class _fingerPrintState extends State<fingerPrint> {
     } else {
       TransType = "1";
     }
-
     prefs.setString('TransType', TransType);
-
-    print(jsonResponse.toString() + "  response.toString()");
+    print(Globalvireables.GetlASTaCTION + prefs.getString('man').toString() + "  response.toString()");
   }
-
+  Future<void> _launchUrl(String lat1,String lon1,String lat2,String long2) async {
+    String googleUrl = "http://maps.google.com/maps?" + "saddr="+ lat1 + "," + lon1 + "&daddr=" + lat2 + "," +long2+"";
+    Uri myUri = Uri.parse(googleUrl);
+    if (!await launchUrl(myUri)) {
+      throw 'Could not launch $myUri';
+    }
+  }
   @override
   Widget build(BuildContext context) {
+  //   _launchUrl("21.42","39.82","23.76","44.52");
     getTime();
     String timee = "00:00:00";
     String datee = "";
@@ -257,8 +272,7 @@ class _fingerPrintState extends State<fingerPrint> {
                       child: Container(
                         decoration: BoxDecoration(
                             color: HexColor(Globalvireables.white2),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(77))),
+                            borderRadius:BorderRadius.all(Radius.circular(77))),
                         margin: EdgeInsets.only(top: 100),
                         height: MediaQuery.of(context).size.height / 1.5,
                         width: MediaQuery.of(context).size.width,
@@ -513,7 +527,7 @@ class _fingerPrintState extends State<fingerPrint> {
   }
 
   void checWork() async {
-    try {
+    //try {
       setState(() {
         activecheck = false;
       });
@@ -537,6 +551,7 @@ class _fingerPrintState extends State<fingerPrint> {
         print("TransType " + TransType);
         SharePrefernce.setR('TransType', TransType);
       }
+      print("TransType : "+TransType);
       ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
         duration: new Duration(seconds: 20),
         content: new Row(
@@ -555,8 +570,8 @@ class _fingerPrintState extends State<fingerPrint> {
         "ActionNo": TransType, //1 =start , 2 = end
         "ActionDate": date.toString(),
         "ActionTime": time.toString(),
-        "Coor_X": _currentPosition!.altitude.toString(),
-        "Coor_Y": _currentPosition!.longitude.toString(),
+        "Coor_X": _currentPosition?.altitude.toString(),
+        "Coor_Y": _currentPosition?.longitude.toString(),
         "ManAddress": _currentAddress,
         "Notes": "1",
         "Img": "1",
@@ -580,11 +595,10 @@ class _fingerPrintState extends State<fingerPrint> {
       print(json.toString() + "ggggg");
 
       var jsonResponse = jsonDecode(response.body);
-      if (jsonResponse.toString() == "2") {
+      if (jsonResponse.toString().contains("2")) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("تم تسجيل الحركه بنجاح"),
-        ));
+          content: Text("تم تسجيل الحركه بنجاح"),));
         setState(() {
           activecheck = true;
         });
@@ -592,19 +606,19 @@ class _fingerPrintState extends State<fingerPrint> {
         try {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا1"),
           ));
         } catch (_) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا"),
+            content: Text("يوجد مشكلة , يرجى المحاولة لاحقا2"),
           ));
         }
       }
 
       if (c == 0) {}
-    } catch (_) {
+   /* } catch (_) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("يوجد مشكلة , يرجى المحاولة لاحقا")));
-    }
+          SnackBar(content: Text("يوجد مشكلة , يرجى المحاولة لاحقا3")));
+    }*/
   }
 }
