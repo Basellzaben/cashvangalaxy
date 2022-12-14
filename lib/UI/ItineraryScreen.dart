@@ -1,14 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:cashvangalaxy/Dialogs/ItemDialog.dart';
+import 'package:cashvangalaxy/provider/CustomerProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Dialogs/CustomersDialog.dart';
 import '../GlobalVar.dart';
 import '../HexaColor.dart';
 import '../Models/Time.dart';
 import 'package:http/http.dart' as http;
+
 import '../Sqlite/DatabaseHandler.dart';
 import 'Home.dart';
 
@@ -23,13 +29,14 @@ Future<Time> getTime() async {
   Uri apiUrl = Uri.parse(Globalvireables.urltime);
   http.Response response = await http.get(apiUrl);
   var jsonResponse = json.decode(response.body);
-  print("mohh = " + jsonResponse);
+  //print("mohh = " + jsonResponse);
 
   var parsedJson = json.decode(jsonResponse);
   var time = Time.fromJson(parsedJson);
-  print("mohh = " + time.Date);
+ // print("mohh = " + time.Date);
   return time;
 }
+
 class ItineraryScreen extends StatefulWidget {
   @override
   State<ItineraryScreen> createState() => _ItineraryScreenState();
@@ -43,6 +50,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   late String _currentAddress;
 
   LatLng currentLatLng = const LatLng(0.0, 0.0);
+  LatLng currentLatLng2 = const LatLng(0.0, 0.0);
   late Position _currentPosition;
 
   int percentage = 0;
@@ -67,15 +75,28 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   TextEditingController dropcontroler = TextEditingController();
 
   void _onAddMarkerButtonPressed() {
-    setState(() {
+    currentLatLng2=(LatLng((context.watch<CustomerProvider>().Lat), (context.watch<CustomerProvider>().Long)));
+    print(currentLatLng.longitude);
+   print(currentLatLng2.longitude);
+    context.watch<CustomerProvider>().Lat=='' ?
       _markers.add(Marker(
         markerId: MarkerId(currentLatLng.toString()),
         position: currentLatLng,
         infoWindow:
             const InfoWindow(title: 'Nice Place', snippet: 'Welcome to Poland'),
         icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
+      )):
+    currentLatLng2=(LatLng((context.watch<CustomerProvider>().Lat), (context.watch<CustomerProvider>().Long)));
+    _markers.add(Marker(
+      markerId: MarkerId(currentLatLng2.toString()),
+      position: currentLatLng2,
+      infoWindow:
+      const InfoWindow(title: 'Nice Place', snippet: 'Welcome to Poland'),
+      icon: BitmapDescriptor.defaultMarker,
+    ));
+  //print(currentLatLng2.toString());
+  print(currentLatLng.longitude);
+
   }
   List<String> items = [];
 
@@ -157,8 +178,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     activecheck = true;
     setState(() {
       _getCurrentPosition();
+     // dropcontroler.text =  context.watch<CustomerProvider>().Name;
     });
-
+    //dropcontroler.text =  context.watch<CustomerProvider>().Name;
     // getBatteryPerentage();
   }
 
@@ -166,6 +188,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   Widget build(BuildContext context) {
     // getTime();
     String timee = "00:00:00";
+    String timer = "11:00:00";
+    String StratVisit = "11:00:00";
     String datee = "";
 
     return WillPopScope(
@@ -181,8 +205,13 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 time = snapshot.data!.Timee.toString();
                 if (snapshot.data!.Timee.toString().length > 4) {
                   timee = snapshot.data!.Timee.toString();
-                  datee = snapshot.data!.Date.toString().substring(0, 10);}
+                  context.read<CustomerProvider>().setdayOFweek((snapshot.data!.Dayofnumber));
+
+                  datee = snapshot.data!.Date.toString().substring(0, 10);
+                }
+
                 return Scaffold(
+
                     appBar: AppBar(
                       backgroundColor: HexColor(Globalvireables.basecolor),
                       title: Row(children: <Widget>[
@@ -261,39 +290,37 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           children: [
                                            Spacer(),
                                             Container(
-                                              width: 100,
+                                              width: 250,
                                               height: 37,
+
                                               color: Colors.white12,
                                               child: TextField(
 
+
+                                                onTap: (){
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CustomersDialog()));
+                                                },
                                                 textAlign:
                                                 TextAlign.center,
                                                 readOnly:
                                                 true,
-                                                controller:
-                                                dropcontroler,
+                                                controller: TextEditingController(text:"${context.watch<CustomerProvider>().Name}"),
                                                 style:
-                                                TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                                TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color: Colors.black),
+
                                                 decoration:
                                                 InputDecoration(
+
+
+
                                                   enabledBorder: const OutlineInputBorder(
                                                     borderSide: const BorderSide(color: Colors.black12, width: 3.0),
                                                   ),
-                                                  suffixIcon: PopupMenuButton<String>(
-                                                    icon: const Icon(Icons.arrow_drop_down),
-                                                    onSelected: (String value) {
-                                                      dropcontroler.text = value;
-                                                      selectedUnit = customersitem.elementAt(items.indexOf(value)); //(Unites.indexOf(value)+1).toString();
-                                                      print("indexselected " + selectedUnit.toString());
-                                                     // PriceCounter.text = getprice(_journals[index]['Item_No'], selectedUnit, '1.0').substring(0, 4);
-                                                     // print("PriceCounter " + PriceCounter.text.toString());
-                                                    },
-                                                    itemBuilder: (BuildContext context) {
-                                                      return items.map<PopupMenuItem<String>>((String? value) {
-                                                        return new PopupMenuItem(child: new Text(value!, style: TextStyle(color: Colors.black, fontSize: 25, height: 1.3, fontWeight: FontWeight.bold)), value: value);
-                                                      }).toList();
-                                                    },
-                                                  ),
+
                                                 ),
                                               ),
                                             ),
@@ -326,14 +353,36 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Spacer(),
-                                            SizedBox(
-                                              height: 25,
-                                              child: Container(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    "158525464",
-                                                    style: TextStyle(fontSize: 16),
-                                                  )),
+                                            Container(
+                                              width: 250,
+                                              height: 37,
+
+                                              color: Colors.white12,
+                                              child: TextField(
+
+
+                                                onTap: (){
+
+                                                },
+                                                textAlign:
+                                                TextAlign.center,
+                                                readOnly:
+                                                true,
+                                                controller: TextEditingController(text:"${context.watch<CustomerProvider>().No}"),
+                                                style:
+                                                TextStyle(fontWeight: FontWeight.bold, fontSize: 14,color: Colors.black),
+
+                                                decoration:
+                                                InputDecoration(
+
+
+
+                                                  enabledBorder: const OutlineInputBorder(
+                                                    borderSide: const BorderSide(color: Colors.black12, width: 3.0),
+                                                  ),
+
+                                                ),
+                                              ),
                                             ),
                                             SizedBox(
                                               height: 25,
@@ -433,7 +482,8 @@ SizedBox(height: 15,),
                                             //   Navigator.pop(context);
                                           },
                                           child: Container(
-                                             ),)
+                                             ),
+                                        )
                                           ]),
                                           Row(
                                             mainAxisAlignment:
@@ -480,10 +530,10 @@ SizedBox(height: 15,),
                                       onMapCreated: _onMapCreated,
                                       mapType: MapType.hybrid,
                                       initialCameraPosition: CameraPosition(
-                                        target: currentLatLng,
+                                        target:   currentLatLng,
                                         zoom: 18.0,
                                       ),
-                                      markers: _markers,
+                                      markers: _markers ,
                                       onCameraMove: _onCameraMove),
                                 ),
                               ),

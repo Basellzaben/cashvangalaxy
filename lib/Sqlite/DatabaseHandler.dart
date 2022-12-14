@@ -328,6 +328,7 @@ class DatabaseHandler {
     return "0";
   }
 
+
   Future<int> insertMaxOrder(List<MaxOrder> categ) async {
     int result = 0;
     final Database db = await initializeDB();

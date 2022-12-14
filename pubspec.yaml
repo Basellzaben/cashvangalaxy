@@ -50,14 +50,14 @@ dependencies:
   intl: ^0.17.0
   path_provider_android: ^2.0.20
   path_provider_ios: ^2.0.11
-  google_maps_flutter: ^2.2.1
+
   google_maps_flutter_android: ^2.3.3
   flutter_gif: ^0.0.4
   edge_detection: ^1.0.9
   expandable: ^5.0.1
   url_launcher: ^6.1.6
 
-
+  google_maps_flutter: ^2.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
