@@ -15,7 +15,7 @@ class CustomersDialog extends StatefulWidget {
 class LogoutOverlayStatecard extends State<CustomersDialog>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
- late String day;
+  late String day;
   List<Map<String, dynamic>> _journals = [];
   final TextEditingController searchcontroler = TextEditingController();
   List<String> prices = [];
@@ -27,13 +27,13 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
 
 
     if (Globalvireables.journals.isEmpty) {
-     // Globalvireables.journals.clear();
+      // Globalvireables.journals.clear();
 
 
       _refreshItems();
     } else {
-  //    final handler = DatabaseHandler();
-     // _journals.clear();
+      //    final handler = DatabaseHandler();
+      // _journals.clear();
       //_journals = Globalvireables.journals;
     }
 //print(_journals[0]['Item_Name'].toString());
@@ -103,9 +103,9 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
                           itemCount: _journals.length,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () {
-                           /*   context.read<CustomerProvider>().Name=_journals[index]['name'];
+                              /*   context.read<CustomerProvider>().Name=_journals[index]['name'];
                               context.read<CustomerProvider>().No=_journals[index]['No'];*/
-                              context.read<CustomerProvider>().setCustomers(_journals[index]['name'], _journals[index]['No'],double.parse(_journals[index]['Latitude']),double.parse(_journals[index]['Longitude']));
+                              context.read<CustomerProvider>().setCustomers(_journals[index]['name'], _journals[index]['No'],double.parse(_journals[index]['Latitude']),double.parse(_journals[index]['Longitude']),"0.00","0.00");
 
                               Navigator.pop(context);
 
@@ -155,13 +155,11 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
                                                   _journals[index]
                                                   ['name'],
                                                   style: const TextStyle(
-                                                      color: Colors
-                                                          .black,
+                                                      color: Colors.black,
                                                       fontSize: 13,
                                                       height: 1.3,
                                                       fontWeight:
-                                                      FontWeight
-                                                          .bold)),
+                                                      FontWeight.bold)),
                                             )),
                                       ),
                                     ),
@@ -191,12 +189,9 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
     );
     /*else
     return      Container(
-
         child: Scaffold(
-
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-
             body: Container(
         margin: EdgeInsets.only(top: 400),
         child: Center(child: CircularProgressIndicator())
@@ -245,7 +240,7 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
 
   void _refreshItems() async {
     final handler = DatabaseHandler();
-   // prefs = await SharedPreferences.getInstance();
+    // prefs = await SharedPreferences.getInstance();
     //print(_journals[0]['price']  + "   thispriiice");
 
     prices.clear();
@@ -264,9 +259,9 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
 
   void refreshSearch(String txt) async {
     final handler = DatabaseHandler();
-     print("as");
-     print(context.watch<CustomerProvider>().DayWeek);
-     print("context.watch<CustomerProvider>().DayWeek");
+    print("as");
+    print(context.watch<CustomerProvider>().DayWeek);
+    print("context.watch<CustomerProvider>().DayWeek");
     if(int.parse(context.watch<CustomerProvider>().DayWeek)==7)
       day= "sat = '1' ";
     else if(int.parse(context.read<CustomerProvider>().DayWeek)==2)
@@ -274,7 +269,7 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
     else if(int.parse(context.read<CustomerProvider>().DayWeek)==3)
       day="tues = '1'";
     else if(int.parse(context.read<CustomerProvider>().DayWeek)==5)
-      day="thurs  '1'";
+      day="thurs = '1'";
     else if(int.parse(context.read<CustomerProvider>().DayWeek)==4)
       day = "wens = '1'";
     else if(int.parse(context.read<CustomerProvider>().DayWeek)==1)
@@ -282,7 +277,7 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
 
 
     var data = await handler.GetCustomersList(txt,day);
-print(data);
+    print(data);
 
     setState(() {
       if(data.length!=0) {
@@ -292,7 +287,7 @@ print(data);
 
 
 
-        //  prices[i] =
+    //  prices[i] =
 
 
   }

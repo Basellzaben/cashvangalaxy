@@ -7,7 +7,7 @@ class SalesInvoiceH{
 
   String hdr_dis_value="";
   String Total="";
-
+  String Net_Total="";
   String Tax_Total="";
   String bounce_Total="";
   String include_Tax="";
@@ -23,6 +23,7 @@ class SalesInvoiceH{
   String OrderDesc="";
   String MOVE="";
   String GSPN="";
+  String posted="";
 
 
 
@@ -34,7 +35,7 @@ class SalesInvoiceH{
     required this.hdr_dis_per,
     required  this.hdr_dis_value,
     required this.Total,
-
+    required this.Net_Total,
     required this.Tax_Total,
     required this.bounce_Total,
     required this.include_Tax,
@@ -49,6 +50,7 @@ class SalesInvoiceH{
     required this.OrderDesc,
     required this.MOVE,
     required this.GSPN,
+    required this.posted,
 
   });
 
@@ -60,7 +62,7 @@ class SalesInvoiceH{
         hdr_dis_per = res["hdr_dis_per"].toString(),
         hdr_dis_value = res["hdr_dis_value"].toString(),
         Total = res["Total"].toString(),
-
+        Net_Total = res["Net_Total"].toString(),
         Tax_Total = res["Tax_Total"].toString(),
         bounce_Total = res["bounce_Total"].toString(),
         include_Tax = res["include_Tax"].toString(),
@@ -74,6 +76,7 @@ class SalesInvoiceH{
         Pos_System = res["Pos_System"].toString(),
         OrderDesc = res["OrderDesc"].toString(),
         MOVE = res["MOVE"].toString(),
+        posted = res["posted"].toString(),
         GSPN = res["GSPN"].toString();
 
 
@@ -86,6 +89,7 @@ class SalesInvoiceH{
       'hdr_dis_per': hdr_dis_per,
       'hdr_dis_value': hdr_dis_value,
       'Total': Total,
+      'Net_Total': Net_Total,
 
       'Tax_Total': Tax_Total,
       'bounce_Total': bounce_Total,
@@ -100,6 +104,7 @@ class SalesInvoiceH{
       'Pos_System': Pos_System,
       'OrderDesc': OrderDesc,
       'MOVE': MOVE,
+      'posted': posted,
       'GSPN': GSPN,
     };
   }
@@ -115,6 +120,7 @@ class SalesInvoiceH{
     hdr_dis_value = json['hdr_dis_value'];
     Total = json['Total'] ;
 
+    Net_Total = json['Net_Total'];
     Tax_Total = json['Tax_Total'];
     bounce_Total = json['bounce_Total'];
     include_Tax = json['include_Tax'];
@@ -129,6 +135,7 @@ class SalesInvoiceH{
     OrderDesc = json['OrderDesc'];
     MOVE = json['MOVE'];
     GSPN = json['GSPN'];
+    posted = json['posted'];
 
   }
 

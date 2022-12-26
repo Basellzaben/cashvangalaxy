@@ -32,22 +32,15 @@ class Home extends StatefulWidget {
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class _HomeState extends State<Home> {
-
-
   @override
   void initState() {
     final handler = DatabaseHandler();
-    var data ;
+    var data;
     handler.retrieveCompanyInfo().then((value) => {
-
-      if(value.length<1){
-        showAlertDialog(context)
-      }
-
-    });
+          if (value.length < 1) {showAlertDialog(context)}
+        });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +56,7 @@ class _HomeState extends State<Home> {
                 backgroundColor: HexColor(Globalvireables.basecolor),
                 title: Text("الصفحة الرئيسية"),
                 leading: GestureDetector(
-                  onTap: () {
-
-                  },
+                  onTap: () {},
                   child: IconButton(
                     icon: Icon(
                       Icons.menu,
@@ -83,11 +74,8 @@ class _HomeState extends State<Home> {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Login()));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -165,7 +153,8 @@ class _HomeState extends State<Home> {
                                       height: 220,
                                       child: Card(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
                                         ),
                                         color: Colors.white,
                                         child: Column(
@@ -224,7 +213,8 @@ class _HomeState extends State<Home> {
                                                     color: HexColor(
                                                         Globalvireables.black2),
                                                     fontSize: 23,
-                                                    fontWeight: FontWeight.w600),
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                               ),
                                             ],
                                           ),
@@ -264,11 +254,14 @@ class _HomeState extends State<Home> {
                             ),
                             GestureDetector(
                               onTap: () {
+                                final handler = DatabaseHandler();
+                                handler.DropsalDetails();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            SalesInvoice()));
+                                        builder: (context) => SalesInvoice(
+                                              fromback: 'home',
+                                            )));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(top: 20),
@@ -286,13 +279,15 @@ class _HomeState extends State<Home> {
                                         Icon(
                                           Icons.payment,
                                           size: 45.0,
-                                          color: HexColor(Globalvireables.white),
+                                          color:
+                                              HexColor(Globalvireables.white),
                                         ),
                                         Spacer(),
                                         Text(
                                           "فاتوره المبيعات",
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 24),
+                                              color: Colors.white,
+                                              fontSize: 24),
                                         ),
                                       ],
                                     ),
@@ -300,16 +295,13 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                             ),
-
-
-
-                        GestureDetector(
-                            onTap: () {
-                               Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => CatchReceipt(),
-                            ));
-                            },
-                           child: Container(
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CatchReceipt(),
+                                ));
+                              },
+                              child: Container(
                                 margin: EdgeInsets.only(top: 20),
                                 width: MediaQuery.of(context).size.width / 1.1,
                                 height: 90,
@@ -325,13 +317,15 @@ class _HomeState extends State<Home> {
                                         Icon(
                                           Icons.payment,
                                           size: 45.0,
-                                          color: HexColor(Globalvireables.white),
+                                          color:
+                                              HexColor(Globalvireables.white),
                                         ),
                                         Spacer(),
                                         Text(
                                           "سند قبض",
                                           style: TextStyle(
-                                              color: Colors.white, fontSize: 24),
+                                              color: Colors.white,
+                                              fontSize: 24),
                                         ),
                                       ],
                                     ),
@@ -350,27 +344,20 @@ class _HomeState extends State<Home> {
       ]),
     );
   }
-  showAlertDialog(BuildContext context) {
 
+  showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("تم"),
-      onPressed:  () {
-
-
+      onPressed: () {
         Navigator.pop(context);
-
       },
     );
     Widget continueButton = TextButton(
       child: Text("تحديث البيانات"),
-      onPressed:  () {
-
+      onPressed: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    UpdateScreen()));
+            context, MaterialPageRoute(builder: (context) => UpdateScreen()));
       },
     );
 
@@ -392,8 +379,9 @@ class _HomeState extends State<Home> {
       },
     );
   }
-  Future<bool> _onBackPressed() async{
-  /*  Navigator.pop(context);
+
+  Future<bool> _onBackPressed() async {
+    /*  Navigator.pop(context);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SalesInvoice(),
     ));

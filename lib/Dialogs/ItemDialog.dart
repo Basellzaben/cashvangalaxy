@@ -91,7 +91,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                               Navigator.pop(context);
                                               Navigator.of(context)
                                                   .push(MaterialPageRoute(
-                                                builder: (context) => SalesInvoice(),
+                                                builder: (context) => SalesInvoice(fromback: 'ItemDialog',),
                                               ));
                                             }),
                                       ),
@@ -605,9 +605,14 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                           String
                                                                               netprice =
                                                                               PriceCounter.text;
-                                                                          String
-                                                                              dis =
-                                                                              discontroler.text;
+                                                                          String dis;
+                                                                          if(val==0){
+                                                                             dis = discontroler.text;
+                                                                          }else{
+                                                                            dis = ((double.parse(discontroler.text)/100)*double.parse(netprice)).toString();
+                                                                          }
+
+
                                                                           String
                                                                               bounse =
                                                                               bounsecontroler.text;
@@ -623,6 +628,11 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                                                           String
                                                                               price =
                                                                               val.toString();
+
+
+                                                                          if(dis.length>3){
+                                                                            dis= dis.substring(0,5);
+                                                                          }
 
                                                                           final handler =
                                                                               DatabaseHandler();
@@ -886,7 +896,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
   Future<bool> _onBackPressed() async {
     Navigator.pop(context);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => SalesInvoice(),
+      builder: (context) => SalesInvoice( fromback: 'ItemDialog',),
     ));
 
     return true;

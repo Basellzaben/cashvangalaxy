@@ -973,7 +973,7 @@ print("uriiiii "+Globalvireables.GetCustomers+prefs.getString('man').toString())
       handler.DropMaxOrder();
       // showLoaderDialog(context);
       var prefs = await SharedPreferences.getInstance();
-      Uri apiUrl = Uri.parse(Globalvireables.GetMaxOrder+prefs.getString('man').toString());
+      Uri apiUrl = Uri.parse(Globalvireables.GetMaxOrder+prefs.getString('EMPMan').toString());
       print("uriiiii "+Globalvireables.GetUnites);
       http.Response response = await http.get(apiUrl);
       if (response.statusCode == 200) {

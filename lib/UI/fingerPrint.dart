@@ -304,8 +304,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                       onTap: () {
                                         setState(() {
                                           if (activecheck &&
-                                              !(time.toString() ==
-                                                  "00:00:00")) {
+                                              !(time.toString() == "00:00:00")) {
                                             checWork();
                                           } else {
                                             ScaffoldMessenger.of(context)

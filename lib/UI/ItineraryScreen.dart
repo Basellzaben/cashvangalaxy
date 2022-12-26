@@ -79,7 +79,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     print(currentLatLng.longitude);
    print(currentLatLng2.longitude);
     context.watch<CustomerProvider>().Lat=='' ?
-      _markers.add(Marker(
+    _markers.add(Marker(
         markerId: MarkerId(currentLatLng.toString()),
         position: currentLatLng,
         infoWindow:

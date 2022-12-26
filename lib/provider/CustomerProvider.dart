@@ -10,12 +10,16 @@ class CustomerProvider with ChangeNotifier {
   late var Long = 0.0;
   late String _distanceInMeters  = "";
   late String DayWeek = '';
+  late String slander = '0.000';
+  late String floorCustomer = '0.000';
 
-  setCustomers(String Name, String No,var Lat,var Long) {
+  setCustomers(String Name, String No,var Lat,var Long,var slander,var floorCustomer) {
     this.Name = Name;
     this.No = No;
     this.Lat=Lat;
     this.Long=Long;
+    this.slander=slander;
+    this.floorCustomer=floorCustomer;
 
     notifyListeners();
   }

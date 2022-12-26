@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cashvangalaxy/provider/CompanyProvider.dart';
 import 'package:cashvangalaxy/provider/CustomerProvider.dart';
+import 'package:cashvangalaxy/provider/SalesInvoice.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => CompanyProvider()),
         ChangeNotifierProvider(create: (_) => CustomerProvider()),
+        ChangeNotifierProvider(create: (_) => SalesInvoiceProvider()),
       ],
       child: MyApp(),
     ),
