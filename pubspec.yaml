@@ -56,8 +56,10 @@ dependencies:
   edge_detection: ^1.0.9
   expandable: ^5.0.1
   url_launcher: ^6.1.6
-
+  bluetooth_print:
   google_maps_flutter: ^2.2.1
+  blue_print_pos: ^0.0.14
+  permission_handler: ^10.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -93,6 +95,7 @@ flutter:
     - assets/finger.png
     - assets/updateback.png
     - assets/notfound.png
+    - assets/logoprint.png
 
 
   # To add assets to your application, add an assets section, like this:

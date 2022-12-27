@@ -17,6 +17,9 @@ import 'Home.dart';
 import 'NavBar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:ui' as ui;
+
+import 'Printing.dart';
+
 void main() =>
     runApp(ResponsiveSizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
@@ -135,7 +138,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                       Stack(
                         children: [
                           Container(
-                            height: 230.0,
+                            height: MediaQuery.of(context).size.width > 600?345:230.0,
                             color: Colors.transparent,
                             child: Container(
                                 decoration: new BoxDecoration(
@@ -157,14 +160,16 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                               final handler = DatabaseHandler();
                                               handler.DropsalDetails()
                                                   .then((value) => {
-                                                        Navigator.of(context)
-                                                            .pop(),
+
+                                                        Navigator.of(context).pop(),
+
                                                         Navigator.of(context)
                                                             .push(
                                                                 MaterialPageRoute(
                                                           builder: (context) =>
                                                               Home(),
                                                         ))
+
                                                       });
                                             },
                                             child: Icon(
@@ -179,7 +184,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                               showListOfOrders(context);
                                             },
                                             child: Container(
-                                              width: 90,
+                                              width: MediaQuery.of(context).size.width > 600?135:90,
                                               child: TextField(
                                                   controller: maxcontroler,
                                                   enabled: false,
@@ -187,14 +192,14 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 17)),
+                                                      fontSize: MediaQuery.of(context).size.width > 600?25:17)),
                                             ),
                                           ),
                                           Text(" فاتوره المبيعات ",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 20)),
+                                                  fontSize: MediaQuery.of(context).size.width > 600?30:20)),
                                         ],
                                       ),
                                     ),
@@ -213,8 +218,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15)),*/
                                           Container(
-                                            height: 22,
-                                            width: 180,
+                                            height: MediaQuery.of(context).size.width > 600?33:22,
+                                            width: MediaQuery.of(context).size.width > 600?270:180,
                                             child: TextField(
                                                 textAlign: TextAlign.center,
                                                 controller:
@@ -223,17 +228,17 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 15)),
+                                                    fontSize: MediaQuery.of(context).size.width > 600?23:15)),
                                           ),
                                           Text(" : اسم العميل  ",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontWeight: FontWeight.w200,
-                                                  fontSize: 15)),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: MediaQuery.of(context).size.width > 600?23:15)),
                                           Spacer(),
                                           Container(
-                                            height: 20,
-                                            width: 65,
+                                            height: MediaQuery.of(context).size.width > 600?30:20,
+                                            width: MediaQuery.of(context).size.width > 600?97:65,
                                             child: TextField(
                                                 textAlign: TextAlign.right,
                                                 controller: CustomerNocontroler,
@@ -241,7 +246,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 15)),
+                                                    fontSize: MediaQuery.of(context).size.width > 600?23:15)),
                                           ),
                                           /*  Text(
                                               "${context.watch<CustomerProvider>().No}",
@@ -253,25 +258,25 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w200,
-                                                  fontSize: 15)),
+                                                  fontSize: MediaQuery.of(context).size.width > 600?23:15)),
                                         ],
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 5),
+                                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width > 600?15:5),
                                       child: Row(
                                         children: [
                                           Spacer(),
                                           Container(
                                               decoration: new BoxDecoration(
                                                   color: HexColor(
-                                                      Globalvireables.white),
+                                                  Globalvireables.white),
                                                   borderRadius:
                                                       new BorderRadius.all(
                                                     const Radius.circular(10),
                                                   )),
                                               margin: EdgeInsets.only(
-                                                  left: 10, right: 10),
+                                                  left: MediaQuery.of(context).size.width > 600?15:10, right: MediaQuery.of(context).size.width > 600?15:10),
                                               padding: EdgeInsets.all(3),
                                               child: Text(
                                                   "${context.read<CustomerProvider>().slander}" +
@@ -280,7 +285,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                       color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 15))),
+                                                      fontSize: MediaQuery.of(context).size.width > 600?22:15))),
                                           Container(
                                               decoration: new BoxDecoration(
                                                   color: HexColor(
@@ -290,7 +295,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                     const Radius.circular(10),
                                                   )),
                                               margin: EdgeInsets.only(
-                                                  left: 10, right: 10),
+                                                  left: MediaQuery.of(context).size.width > 600?15:10, right: MediaQuery.of(context).size.width > 600?15:10),
                                               padding: EdgeInsets.all(3),
                                               child: Text(
                                                   "${context.read<CustomerProvider>().floorCustomer}" +
@@ -299,7 +304,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                       color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 15)))
+                                                      fontSize: MediaQuery.of(context).size.width > 600?22:15)))
                                         ],
                                       ),
                                     ),
@@ -326,16 +331,18 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                     },
                                                     child: Container(
                                                         margin:
-                                                            EdgeInsets.all(5),
+                                                            EdgeInsets.all(MediaQuery.of(context).size.width > 600?10:5),
                                                         child: Icon(
                                                           Icons.add_circle,
                                                           color: Colors.white,
-                                                          size: 50,
+                                                          size: MediaQuery.of(context).size.width > 600?75:50,
                                                         )),
                                                   ),
+
                                                   SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
+                                                    width: MediaQuery.of(context).size.width > 600?MediaQuery.of(context)
+                                                        .size
+                                                        .width /2:MediaQuery.of(context)
                                                                 .size
                                                                 .width /
                                                             3.4,
@@ -353,7 +360,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 15)),
+                                                          fontSize: MediaQuery.of(context).size.width > 600?22:15)),
                                                   Checkbox(
                                                       value: IncludeTex,
                                                       //set variable for value
@@ -369,7 +376,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 15)),
+                                                          fontSize:MediaQuery.of(context).size.width > 600?22: 15)),
                                                 ],
                                               ),
                                             ),
@@ -438,17 +445,9 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                             child:
                                                                 Directionality(
                                                                     textDirection:
-                                                                    ui.TextDirection
-                                                                            .rtl,
-                                                                    child: Text(
-                                                                      _journals[
-                                                                              index]
-                                                                          [
-                                                                          'name'],
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .clip,
-                                                                    )),
+                                                                    ui.TextDirection.rtl,
+                                                                    child: Text(_journals[index]['name'],
+                                                                      overflow: TextOverflow.clip,)),
                                                           ),
                                                         ]),
                                                         children: [
@@ -466,8 +465,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                                     Text(_journals[
                                                                             index]
                                                                         ['qt']),
-                                                                    Text(
-                                                                        ': الكميه'),
+                                                                    Text(': الكميه'),
                                                                     Spacer(),
                                                                     Text(_journals[index]
                                                                         ['unit']),
@@ -675,7 +673,19 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                               fontSize: 22),
                                                         ),
                                                         onPressed: () async {
-                                                          SaveSalData(context);
+
+                                                          if(maxcontroler.text.isEmpty || CustomerNocontroler.text.isEmpty||
+                                                              CustomerNamecontroler.text.isEmpty||_journals.length<1){
+                                                            Navigator.of(context).pop();
+
+                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                              content: Text("لا يمكن حفظ الفاتوره"),
+                                                            ));
+                                                          }else{
+                                                            SaveSalData(context);
+
+                                                          }
+
                                                         },
                                                       ),
                                                       Spacer(),
@@ -717,7 +727,18 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                               fontSize: 22),
                                                         ),
                                                         onPressed: () async {
-                                                          PostSalData(context);
+
+                                                          if(maxcontroler.text.isEmpty || CustomerNocontroler.text.isEmpty||
+                                                              CustomerNamecontroler.text.isEmpty||_journals.length<1){
+                                                            Navigator.of(context).pop();
+                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                              content: Text("لا يمكن اعتماد الفاتوره"),
+                                                            ));
+                                                          }else{
+                                                            PostSalData(context);
+
+                                                          }
+
                                                         },
                                                       ),
                                                       Spacer(),
@@ -725,8 +746,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                           primary: HexColor(
-                                                              Globalvireables
-                                                                  .white),
+                                                              Globalvireables.white),
                                                         ),
                                                         child: Text(
                                                           "طباعه",
@@ -736,7 +756,26 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                                       .basecolor),
                                                               fontSize: 22),
                                                         ),
-                                                        onPressed: () async {},
+                                                        onPressed: () async {
+
+                                                          if(maxcontroler.text.isEmpty || CustomerNocontroler.text.isEmpty||
+                                                              CustomerNamecontroler.text.isEmpty||_journals.length<1){
+                                                            Navigator.of(context)
+                                                                .push(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      Prinitng(),
+                                                                ));
+                                                          }else{
+                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                              content: Text("لا يمكن طباعه الفاتوره"),
+                                                            ));
+                                                          }
+
+
+
+
+                                                        },
                                                       ),
                                                       Spacer(),
                                                       ElevatedButton(
@@ -858,7 +897,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
       }
       Sum += priceT;
 
-      taxVal = (Sum * (double.parse(tax) / 100));
+    //  taxVal = (Sum * (double.parse(tax) / 100));
       net = ((priceT * qtT) - disVal);
       print("priceT :" + priceT.toString());
       print("tax :" + taxVal.toString());
@@ -885,8 +924,10 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
       Total += net;
       Sum += priceT;
-      SumTax += (taxT * Sum);
+     // SumTax += (taxT * Sum);
+      SumTax += (taxVal);
       SumDis += disVal;
+      Globalvireables.Total=Total.toString();
     }
     //String inString = d.toStringAsFixed(2);
     return net.toStringAsFixed(3);
@@ -1042,6 +1083,7 @@ SumDis += disVal;
         });
         handler.DropsalDetails();
         _refreshItems();
+        _refreshOrders();
       }
 
       var jsonResponse = jsonDecode(response.body);
@@ -1204,8 +1246,10 @@ SumDis += disVal;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("تم حفظ الفاتوره "),
               ));
+              //dsfds
+              handler.DropsalDetails();
               _refreshItems();
-
+              _refreshOrders();
               save=true;
             }
           }
@@ -1272,7 +1316,7 @@ SumDis += disVal;
   showListOfOrders(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Container(
-        height: _journalsOrders.length * 100,
+        height: MediaQuery.of(context).size.height / 1.1,
         child: SingleChildScrollView(
           child: new Column(
             children: [
@@ -1284,7 +1328,7 @@ SumDis += disVal;
               Container(
                 margin: EdgeInsets.only(top: 22),
                 //padding: EdgeInsets.all(10),
-                height: MediaQuery.of(context).size.height / 2,
+                height: MediaQuery.of(context).size.height / 1.1,
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     itemCount: _journalsOrders.length,

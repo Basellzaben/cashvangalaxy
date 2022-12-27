@@ -109,8 +109,9 @@ class _HomeState extends State<Home> {
                                                   fingerPrint()));
                                     },
                                     child: Container(
-                                      width: 180,
-                                      height: 220,
+                                      width:MediaQuery.of(context).size.width > 600?279: 180,
+                                      height: MediaQuery.of(context).size.width > 600?330:220,
+
                                       child: Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -127,12 +128,13 @@ class _HomeState extends State<Home> {
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
+                                            Spacer(),
                                             Text(
                                               "الدوام",
                                               style: TextStyle(
                                                   color: HexColor(
                                                       Globalvireables.black2),
-                                                  fontSize: 23,
+                                                  fontSize:MediaQuery.of(context).size.width > 600?34: 23,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           ],
@@ -149,8 +151,8 @@ class _HomeState extends State<Home> {
                                                   ItineraryScreen()));
                                     },
                                     child: Container(
-                                      width: 180,
-                                      height: 220,
+                                      width:MediaQuery.of(context).size.width > 600?279: 180,
+                                      height: MediaQuery.of(context).size.width > 600?330:220,
                                       child: Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -167,12 +169,15 @@ class _HomeState extends State<Home> {
                                                 fit: BoxFit.contain,
                                               ),
                                             ),
+                                            Spacer(),
+
                                             Text(
                                               "الزيارات",
                                               style: TextStyle(
                                                   color: HexColor(
                                                       Globalvireables.black2),
-                                                  fontSize: 23,
+                                                  fontSize:MediaQuery.of(context).size.width > 600?34: 23,
+
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           ],
@@ -189,8 +194,9 @@ class _HomeState extends State<Home> {
                                                     UpdateScreen()));
                                       },
                                       child: Container(
-                                        width: 180,
-                                        height: 220,
+                                        width:MediaQuery.of(context).size.width > 600?279: 180,
+                                        height: MediaQuery.of(context).size.width > 600?330:220,
+
                                         child: Card(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
@@ -207,12 +213,15 @@ class _HomeState extends State<Home> {
                                                   fit: BoxFit.contain,
                                                 ),
                                               ),
+                                              Spacer(),
+
                                               Text(
                                                 "تحديث البيانات",
                                                 style: TextStyle(
                                                     color: HexColor(
                                                         Globalvireables.black2),
-                                                    fontSize: 23,
+                                                    fontSize:MediaQuery.of(context).size.width > 600?34: 23,
+
                                                     fontWeight:
                                                         FontWeight.w600),
                                               ),
@@ -223,31 +232,35 @@ class _HomeState extends State<Home> {
                                 ]),
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              width: MediaQuery.of(context).size.width / 1.1,
-                              height: 90,
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                color: HexColor(Globalvireables.basecolor),
-                                child: Container(
-                                  padding: EdgeInsets.all(17),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.monetization_on_outlined,
-                                        size: 45.0,
-                                        color: HexColor(Globalvireables.white),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        "طلب البيع",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 24),
-                                      ),
-                                    ],
+                            Center(
+                              child: Container(
+
+                                margin: EdgeInsets.only(top: 20),
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                height: MediaQuery.of(context).size.width > 600?130:90,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  color: HexColor(Globalvireables.basecolor),
+                                  child: Container(
+                                    padding: EdgeInsets.all(17),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.monetization_on_outlined,
+                                          size: MediaQuery.of(context).size.width > 600?65:45.0,
+                                          color: HexColor(Globalvireables.white),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "طلب البيع",
+                                          style: TextStyle(
+                                              color: Colors.white,                                               fontSize:MediaQuery.of(context).size.width > 600?35: 24),
+
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -266,7 +279,8 @@ class _HomeState extends State<Home> {
                               child: Container(
                                 margin: EdgeInsets.only(top: 20),
                                 width: MediaQuery.of(context).size.width / 1.1,
-                                height: 90,
+                                height: MediaQuery.of(context).size.width > 600?130:90,
+
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
@@ -278,7 +292,8 @@ class _HomeState extends State<Home> {
                                       children: [
                                         Icon(
                                           Icons.payment,
-                                          size: 45.0,
+                                          size: MediaQuery.of(context).size.width > 600?65:45.0,
+
                                           color:
                                               HexColor(Globalvireables.white),
                                         ),
@@ -287,7 +302,9 @@ class _HomeState extends State<Home> {
                                           "فاتوره المبيعات",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 24),
+                                              fontSize:MediaQuery.of(context).size.width > 600?35: 24
+
+                                        ),
                                         ),
                                       ],
                                     ),
@@ -304,7 +321,8 @@ class _HomeState extends State<Home> {
                               child: Container(
                                 margin: EdgeInsets.only(top: 20),
                                 width: MediaQuery.of(context).size.width / 1.1,
-                                height: 90,
+                                height: MediaQuery.of(context).size.width > 600?130:90,
+
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
@@ -316,7 +334,8 @@ class _HomeState extends State<Home> {
                                       children: [
                                         Icon(
                                           Icons.payment,
-                                          size: 45.0,
+                                          size: MediaQuery.of(context).size.width > 600?65:45.0,
+
                                           color:
                                               HexColor(Globalvireables.white),
                                         ),
@@ -325,7 +344,7 @@ class _HomeState extends State<Home> {
                                           "سند قبض",
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 24),
+                                              fontSize:MediaQuery.of(context).size.width > 600?35: 24),
                                         ),
                                       ],
                                     ),

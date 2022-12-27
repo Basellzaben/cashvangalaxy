@@ -10,7 +10,7 @@ class Globalvireables {
   static String white="#ffffff";
   static String black="#000000";
   static String black2="#191919";
-
+static String Total='';
   static List<Map<String, dynamic>> journals = [];
   static List<String> price = [];
   static String GetCInfo="http://10.0.1.60:88/api/Company/GetCompanyInfo";

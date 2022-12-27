@@ -4,6 +4,7 @@ import 'package:cashvangalaxy/provider/CustomerProvider.dart';
 import 'package:cashvangalaxy/provider/SalesInvoice.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gif/flutter_gif.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   Widget build(BuildContext context) {
+
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+
   //  FlutterGifController controller= FlutterGifController();
     var isLargeScreen = false;
     String isLarge = "0";
