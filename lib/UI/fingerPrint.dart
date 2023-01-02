@@ -188,7 +188,7 @@ class _fingerPrintState extends State<fingerPrint> {
                     Row(
                       children: [
                         Container(
-                            margin: EdgeInsets.only(top: 30, left: 20),
+                            margin: EdgeInsets.only(top: 40, left: 20),
                             child: GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -202,7 +202,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                 ))),
                         Spacer(),
                         Container(
-                          margin: EdgeInsets.only(top: 30, left: 5, right: 5),
+                          margin: EdgeInsets.only(top: 40, left: 5, right: 5),
                           child: Text(
                             prefs.getString('TransType').toString() == "1"
                                 ? "بدايه الدوام"
@@ -257,7 +257,7 @@ class _fingerPrintState extends State<fingerPrint> {
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width / 1.3,
                             child: Text(
-                              textAlign: TextAlign.center,
+                              textAlign: TextAlign.right,
                               ' ${_currentAddress ?? ""}',
                               style: TextStyle(
                                 color: HexColor(Globalvireables.white),

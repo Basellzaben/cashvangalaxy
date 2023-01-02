@@ -62,20 +62,20 @@ class NavBar extends StatelessWidget {
                                         style: TextStyle(
                                             color:
                                                 HexColor(Globalvireables.white),
-                                            fontSize: 25,
+                                            fontSize: MediaQuery.of(context).size.width > 600?34:25,
                                             fontWeight: FontWeight.w500),
                                       )),
                                   Text(
                                     data!.CName,
                                     style: TextStyle(
                                       color: HexColor(Globalvireables.white),
-                                      fontSize: 13,
+                                      fontSize: MediaQuery.of(context).size.width > 600?20:13,
                                     ),
                                   )
                                 ])),
                             Container(
-                              height: 65,
-                              width: 65,
+                              height: MediaQuery.of(context).size.width > 600?100:65,
+                              width: MediaQuery.of(context).size.width > 600?100:65,
                               decoration: BoxDecoration(
                                   color: HexColor(Globalvireables.white),
                                   borderRadius: BorderRadius.circular(100)
@@ -91,7 +91,7 @@ class NavBar extends StatelessWidget {
                                     style: TextStyle(
                                         color:
                                             HexColor(Globalvireables.basecolor),
-                                        fontSize: 33,
+                                        fontSize: MediaQuery.of(context).size.width > 600?50:33,
                                         fontWeight: FontWeight.w900),
                                   )),
                             )
@@ -99,8 +99,7 @@ class NavBar extends StatelessWidget {
                         ),
                         Container(
                           margin: EdgeInsets.only(
-                              top:
-                                  MediaQuery.of(context).size.longestSide / 10),
+                              top: MediaQuery.of(context).size.width > 600?MediaQuery.of(context).size.longestSide / 7:MediaQuery.of(context).size.longestSide / 10),
                           child: Row(
                             children: [
                               Spacer(),
@@ -108,13 +107,16 @@ class NavBar extends StatelessWidget {
                                 "جرد كميات العميل",
                                 style: TextStyle(
                                     color: HexColor(Globalvireables.basecolor),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w200),
+                                    fontSize: MediaQuery.of(context).size.width > 600?30:20,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Icon(
-                                Icons.bar_chart,
-                                size: 40.0,
-                                color: HexColor(Globalvireables.basecolor),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.bar_chart,
+                                  size: MediaQuery.of(context).size.width > 600?66:40.0,
+                                  color: HexColor(Globalvireables.basecolor),
+                                ),
                               ),
                             ],
                           ),
@@ -128,14 +130,17 @@ class NavBar extends StatelessWidget {
                                 "الزيارات",
                                 style: TextStyle(
                                     color: HexColor(Globalvireables.basecolor),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w200
+                                    fontSize: MediaQuery.of(context).size.width > 600?30:20,
+                                    fontWeight: FontWeight.bold
                                 ),
                               ),
-                              Icon(
-                                Icons.bar_chart,
-                                size: 40.0,
-                                color: HexColor(Globalvireables.basecolor),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.bar_chart,
+                                  size: MediaQuery.of(context).size.width > 600?66:40.0,
+                                  color: HexColor(Globalvireables.basecolor),
+                                ),
                               ),
                             ],
                           ),
@@ -149,13 +154,16 @@ class NavBar extends StatelessWidget {
                                 "المواد",
                                 style: TextStyle(
                                     color: HexColor(Globalvireables.basecolor),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w200),
+                                    fontSize: MediaQuery.of(context).size.width > 600?30:20,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Icon(
-                                Icons.access_alarm,
-                                size: 40.0,
-                                color: HexColor(Globalvireables.basecolor),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.access_alarm,
+                                  size: MediaQuery.of(context).size.width > 600?66:40.0,
+                                  color: HexColor(Globalvireables.basecolor),
+                                ),
                               ),
                             ],
                           ),
@@ -175,13 +183,16 @@ class NavBar extends StatelessWidget {
                                   "دليل المستخدم",
                                   style: TextStyle(
                                       color: HexColor(Globalvireables.basecolor),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w200),
+                                      fontSize: MediaQuery.of(context).size.width > 600?30:20,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                                Icon(
-                                  Icons.account_balance_wallet_outlined,
-                                  size: 40.0,
-                                  color: HexColor(Globalvireables.basecolor),
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
+                                    Icons.account_balance_wallet_outlined,
+                                    size: MediaQuery.of(context).size.width > 600?66:40.0,
+                                    color: HexColor(Globalvireables.basecolor),
+                                  ),
                                 ),
                               ],
                             ),

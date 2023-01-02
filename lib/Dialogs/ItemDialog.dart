@@ -98,7 +98,7 @@ class LogoutOverlayStatecard extends State<ItemDialog>
                                       Center(
                                         child: Container(
                                           width: MediaQuery.of(context).size.height /
-                                              2.6,
+                                              2.7,
                                           child: TextField(
                                             controller: searchcontroler,
                                             onChanged: refrech(),

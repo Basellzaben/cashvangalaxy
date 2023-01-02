@@ -103,11 +103,29 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
                           itemCount: _journals.length,
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () {
+                              print('seleeeected   '+_journals[index]['Latitude'].toString());
                               /*   context.read<CustomerProvider>().Name=_journals[index]['name'];
                               context.read<CustomerProvider>().No=_journals[index]['No'];*/
-                              context.read<CustomerProvider>().setCustomers(_journals[index]['name'], _journals[index]['No'],double.parse(_journals[index]['Latitude']),double.parse(_journals[index]['Longitude']),"0.00","0.00");
-
-                              Navigator.pop(context);
+                              String name=_journals[index]['name'];
+                              String No=_journals[index]['No'];
+                              String Latitude=_journals[index]['Latitude'];
+                              String Longitude=_journals[index]['Longitude'];
+                              String BB=_journals[index]['BB'];
+                              String BB_Chaq=_journals[index]['BB_Chaq'];
+                              if(Latitude.isEmpty){
+                                Latitude='0.0';
+                              }
+                              if(Longitude.isEmpty){
+                                Longitude='0.0';
+                              }
+                              context.read<CustomerProvider>().setCustomers(
+                                  name
+                                  , No
+                                  ,double.parse(Latitude)
+                                  ,double.parse(Longitude)
+                                  ,BB
+                                  ,BB_Chaq);
+                              Navigator.of(context).pop();
 
                             },
                             child: Card(

@@ -138,7 +138,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                       Stack(
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.width > 600?345:230.0,
+                            height: MediaQuery.of(context).size.width > 600?345:240.0,
                             color: Colors.transparent,
                             child: Container(
                                 decoration: new BoxDecoration(
@@ -219,9 +219,9 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                   fontSize: 15)),*/
                                           Container(
                                             height: MediaQuery.of(context).size.width > 600?33:22,
-                                            width: MediaQuery.of(context).size.width > 600?270:180,
+                                            width: MediaQuery.of(context).size.width > 600?270:160,
                                             child: TextField(
-                                                textAlign: TextAlign.center,
+                                                textAlign: TextAlign.right,
                                                 controller:
                                                     CustomerNamecontroler,
                                                 enabled: false,
@@ -238,7 +238,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                           Spacer(),
                                           Container(
                                             height: MediaQuery.of(context).size.width > 600?30:20,
-                                            width: MediaQuery.of(context).size.width > 600?97:65,
+                                            width: MediaQuery.of(context).size.width > 600?97:80,
                                             child: TextField(
                                                 textAlign: TextAlign.right,
                                                 controller: CustomerNocontroler,
@@ -263,7 +263,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                       ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width > 600?15:5),
+                                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width > 600?20:15),
                                       child: Row(
                                         children: [
                                           Spacer(),
@@ -682,8 +682,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                               content: Text("لا يمكن حفظ الفاتوره"),
                                                             ));
                                                           }else{
+                                                            Navigator.of(context).pop();
                                                             SaveSalData(context);
-
                                                           }
 
                                                         },
@@ -760,16 +760,18 @@ class _SalesInvoiceState extends State<SalesInvoice> {
 
                                                           if(maxcontroler.text.isEmpty || CustomerNocontroler.text.isEmpty||
                                                               CustomerNamecontroler.text.isEmpty||_journals.length<1){
+                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                              content: Text("لا يمكن طباعه الفاتوره"),
+                                                            ));
+                                                          }else{
+                                                            Navigator.pop(context);
                                                             Navigator.of(context)
                                                                 .push(
                                                                 MaterialPageRoute(
                                                                   builder: (context) =>
                                                                       Prinitng(),
                                                                 ));
-                                                          }else{
-                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                              content: Text("لا يمكن طباعه الفاتوره"),
-                                                            ));
+
                                                           }
 
 
@@ -1047,8 +1049,7 @@ SumDis += disVal;
         'disc_Total': SumDis.toString(),
         'inovice_type': Cash ? '0' : '1',
         'CashCustNm': CustomerNamecontroler.text,
-        'V_OrderNo':
-        maxcontroler.text.toString().replaceAll('(', '').replaceAll(')', ''),
+        'V_OrderNo':  maxcontroler.text.toString().replaceAll('(', '').replaceAll(')', ''),
         "DocType": "1",
         'DriverNo': "0",
         'Pos_System': "0",
@@ -1243,6 +1244,7 @@ SumDis += disVal;
 
             if (i == _journals.length - 1) {
               Navigator.pop(context);
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text("تم حفظ الفاتوره "),
               ));
@@ -1256,7 +1258,7 @@ SumDis += disVal;
         } else {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("2لم يتم الحفظ ، حاول مره اخرى"),
+            content: Text("لم يتم الحفظ ، حاول مره اخرى"),
           ));
           handler.DeleteSalesInvoiceH(maxcontroler.text.replaceAll('(', '').replaceAll(')', ''));
         }
@@ -1316,7 +1318,7 @@ SumDis += disVal;
   showListOfOrders(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: Container(
-        height: MediaQuery.of(context).size.height / 1.1,
+        height:   _journalsOrders.length>0?MediaQuery.of(context).size.height / 1.1:MediaQuery.of(context).size.height /2.4,
         child: SingleChildScrollView(
           child: new Column(
             children: [
@@ -1325,7 +1327,9 @@ SumDis += disVal;
                 'فواتير البيع',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
               )),
-              Container(
+
+
+              _journalsOrders.length>0? Container(
                 margin: EdgeInsets.only(top: 22),
                 //padding: EdgeInsets.all(10),
                 height: MediaQuery.of(context).size.height / 1.1,
@@ -1368,7 +1372,18 @@ SumDis += disVal;
                                 ],
                               )),
                         )),
-              ),
+              ):
+             Center(
+               child: Container(
+                   child: Container(
+                     margin: const EdgeInsets.only(top: 50),
+                     child: Image.asset(
+                       'assets/notfound.png',
+                       height: MediaQuery.of(context).size.width/2,
+                       width: MediaQuery.of(context).size.width/2,
+                     ),
+                   )),
+             ),
             ],
           ),
         ),

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:blue_print_pos/models/blue_device.dart';
 import 'package:blue_print_pos/models/connection_status.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
 import '../GlobalVar.dart';
 import '../Sqlite/DatabaseHandler.dart';
 import '../provider/SalesInvoice.dart';
@@ -29,29 +27,21 @@ class Prinitng extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bluetooth Print Demo',
+      title: 'طباعه الفاتوره',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
       ),
-      home: const MyHomePage(title: 'Bluetooth Print Demo'),
+      home:  MyHomePage(title: 'طباعه الفاتوره'),
+      debugShowCheckedModeBanner: false,
+
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+   MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+   String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -64,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool _isLoading = false;
   int _loadingAtIndex = -1;
+  late BuildContext c;
 
   Future<void> _onScanPressed() async {
     if (Platform.isAndroid) {
@@ -84,7 +75,14 @@ class _MyHomePageState extends State<MyHomePage> {
           _isLoading = false;
         });
       } else {
-        setState(() => _isLoading = false);
+        try{
+          setState(() => _isLoading = false);
+
+        }catch(_){
+          if(mounted)
+          Navigator.of(context, rootNavigator: true).pop();
+
+        }
       }
     });
   }
@@ -99,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _onSelectDevice(int index) {
-    _refreshItems();
+  void _onSelectDevice(int index,BuildContext context) {
+    _refreshItems(context);
     setState(() {
       _isLoading = true;
       _loadingAtIndex = index;
@@ -149,10 +147,11 @@ class _MyHomePageState extends State<MyHomePage> {
     receiptText.addLeftRightText('السعر', 'اسم المادة       الكمية');
     receiptText.addSpacer(useDashed: true);
 
-    for(int index=0;index<10;index++){
+    for(int index=0;index<_journals.length;index++){
       receiptText.addLeftRightText( _journals[index]['netprice'], _journals[index]['qt']+"       "+_journals[index]['name']);
       receiptText.addSpacer(useDashed: true);
     }
+
     receiptText.addSpacer(count: 2);
 
     receiptText.addLeftRightText(Globalvireables.Total, 'المجموع');
@@ -167,14 +166,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
     /// Text after QR
     final ReceiptSectionText receiptSecondText = ReceiptSectionText();
-    receiptSecondText.addText('Powered by Galaxy Group',
-        size: ReceiptTextSizeType.small);
+    receiptSecondText.addText(
+        'Powered by Galaxy Group',
+         size: ReceiptTextSizeType.small
+    );
     receiptSecondText.addSpacer();
     await _bluePrintPos.printReceiptText(receiptSecondText, feedCount: 1);
   }
 
   @override
   Widget build(BuildContext context) {
+    c=context;
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -182,153 +184,163 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: SafeArea(
-        child: _isLoading && _blueDevices.isEmpty
-            ? const Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        appBar: AppBar(
+          leading: InkWell(
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
           ),
-        )
-            : _blueDevices.isNotEmpty
-            ? SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                children: List<Widget>.generate(_blueDevices.length,
-                        (int index) {
-                      return Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: _blueDevices[index].address ==
-                                  (_selectedDevice?.address ?? '')
-                                  ? _onDisconnectDevice
-                                  : () => _onSelectDevice(index),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      _blueDevices[index].name,
-                                      style: TextStyle(
-                                        color: _selectedDevice?.address ==
-                                            _blueDevices[index]
-                                                .address
-                                            ? Colors.blue
-                                            : Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Align(alignment:Alignment.centerRight,child: Text(widget.title)),
+        ),
+        body: SafeArea(
+          child: _isLoading && _blueDevices.isEmpty
+              ? const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+            ),
+          )
+              : _blueDevices.isNotEmpty
+              ? SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                  children: List<Widget>.generate(_blueDevices.length,
+                          (int index) {
+                        return Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: _blueDevices[index].address ==
+                                    (_selectedDevice?.address ?? '')
+                                    ? _onDisconnectDevice
+                                    : () => _onSelectDevice(index,context),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        _blueDevices[index].name,
+                                        style: TextStyle(
+                                          color: _selectedDevice?.address ==
+                                              _blueDevices[index]
+                                                  .address
+                                              ? Colors.blue
+                                              : Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      _blueDevices[index].address,
-                                      style: TextStyle(
-                                        color: _selectedDevice?.address ==
-                                            _blueDevices[index]
-                                                .address
-                                            ? Colors.blueGrey
-                                            : Colors.grey,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
+                                      Text(
+                                        _blueDevices[index].address,
+                                        style: TextStyle(
+                                          color: _selectedDevice?.address ==
+                                              _blueDevices[index].address
+                                              ? Colors.blueGrey
+                                              : Colors.grey,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          if (_loadingAtIndex == index && _isLoading)
-                            Container(
-                              height: 24.0,
-                              width: 24.0,
-                              margin: const EdgeInsets.only(right: 8.0),
-                              child: const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.blue,
+                            if (_loadingAtIndex == index && _isLoading)
+                              Container(
+                                height: 24.0,
+                                width: 24.0,
+                                margin: const EdgeInsets.only(right: 8.0),
+                                child: const CircularProgressIndicator(
+
                                 ),
                               ),
-                            ),
-                          if (!_isLoading &&
-                              _blueDevices[index].address ==
-                                  (_selectedDevice?.address ?? ''))
-                            TextButton(
-                              onPressed: _onPrintReceipt,
-                              child: Container(
-                                color: _selectedDevice == null
-                                    ? Colors.grey
-                                    : Colors.blue,
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Text(
-                                  'Test Print',
-                                  style: TextStyle(color: Colors.white),
+                            if (!_isLoading &&
+                                _blueDevices[index].address ==
+                                    (_selectedDevice?.address ?? ''))
+                              TextButton(
+                                onPressed: _onPrintReceipt,
+                                child: Container(
+                                  color: _selectedDevice == null
+                                      ? Colors.grey
+                                      : Colors.blue,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Text(
+                                    'طباعه',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty
-                                    .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                    if (states.contains(
-                                        MaterialState.pressed)) {
-                                      return Theme.of(context)
-                                          .colorScheme
-                                          .primary
-                                          .withOpacity(0.5);
-                                    }
-                                    return Theme.of(context).primaryColor;
-                                  },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty
+                                      .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                      if (states.contains(
+                                          MaterialState.pressed)) {
+                                        return Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withOpacity(0.5);
+                                      }
+                                      return Theme.of(context).primaryColor;
+                                    },
+                                  ),
                                 ),
-                              ),
 
 
-                            ),
-                        ],
-                      );
-                    }),
-              ),
-            ],
-          ),
-        )
-            : Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const <Widget>[
-              Text(
-                'Scan bluetooth device',
-                style: TextStyle(fontSize: 24, color: Colors.blue),
-              ),
-              Text(
-                'Press button scan',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-            ],
+                              ),
+                          ],
+                        );
+                      }),
+                ),
+              ],
+            ),
+          )
+              : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const <Widget>[
+                Text(
+                  'البحث عن الاجهزه القريبه',
+                  style: TextStyle(fontSize: 24, color: Colors.blueAccent),
+                ),
+                Text(
+                  'Press button scan',
+                  style: TextStyle(fontSize: 14, color: Colors.indigo),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _isLoading ? null : _onScanPressed,
-        child: const Icon(Icons.search),
-        backgroundColor: _isLoading ? Colors.grey : Colors.blue,
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        floatingActionButton: FloatingActionButton(
+          onPressed: _isLoading ? null : _onScanPressed,
+          child: const Icon(Icons.search),
+          backgroundColor: _isLoading ? Colors.grey : Colors.indigo,
+        ), // This trailing comma makes auto-formatting nicer for build methods.
+
     );
   }
 
-  void _refreshItems() async {
-    try {
+  void _refreshItems(BuildContext co) async {
+    c=co;
       final handler = DatabaseHandler();
       Globalvireables.journals = await handler.retrievesalDetails();
       setState(() {
         _journals = Globalvireables.journals;
       });
-    } catch (_) {}
   }
+
+
+
+
 
 }

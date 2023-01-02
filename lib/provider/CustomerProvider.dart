@@ -20,7 +20,6 @@ class CustomerProvider with ChangeNotifier {
     this.Long=Long;
     this.slander=slander;
     this.floorCustomer=floorCustomer;
-
     notifyListeners();
   }
 

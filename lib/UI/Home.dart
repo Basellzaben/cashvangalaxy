@@ -51,7 +51,10 @@ class _HomeState extends State<Home> {
           textDirection: TextDirection.rtl,
           child: Scaffold(
               key: _scaffoldKey,
-              drawer: NavBar(),
+              drawer: Container(
+                  width: MediaQuery.of(context).size.width > 600 ? MediaQuery.of(context).size.width/1.7:
+                  MediaQuery.of(context).size.width/1.5,
+                  child: NavBar()),
               appBar: AppBar(
                 backgroundColor: HexColor(Globalvireables.basecolor),
                 title: Text("الصفحة الرئيسية"),
@@ -351,7 +354,50 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                               ),
-                            )
+                            ),
+
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CatchReceipt(),
+                                ));
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 20),
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                height: MediaQuery.of(context).size.width > 600?130:90,
+
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  color: HexColor(Globalvireables.basecolor),
+                                  child: Container(
+                                    padding: EdgeInsets.all(17),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.reset_tv,
+                                          size: MediaQuery.of(context).size.width > 600?65:45.0,
+
+                                          color:
+                                          HexColor(Globalvireables.white),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          "مرتجع المبيعات",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:MediaQuery.of(context).size.width > 600?35: 24),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+
                           ],
                         ),
                       ),
@@ -365,7 +411,11 @@ class _HomeState extends State<Home> {
   }
 
   showAlertDialog(BuildContext context) {
-    // set up the buttons
+
+
+
+
+  // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("تم"),
       onPressed: () {
@@ -375,6 +425,7 @@ class _HomeState extends State<Home> {
     Widget continueButton = TextButton(
       child: Text("تحديث البيانات"),
       onPressed: () {
+        Navigator.pop(context);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => UpdateScreen()));
       },
