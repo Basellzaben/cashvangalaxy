@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cashvangalaxy/UI/Home.dart';
 import 'package:cashvangalaxy/provider/CompanyProvider.dart';
 import 'package:cashvangalaxy/provider/CustomerProvider.dart';
 import 'package:cashvangalaxy/provider/SalesInvoice.dart';
@@ -35,7 +36,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'Galaxy group',
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => Home(),
+        '/second': (context) => Login(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),

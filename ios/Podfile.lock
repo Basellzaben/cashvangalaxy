@@ -9,6 +9,8 @@ PODS:
     - Flutter
   - bluetooth_print (0.0.1):
     - Flutter
+  - charset_converter (0.0.1):
+    - Flutter
   - edge_detection (1.0.9):
     - Flutter
     - WeScan
@@ -60,6 +62,7 @@ DEPENDENCIES:
   - blue_print_pos (from `.symlinks/plugins/blue_print_pos/ios`)
   - blue_thermal_printer (from `.symlinks/plugins/blue_thermal_printer/ios`)
   - bluetooth_print (from `.symlinks/plugins/bluetooth_print/ios`)
+  - charset_converter (from `.symlinks/plugins/charset_converter/ios`)
   - edge_detection (from `.symlinks/plugins/edge_detection/ios`)
   - Flutter (from `Flutter`)
   - flutter_blue_plus (from `.symlinks/plugins/flutter_blue_plus/ios`)
@@ -93,6 +96,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/blue_thermal_printer/ios"
   bluetooth_print:
     :path: ".symlinks/plugins/bluetooth_print/ios"
+  charset_converter:
+    :path: ".symlinks/plugins/charset_converter/ios"
   edge_detection:
     :path: ".symlinks/plugins/edge_detection/ios"
   Flutter:
@@ -126,6 +131,7 @@ SPEC CHECKSUMS:
   blue_print_pos: 23e8b4bede0fc07cd75b3257783523ca332bf3cb
   blue_thermal_printer: c83405103d2c17f8d67aaa43fcff94df5d616a66
   bluetooth_print: da8f47e8881a0b1f0fd8d73cd6fa84c9bd41ac28
+  charset_converter: 215c7b04932ec2b9ba43be96a9bc34afed3e5322
   edge_detection: 9bc5ee35073b5a17c0b3b679908f01017ce3062a
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_blue_plus: 6787777145d615de01828f3a9fa423c3c702f0b3

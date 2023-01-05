@@ -382,9 +382,9 @@ class _CatchReceiptState extends State<CatchReceipt> {
                                           keyboardType: TextInputType.number,
                                         ),
                                       ),
+
                                       Container(
                                         width: 100,
-
                                         child: Text(
                                           ": المبلغ",
                                           overflow: TextOverflow.clip,
@@ -392,6 +392,7 @@ class _CatchReceiptState extends State<CatchReceipt> {
                                           style: TextStyle(fontSize: 22),
                                         ),
                                       )
+
                                     ],
                                   ),
                                   Row(
@@ -401,16 +402,15 @@ class _CatchReceiptState extends State<CatchReceipt> {
                                         width: MediaQuery.of(context).size.width/2,
                                         child: TextField(
                                           textAlign: TextAlign.center,
-
                                           autocorrect: false,
                                           controller: CatchControler,
                                           style: TextStyle(fontSize: 22.0, color: Colors.black),
                                           keyboardType: TextInputType.number,
                                         ),
                                       ),
+
                                       Container(
                                         width: 100,
-
                                         child: Text(
                                           ": فترة السماح",
                                           overflow: TextOverflow.clip,
@@ -418,6 +418,8 @@ class _CatchReceiptState extends State<CatchReceipt> {
                                           style: TextStyle(fontSize: 22),
                                         ),
                                       )
+
+
                                     ],
                                   ),
                                 ],

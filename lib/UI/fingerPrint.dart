@@ -159,8 +159,7 @@ class _fingerPrintState extends State<fingerPrint> {
     String datee = "";
     sharedPrefs();
     return StreamBuilder(
-        stream:
-            Stream.periodic(Duration(seconds: 1)).asyncMap((i) => getTime()),
+        stream: Stream.periodic(Duration(seconds: 1)).asyncMap((i) => getTime()),
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               prefs != null /*&& snapshot.data!.Timee.toString().length > 4*/) {
@@ -252,6 +251,7 @@ class _fingerPrintState extends State<fingerPrint> {
                     Row(
                       children: [
                         Spacer(),
+
                         Container(
                           margin: EdgeInsets.only(top: 5, left: 5, right: 5),
                           child: SizedBox(
@@ -266,6 +266,7 @@ class _fingerPrintState extends State<fingerPrint> {
                             ),
                           ),
                         ),
+
                       ],
                     ),
                     Center(
@@ -336,6 +337,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                   ),
                                 ),
                               ),
+
                               Center(
                                 child: Container(
                                   margin: EdgeInsets.only(top: 20),
@@ -354,6 +356,7 @@ class _fingerPrintState extends State<fingerPrint> {
                                   ),
                                 ),
                               )
+
                             ],
                           ),
                         ),
@@ -620,4 +623,5 @@ class _fingerPrintState extends State<fingerPrint> {
           SnackBar(content: Text("يوجد مشكلة , يرجى المحاولة لاحقا3")));
     }*/
   }
+
 }

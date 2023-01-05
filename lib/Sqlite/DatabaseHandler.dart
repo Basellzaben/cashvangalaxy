@@ -527,6 +527,28 @@ class DatabaseHandler {
     return db.query('items', orderBy: "Item_No");
   }
 
+  GetHdrIncludeTax(String OrderNo) async {
+    final Database db = await initializeDB();
+    final List<Map<String, Object?>> queryResult =
+    await db.rawQuery("select include_Tax from SalesInvoiceH where OrderNo='" + OrderNo + "'");
+
+    print(queryResult
+        .map((e) => SalesInvoiceH.fromMap(e))
+        .toList()
+        .last
+        .include_Tax
+        .toString()+" include_Tax ");
+
+    return queryResult
+          .map((e) => SalesInvoiceH.fromMap(e))
+          .toList()
+          .last
+          .include_Tax
+          .toString();
+    return "0";
+  }
+
+
   Future<List<Map<String, dynamic>>> retrievesalDetailsById(
       String orderni) async {
     final Database db = await initializeDB();

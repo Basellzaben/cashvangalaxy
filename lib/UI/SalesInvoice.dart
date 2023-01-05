@@ -146,7 +146,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                     borderRadius: new BorderRadius.only(
                                       bottomLeft: const Radius.circular(0.0),
                                     )),
-                                child: new Column(
+                                child: Column(
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(top: 40),
@@ -247,13 +247,8 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: MediaQuery.of(context).size.width > 600?23:15)),
-                                          ),
-                                          /*  Text(
-                                              "${context.watch<CustomerProvider>().No}",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15)),*/
+                                                            ),
+
                                           Text(" : رقم العميل  ",
                                               style: TextStyle(
                                                   color: Colors.white,
@@ -610,9 +605,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                     children: [
                                                       Spacer(),
                                                       Text(
-                                                          Total.toStringAsFixed(
-                                                                  3)
-                                                              .toString(),
+                                                       Total.toStringAsFixed(3).toString(),
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -764,14 +757,13 @@ class _SalesInvoiceState extends State<SalesInvoice> {
                                                               content: Text("لا يمكن طباعه الفاتوره"),
                                                             ));
                                                           }else{
-                                                            Navigator.pop(context);
-                                                            Navigator.of(context)
-                                                                .push(
-                                                                MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      Prinitng(),
-                                                                ));
+                                                          //  Navigator.pushNamed(context, '/second');
 
+                                                              Navigator.pop(context);
+                                                            Navigator.of(context).push(MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  Prinitng(),
+                                                                ));
                                                           }
 
 
@@ -1018,6 +1010,7 @@ class _SalesInvoiceState extends State<SalesInvoice> {
               IncludeTex)
               .toString(),
           "weight": "0.0"
+
         });
       }
 
@@ -1187,11 +1180,13 @@ SumDis += disVal;
               DisPerFromHdr = _journals[i]['dis'];
             }
             hdr_dis_value += double.parse(DisAmtFromHdr);
-            if (IncludeTex) {
+            if (!IncludeTex) {
               ItemOrgPrice = double.parse(_journals[i]['netprice']);
-              price = double.parse(_journals[i]['netprice']) -
+             /* price = double.parse(_journals[i]['netprice']) -
                   (double.parse(_journals[i]['netprice']) *
-                      (double.parse(_journals[i]['tax']) / 100));
+                      (double.parse(_journals[i]['tax']) / 100));*/
+              price = double.parse(_journals[i]['netprice']);
+
             } else {
               ItemOrgPrice = double.parse(_journals[i]['netprice']);
               price = double.parse(_journals[i]['netprice']);
@@ -1404,6 +1399,17 @@ SumDis += disVal;
       handler.DropsalDetails();
       List<Map<String, dynamic>> journals2 = [];
 
+
+      String incT=await handler.GetHdrIncludeTax(orderno);
+if(incT=='-1')
+  setState(() {
+    IncludeTex=false;
+  });
+  else  setState(() {
+  IncludeTex=true;
+});
+
+
       journals2 = await handler.retrievesalDetailsById(orderno);
       if (journals2.length == 0) _refreshItems();
       print("sizeofinput = " + journals2.length.toString());
@@ -1411,7 +1417,7 @@ SumDis += disVal;
         for (int i = 0; i < journals2.length; i++) {
           var name = journals2[i]['name'];
           var itemno = journals2[i]['no'];
-          var netprice = journals2[i]['total'];
+          var netprice = journals2[i]['price'];
           var dis = journals2[i]['dis_Amt'];
           var bounse = journals2[i]['Bounce'];
           var qt = journals2[i]['qty'];

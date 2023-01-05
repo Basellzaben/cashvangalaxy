@@ -24,17 +24,12 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
   @override
   void initState() {
     super.initState();
+    if (Globalvireables.journals.isEmpty)
+    {
 
+    } else
+    {
 
-    if (Globalvireables.journals.isEmpty) {
-      // Globalvireables.journals.clear();
-
-
-      _refreshItems();
-    } else {
-      //    final handler = DatabaseHandler();
-      // _journals.clear();
-      //_journals = Globalvireables.journals;
     }
 //print(_journals[0]['Item_Name'].toString());
   }
@@ -104,8 +99,6 @@ class LogoutOverlayStatecard extends State<CustomersDialog>
                           itemBuilder: (context, index) => GestureDetector(
                             onTap: () {
                               print('seleeeected   '+_journals[index]['Latitude'].toString());
-                              /*   context.read<CustomerProvider>().Name=_journals[index]['name'];
-                              context.read<CustomerProvider>().No=_journals[index]['No'];*/
                               String name=_journals[index]['name'];
                               String No=_journals[index]['No'];
                               String Latitude=_journals[index]['Latitude'];

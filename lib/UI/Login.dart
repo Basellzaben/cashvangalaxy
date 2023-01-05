@@ -178,6 +178,7 @@ var RE=false;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("تآكد من الاتصال بالانترنت وحاول لاحقا"),
         ));
+
       }
     }
 
